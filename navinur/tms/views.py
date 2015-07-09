@@ -24,7 +24,24 @@ def root(request):
 
 def service(request, version):
         #creation of a service xml file which will be accessed by Openlayers
-        return HttpResponse("Dummy map service")
+        try:
+            if version != "1.0":
+                raise Http404
+            baseURL = request.build_absolute_uri()
+            area_id = "1"
+            xml = []
+            xml.append('<?xml version="1.0" encoding="utf-8" ?>')
+            xml.append('<TileMapService version="1.0" services="' + baseURL + '">')
+            xml.append('<Title>Navinur Tile Map Service</Title>')
+            xml.append('<Abstract></Abstract>')
+            xml.append('    <TileMaps>')
+            xml.append('        <TileMap title=Bay of Mexico" srs="EPSG:4326" href= "' + baseURL + '/' +area_id + '"/>')
+            xml.append('    </TileMaps>')
+            xml.append('</TileMapsService>')
+            return HttpResponse("'\n".join(xml), content_type="text/xml")
+        except:
+            traceback.print_exc()
+            return HttpResponse("Error")
 
 
 def tileMap(request, version, area):
