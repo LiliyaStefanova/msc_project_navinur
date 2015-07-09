@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.http import Http404
 import traceback
 import math
+import mapnik
 
 TILE_WIDTH = 256
 TILE_HEIGHT = 256
@@ -78,9 +79,37 @@ def tileMap(request, version, area_id):
         return HttpResponse("Error")
 
 
-def tile(request, version, area, zoom, x, y):
-    return HttpResponse("Dummy impelementation of a tile displayed based on coords")
+def tile(request, version, area_id, zoom, x, y):
+    try:
+        if version != "1.0" or area_id != "1":
+            raise Http404
 
+        zoom = int(zoom)
+        x = int(x)
+        y = int(y)
+
+        if zoom < 0 or zoom > MAX_ZOOM_LEVEL:
+            raise Http404
+
+        # determining the extent of a tile a the given zoom level
+        xExtent = _unitsPerPixel(zoom) * TILE_WIDTH
+        yExtent = _unitsPerPixel(zoom) * TILE_HEIGHT
+
+        # convert x and y into min and max lat and lon values covered by tile
+        minLong = x * xExtent - 180
+        minLat = x * yExtent - 90
+        maxLong = minLong + xExtent
+        maxLat = minLat + yExtent
+
+        if(minLong < -180 or maxLong > 180
+           or minLat < -90 or maxLat > 90):
+            raise Http404
+
+        map = mapnik.Map(TILE_WIDTH, TILE_HEIGHT, "+proj = longlat +datum=WGS84")
+        map.background = mapnik.Color("#7391ad")
+    except:
+        traceback.print_exc()
+        return HttpResponse("Error")
 
 # underscore denotes private functions in python
 def _unitsPerPixel(zoomLevel):
