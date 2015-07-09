@@ -12,6 +12,7 @@ TILE_WIDTH = 256
 TILE_HEIGHT = 256
 MAX_ZOOM_LEVEL = 4
 
+
 def root(request):
     try:
         baseURL = request.build_absolute_uri()
@@ -52,7 +53,7 @@ def service(request, version):
 
 
 def tileMap(request, version, area_id):
-    if version !="1.0":
+    if version != "1.0":
         raise Http404
     try:
         baseURL = request.build_absolute_uri()
@@ -64,7 +65,7 @@ def tileMap(request, version, area_id):
         xml.append('    <SRS>EPSG:4326</SRS>')
         xml.append('    <BoundingBox minx="" miny="" maxx="" maxy="" />')
         xml.append('    <Origin x = " " y = " " />')
-        xml.append('    TileFormat width="'+str(TILE_WIDTH) + '" height="' + str(TILE_HEIGHT) + '"'
+        xml.append('    <TileFormat width="'+str(TILE_WIDTH) + '" height="' + str(TILE_HEIGHT) + '"'
                    + ' mime-type="image/png" extension="png"/>')
         xml.append('    <TileSets profile="global-geodetic">')
         for zoomLevel in range(0, MAX_ZOOM_LEVEL +1):
@@ -80,7 +81,7 @@ def tileMap(request, version, area_id):
 
 
 def tile(request, version, area_id, zoom, x, y):
-    try:
+   # try:
         if version != "1.0" or area_id != "1":
             raise Http404
 
@@ -107,10 +108,23 @@ def tile(request, version, area_id, zoom, x, y):
 
         map = mapnik.Map(TILE_WIDTH, TILE_HEIGHT, "+proj = longlat +datum=WGS84")
         map.background = mapnik.Color("#7391ad")
-    except:
-        traceback.print_exc()
-        return HttpResponse("Error")
+        mapfile = "/Users/liliya/repos/navinur/navinur/tms/style/map_file.xml"
+        mapnik.load_map(map, mapfile)
+        box = mapnik.Box2d(minLong, minLat, maxLong, maxLat)
+        map.zoom_to_box(box)
+
+        image = mapnik.Image(TILE_WIDTH, TILE_HEIGHT)
+        mapnik.render(map, image)
+        imageData = image.tostring("png")
+
+        return HttpResponse(imageData, content_type="image/png")
+
+   # except:
+      #  traceback.print_exc()
+      #  return HttpResponse("Error")
 
 # underscore denotes private functions in python
+
+
 def _unitsPerPixel(zoomLevel):
     return 0.702125 / math.pow(2, zoomLevel)
