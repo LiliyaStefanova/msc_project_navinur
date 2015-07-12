@@ -39,7 +39,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'navinur.shared',
-    'navinur.tms'
+    'navinur.tms',
+    'navinur.planner'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -80,8 +81,8 @@ WSGI_APPLICATION = 'navinur.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME':   'navinur_db',
-        'USER':   'liliya'
+        'NAME': 'navinur_db',
+        'USER': 'liliya',
     }
 }
 

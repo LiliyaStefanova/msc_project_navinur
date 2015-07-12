@@ -1,15 +1,16 @@
-from django.shortcuts import render
-
 # Views for the tile map server
 
 from django.http import HttpResponse
 from django.http import Http404
+from django.conf import settings
 import traceback
 import math
 import mapnik
 
+
 TILE_WIDTH = 256
 TILE_HEIGHT = 256
+# overview, general, coastal, approach
 MAX_ZOOM_LEVEL = 4
 
 
@@ -30,26 +31,26 @@ def root(request):
 
 
 def service(request, version):
-        #creation of a service xml file which will be accessed by Openlayers
-        try:
-            if version != "1.0":
-                raise Http404
-            baseURL = request.build_absolute_uri()
-            area_id = "1"
-            xml = []
-            xml.append('<?xml version = "1.0" encoding = "utf-8" ?>')
-            xml.append('<TileMapService version="1.0" services="' + baseURL + '">')
-            xml.append('<Title> Navinur Tile Map Service</Title>')
-            xml.append('<Abstract></Abstract>')
-            xml.append('    <TileMaps>')
-            xml.append('        <TileMap title= "Bay of Mexico" srs="EPSG:4326" href= "' + baseURL + '/'
-                       + area_id + '"/>')
-            xml.append('    </TileMaps>')
-            xml.append('</TileMapService>')
-            return HttpResponse("\n".join(xml), content_type="text/xml")
-        except:
-            traceback.print_exc()
-            return HttpResponse("Error")
+    # creation of a service xml file which will be accessed by Openlayers
+    try:
+        if version != "1.0":
+            raise Http404
+        baseURL = request.build_absolute_uri()
+        area_id = "1"
+        xml = []
+        xml.append('<?xml version = "1.0" encoding = "utf-8" ?>')
+        xml.append('<TileMapService version="1.0" services="' + baseURL + '">')
+        xml.append('<Title> Navinur Tile Map Service</Title>')
+        xml.append('<Abstract></Abstract>')
+        xml.append('    <TileMaps>')
+        xml.append('        <TileMap title= "Bay of Mexico" srs="EPSG:4326" href= "' + baseURL + '/'
+                   + area_id + '"/>')
+        xml.append('    </TileMaps>')
+        xml.append('</TileMapService>')
+        return HttpResponse("\n".join(xml), content_type="text/xml")
+    except:
+        traceback.print_exc()
+        return HttpResponse("Error")
 
 
 def tileMap(request, version, area_id):
@@ -65,12 +66,13 @@ def tileMap(request, version, area_id):
         xml.append('    <SRS>EPSG:4326</SRS>')
         xml.append('    <BoundingBox minx="" miny="" maxx="" maxy="" />')
         xml.append('    <Origin x = " " y = " " />')
-        xml.append('    <TileFormat width="'+str(TILE_WIDTH) + '" height="' + str(TILE_HEIGHT) + '"'
+        xml.append('    <TileFormat width="' + str(TILE_WIDTH) + '" height="' + str(TILE_HEIGHT) + '"'
                    + ' mime-type="image/png" extension="png"/>')
         xml.append('    <TileSets profile="global-geodetic">')
-        for zoomLevel in range(0, MAX_ZOOM_LEVEL +1):
+        for zoomLevel in range(0, MAX_ZOOM_LEVEL + 1):
             units_per_pixel = _unitsPerPixel(zoomLevel)
-            xml.append('    <TileSet href = "' + baseURL + '/' + str(zoomLevel) + '" units-per-pixel ="' + str(units_per_pixel) +
+            xml.append('    <TileSet href = "' + baseURL + '/' + str(zoomLevel) + '" units-per-pixel ="' + str(
+                units_per_pixel) +
                        '" order = "' + str(zoomLevel) + '"/>')
         xml.append('    </TileSets>')
         xml.append('</TileMap>')
@@ -81,49 +83,77 @@ def tileMap(request, version, area_id):
 
 
 def tile(request, version, area_id, zoom, x, y):
-   # try:
-        if version != "1.0" or area_id != "1":
-            raise Http404
+    # try:
+    # check parameters are specified correctly
+    if version != "1.0" or area_id != "1":
+        raise Http404
 
-        zoom = int(zoom)
-        x = int(x)
-        y = int(y)
+    zoom = int(zoom)
+    x = int(x)
+    y = int(y)
 
-        if zoom < 0 or zoom > MAX_ZOOM_LEVEL:
-            raise Http404
+    #check level of zoom specified correctly
+    if zoom < 0 or zoom > MAX_ZOOM_LEVEL:
+        raise Http404
 
-        # determining the extent of a tile a the given zoom level
-        xExtent = _unitsPerPixel(zoom) * TILE_WIDTH
-        yExtent = _unitsPerPixel(zoom) * TILE_HEIGHT
+    # determining the extent of a tile a the given zoom level
+    xExtent = _unitsPerPixel(zoom) * TILE_WIDTH
+    yExtent = _unitsPerPixel(zoom) * TILE_HEIGHT
 
-        # convert x and y into min and max lat and lon values covered by tile
-        minLong = x * xExtent - 180
-        minLat = x * yExtent - 90
-        maxLong = minLong + xExtent
-        maxLat = minLat + yExtent
+    # convert x and y into min and max lat and lon values covered by tile
+    minLong = x * xExtent - 180
+    minLat = y * yExtent - 90
+    maxLong = minLong + xExtent
+    maxLat = minLat + yExtent
 
-        if(minLong < -180 or maxLong > 180
-           or minLat < -90 or maxLat > 90):
-            raise Http404
+    #ensure the values specified for each tile are correct
+    if (minLong < -180 or maxLong > 180
+        or minLat < -90 or maxLat > 90):
+        raise Http404
 
-        map = mapnik.Map(TILE_WIDTH, TILE_HEIGHT, "+proj = longlat +datum=WGS84")
-        map.background = mapnik.Color("#7391ad")
-        mapfile = "/Users/liliya/repos/navinur/navinur/tms/style/map_file.xml"
-        mapnik.load_map(map, mapfile)
-        box = mapnik.Box2d(minLong, minLat, maxLong, maxLat)
-        map.zoom_to_box(box)
+    #set up mapnik map
+    map = mapnik.Map(TILE_WIDTH, TILE_HEIGHT, "+proj=longlat +datum=WGS84")
+    map.background = mapnik.Color("#7391ad")
 
-        image = mapnik.Image(TILE_WIDTH, TILE_HEIGHT)
-        mapnik.render(map, image)
-        imageData = image.tostring("png")
 
-        return HttpResponse(imageData, content_type="image/png")
+    #define base map layer
+    # dbSettings = settings.DATABASES['default']
+    # dataSource = mapnik.PostGIS(dbname=dbSettings['NAME'],
+    #                             table='tms_basemap',
+    #                             user=dbSettings['USER'],
+    #                             srid=4326,
+    #                             geometry_field="geometry",
+    #                             geometry_table='tms_basemap')
+    #
+    # baseLayer = mapnik.Layer("baseLayer")
+    # baseLayer.datasource = dataSource
+    # baseLayer.styles.append("baseLayerStyle")
+    #
+    # #set up the basemap style
+    # rule = mapnik.Rule()
+    # rule.symbols.append(mapnik.PolygonSymbolizer(mapnik.Color("#b5d19c")))
+    # rule.symbols.append(mapnik.LineSymbolizer(mapnik.Color("#404040"), 0.2))
+    #
+    # style = mapnik.Style()
+    # style.rules.append(rule)
+    #
+    # map.append_style("baseLayerStyle", style)
+    # map.layers.append(baseLayer)
 
-   # except:
-      #  traceback.print_exc()
-      #  return HttpResponse("Error")
+    mapfile = "/Users/liliya/repos/navinur/navinur/tms/style/map_file.xml"
+    mapnik.load_map(map, mapfile)
+    box = mapnik.Box2d(minLong, minLat, maxLong, maxLat)
+    map.zoom_to_box(box)
 
-# underscore denotes private functions in python
+    image = mapnik.Image(TILE_WIDTH, TILE_HEIGHT)
+    mapnik.render(map, image)
+    imageData = image.tostring("png")
+
+    return HttpResponse(imageData, content_type="image/png")
+
+    # except:
+    #      traceback.print_exc()
+    #      return HttpResponse("Error")
 
 
 def _unitsPerPixel(zoomLevel):

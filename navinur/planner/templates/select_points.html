@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Trip Planner</title>
+    <style type="text/css">
+        div#map {
+        width : 800px;
+        height: 600px;
+        border: 1px solid #ccc;
+        }
+    </style>
+    <script src="http://openlayers.org/api/OpenLayers.js"></script>
+    <script type="text/javascript">
+        function initMap(){
+            map = new OpenLayers.Map('map',
+                                     {maxResolution: 0.703125,
+                                      numZoomLevels: 4});
+            layer = new OpenLayers.Layer.TMS('TMS',
+                                             "{{ tms_url }}",
+                                             {serviceVersion: "1.0",
+                                             layername: "1",
+                                             type: 'png'});
+            map.addLayer(layer);
+            map.zoomToMaxExtent();
+            }
+    </script>
+</head>
+<body onload="initMap()">
+<h1>Plan your trip</h1>
+<b>Choose a desired start and end point to your journey</b>
+<br/>
+
+<div id="map" class="map"></div>
+<br/>
+
+<div style="margin-left: 20px">
+    <!--TODO implement properly -->
+    <button type="button"
+            onclick='window.location="/router";'>Cancel
+    </button>
+</div>
+</body>
+</html>

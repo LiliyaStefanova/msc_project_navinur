@@ -1,16 +1,9 @@
 <!DOCTYPE Map>
 <Map srs="+proj=latlong +datum=WGS84" background-color="#FFFFFF" minimum-version="0.7.2">
-    <Style name="anchorageArea">
+    <Style name="baseLayer">
         <Rule>
-            <LineSymbolizer stroke="#000000" stroke-width="0.2" stroke-dasharray=".1, .1"/>
-            <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000" avoid-edges="true">[inform]
-            </TextSymbolizer>
-            <PolygonPatternSymbolizer file="/Users/liliya/test_marine/tms/resources/anchorage.png"/>
-        </Rule>
-    </Style>
-    <Style name="buoyLateralPoint">
-        <Rule>
-            <PointSymbolizer allow-overlap="no" file="/Users/liliya/test_marine/tms/resources/buoy.png"/>
+            <PolygonSymbolizer fill="#b5d19c"/>
+            <LineSymbolizer stroke="#404040" stroke-width="0.2"/>
         </Rule>
     </Style>
     <Style name="landArea">
@@ -28,13 +21,7 @@
             <PolygonSymbolizer fill="#5F9EA0" gamma="0.63"/>
         </Rule>
     </Style>
-    <Style name="depthAreaLabel">
-        <Rule>
-            <Filter>[drval1] &gt; 0.000000000000000</Filter>
-            <TextSymbolizer size="10" face-name="DejaVu Sans Book" halo-fill="#000000" avoid-edges="true">[drval1]
-            </TextSymbolizer>
-        </Rule>
-    </Style>
+
     <Style name="depthContour">
         <Rule>
             <LineSymbolizer stroke="#5F9EA0" stroke-width="0.1"/>
@@ -45,43 +32,40 @@
             <TextSymbolizer size="10" face-name="DejaVu Sans Book" halo-fill="#000000">[objnam]</TextSymbolizer>
         </Rule>
     </Style>
-    <Style name="riverLine">
-        <Rule>
-            <LineSymbolizer stroke="#5F9EA0" stroke-width="0.1"/>
-            <TextSymbolizer size="10" face-name="DejaVu Sans Book">[objnam]</TextSymbolizer>
-        </Rule>
-    </Style>
-    <Style name="wreckPoint">
-        <Rule>
-            <PointSymbolizer file="/Users/liliya/test_marine/tms/resources/wreck.png" allow-overlap="no"/>
-        </Rule>
-    </Style>
-
+    <Layer name="baseMap" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>baseLayer</StyleName>
+        <Datasource>
+            <Parameter name="type">postgis</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
+            <Parameter name="user">liliya</Parameter>
+            <Parameter name="table">tms_basemap</Parameter>
+        </Datasource>
+    </Layer>
     <Layer name="landArea" srs="+proj=latlong +datum=WGS84" status="on">
         <StyleName>landArea</StyleName>
         <Datasource>
             <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">marine_data</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
             <Parameter name="user">liliya</Parameter>
-            <Parameter name="table">coastal_land_area</Parameter>
+            <Parameter name="table">overview_land_area</Parameter>
         </Datasource>
     </Layer>
     <Layer name="landAreaLine" srs="+proj=latlong +datum=WGS84" status="on">
         <StyleName>coastLine</StyleName>
         <Datasource>
             <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">marine_data</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
             <Parameter name="user">liliya</Parameter>
-            <Parameter name="table">coastal_land_area_line</Parameter>
+            <Parameter name="table">overview_land_area_line</Parameter>
         </Datasource>
     </Layer>
     <Layer name="depthContour" srs="+proj=latlong +datum=WGS84" status="on">
         <StyleName>depthContour</StyleName>
         <Datasource>
             <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">marine_data</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
             <Parameter name="user">liliya</Parameter>
-            <Parameter name="table">coastal_depth_contour_line</Parameter>
+            <Parameter name="table">overview_depth_contour_line</Parameter>
         </Datasource>
     </Layer>
     <Layer name="depthArea" srs="+proj=latlong +datum=WGS84" status="on">
@@ -89,54 +73,17 @@
         <StyleName>depthAreaLabel</StyleName>
         <Datasource>
             <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">marine_data</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
             <Parameter name="user">liliya</Parameter>
-            <Parameter name="table">coastal_depth_area</Parameter>
+            <Parameter name="table">overview_depth_area</Parameter>
         </Datasource>
     </Layer>
-    <Layer name="anchorageArea" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>anchorageArea</StyleName>
+    <Layer>
         <Datasource>
             <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">marine_data</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
             <Parameter name="user">liliya</Parameter>
-            <Parameter name="table">coastal_anchorage_area</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="buoyLateralPoint" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>buoyLateralPoint</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">marine_data</Parameter>
-            <Parameter name="user">liliya</Parameter>
-            <Parameter name="table">coastal_buoy_lateral_point</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="wreckPoint" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>wreckPoint</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">marine_data</Parameter>
-            <Parameter name="user">liliya</Parameter>
-            <Parameter name="table">coastal_wreck_point</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="riverLine" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>riverLine</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">marine_data</Parameter>
-            <Parameter name="user">liliya</Parameter>
-            <Parameter name="table">coastal_river_line</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="landRegionLabel" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>landRegion</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">marine_data</Parameter>
-            <Parameter name="user">liliya</Parameter>
-            <Parameter name="table">coastal_land_region_point</Parameter>
+            <Parameter name="table">overview_land_region_point</Parameter>
         </Datasource>
     </Layer>
 
