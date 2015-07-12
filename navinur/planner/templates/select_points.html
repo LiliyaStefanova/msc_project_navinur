@@ -29,20 +29,29 @@
                 },
 
                 onClick: function(e) {
-                    alert("click")
+                    var coord = map.getLonLatFromViewPortPx(e.xy);
+                    markers.clearMarkers();
+                    var locations = new OpenLayers.LonLat(coord.lon, coord.lat);
+                    var size = new OpenLayers.Size(21, 35);
+                    var offset = new OpenLayers.Pixel(-(size.w/2), size.h);
+                    var icon = new OpenLayers.Icon();
+                    markers.addMarker(new OpenLayers.Marker(location, icon.clone()));
                 }
             }
          );
+
         function initMap(){
             map = new OpenLayers.Map('map',
                                      {maxResolution: 0.703125,
                                       numZoomLevels: 4});
             layer = new OpenLayers.Layer.TMS('TMS',
                                              "{{ tms_url }}",
-                                             {serviceVersion: "1.0",
-                                             layername: "1",
-                                             type: 'png'});
+                                              {serviceVersion: "1.0",
+                                              layername: "1",
+                                              type: 'png'});
+            markers = new OpenLayers.Layer.Markers("Waypoints");
             map.addLayer(layer);
+            map.addLayer(markers);
             map.zoomToMaxExtent();
             var click = new OpenLayers.Control.Click();
             map.addControl(click);
