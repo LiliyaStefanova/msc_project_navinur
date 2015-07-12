@@ -11,6 +11,6 @@ class BaseMap(models.Model):
     def __unicode__(self):
         return self.name
 
-    class Meta:
-        managed = True
-        db_table = 'tms_basemap'
+   # class Meta:
+    #    managed = True
+     #   db_table = 'tms_basemap'

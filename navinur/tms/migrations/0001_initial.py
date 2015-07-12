@@ -18,9 +18,5 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=50)),
                 ('geometry', django.contrib.gis.db.models.fields.MultiPolygonField(srid=4326)),
             ],
-            options={
-                'db_table': 'tms_basemap',
-                'managed': True,
-            },
         ),
     ]
