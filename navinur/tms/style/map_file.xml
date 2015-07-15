@@ -2,38 +2,124 @@
 <Map srs="+proj=latlong +datum=WGS84" background-color="#FFFFFF" minimum-version="0.7.2">
     <Style name="baseLayer">
         <Rule>
-            <PolygonSymbolizer fill="#b5d19c"/>
+            <PolygonSymbolizer fill="#F0E68C"/>
             <LineSymbolizer stroke="#404040" stroke-width="0.2"/>
         </Rule>
     </Style>
-    <Style name="landArea">
+    <Style name="baseLayerText">
+        <Rule>
+             <MaxScaleDenominator>20000000</MaxScaleDenominator>
+            <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[name]</TextSymbolizer>
+        </Rule>
+    </Style>
+
+    <Style name="OverviewLandArea">
         <Rule>
             <PolygonSymbolizer fill="#F0E68C" gamma="0.63"/>
         </Rule>
     </Style>
-    <Style name="coastLine">
+    <Style name="GeneralLandArea">
         <Rule>
-            <LineSymbolizer stroke="#000000" stroke-width="0.1"/>
+            <MaxScaleDenominator>20000000</MaxScaleDenominator>
+            <PolygonSymbolizer fill="#F0E68C" gamma="0.63"/>
         </Rule>
     </Style>
-    <Style name="depthArea">
+    <Style name="OverviewLandLine">
+        <Rule>
+            <LineSymbolizer stroke="#404040" stroke-width="0.1"/>
+        </Rule>
+    </Style>
+    <Style name="GeneralLandLine">
+        <Rule>
+            <MaxScaleDenominator>20000000</MaxScaleDenominator>
+            <LineSymbolizer stroke="#404040" stroke-width="0.1"/>
+        </Rule>
+    </Style>
+    <Style name="OverviewCoastline">
+        <Rule>
+            <LineSymbolizer stroke="#404040" stroke-width="0.1"/>
+        </Rule>
+    </Style>
+    <Style name="GeneralCoastline">
+        <Rule>
+            <MaxScaleDenominator>20000000</MaxScaleDenominator>
+            <LineSymbolizer stroke="#404040" stroke-width="0.1"/>
+        </Rule>
+    </Style>
+    <Style name="OverviewDepthArea">
         <Rule>
             <PolygonSymbolizer fill="#5F9EA0" gamma="0.63"/>
         </Rule>
     </Style>
-
-    <Style name="depthContour">
+    <Style name="GeneralDepthArea">
         <Rule>
-            <LineSymbolizer stroke="#5F9EA0" stroke-width="0.1"/>
+            <MaxScaleDenominator>20000000</MaxScaleDenominator>
+            <PolygonSymbolizer fill="#5F9EA0" gamma="0.63"/>
         </Rule>
     </Style>
-    <Style name="landRegion">
+    <Style name="OverviewDepthContour">
         <Rule>
-            <TextSymbolizer size="10" face-name="DejaVu Sans Book" halo-fill="#000000">[objnam]</TextSymbolizer>
+            <LineSymbolizer stroke="#404040" stroke-width="0.1"/>
         </Rule>
     </Style>
+    <Style name="GeneralDepthContour">
+        <Rule>
+            <MaxScaleDenominator>20000000</MaxScaleDenominator>
+            <LineSymbolizer stroke="#404040" stroke-width="0.1"/>
+        </Rule>
+    </Style>
+    <Style name="OverviewRiverLine">
+        <Rule>
+            <LineSymbolizer stroke="#5F9EA0" stroke-width="0.5"/>
+        </Rule>
+    </Style>
+    <Style name="GeneralRiverLine">
+        <Rule>
+            <MaxScaleDenominator>20000000</MaxScaleDenominator>
+            <LineSymbolizer stroke="#5F9EA0" stroke-width="0.5"/>
+        </Rule>
+    </Style>
+    <Style name="OverviewWreckPoint">
+        <Rule>
+            <PointSymbolizer allow-overlap="no" file="/Users/liliya/repos/navinur/navinur/tms/img/visible wreck.png"/>
+        </Rule>
+    </Style>
+    <Style name="GeneralWreckPoint">
+        <Rule>
+            <MaxScaleDenominator>20000000</MaxScaleDenominator>
+            <PointSymbolizer allow-overlap="no" file="/Users/liliya/repos/navinur/navinur/tms/img/visible wreck.png"/>
+        </Rule>
+    </Style>
+    <Style name="OverviewBuoy">
+        <Rule>
+            <PointSymbolizer allow-overlap="no"
+                             file="/Users/liliya/repos/navinur/navinur/tms/img/beacon_special_purpose_general_p.png"/>
+        </Rule>
+    </Style>
+    <Style name="GeneralBuoy">
+        <Rule>
+            <MaxScaleDenominator>20000000</MaxScaleDenominator>
+            <PointSymbolizer allow-overlap="no"
+                             file="/Users/liliya/repos/navinur/navinur/tms/img/beacon_special_purpose_general_p.png"/>
+        </Rule>
+    </Style>
+    <Style name="anchorage">
+        <Rule>
+            <!-- <MaxScaleDenominator>6000000</MaxScaleDenominator>-->
+            <!-- <MinScaleDenominator>700000</MinScaleDenominator> -->
+            <PointSymbolizer allow-overlap="no" file="/Users/liliya/repos/navinur/navinur/tms/img/anchorage.png"/>
+        </Rule>
+    </Style>
+    <Style name="GeneralLandRegionText">
+        <Rule>
+            <MaxScaleDenominator>20000000</MaxScaleDenominator>
+            <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[objnam]</TextSymbolizer>
+        </Rule>
+    </Style>
+    <!--this layer will remain as a base regardless -->
     <Layer name="baseMap" srs="+proj=latlong +datum=WGS84" status="on">
         <StyleName>baseLayer</StyleName>
+        <StyleName>baseLayerText</StyleName>
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
@@ -41,8 +127,9 @@
             <Parameter name="table">tms_basemap</Parameter>
         </Datasource>
     </Layer>
-    <Layer name="landArea" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>landArea</StyleName>
+
+    <Layer name="OverviewLandArea" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>OverviewLandArea</StyleName>
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
@@ -50,8 +137,8 @@
             <Parameter name="table">overview_land_area</Parameter>
         </Datasource>
     </Layer>
-    <Layer name="landAreaLine" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>coastLine</StyleName>
+    <Layer name="OverviewLandLine" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>OverviewLandLine</StyleName>
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
@@ -59,8 +146,17 @@
             <Parameter name="table">overview_land_area_line</Parameter>
         </Datasource>
     </Layer>
-    <Layer name="depthContour" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>depthContour</StyleName>
+    <Layer name="OverviewCoastLine" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>OverviewCoastLine</StyleName>
+        <Datasource>
+            <Parameter name="type">postgis</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
+            <Parameter name="user">liliya</Parameter>
+            <Parameter name="table">overview_coastline_line</Parameter>
+        </Datasource>
+    </Layer>
+    <Layer name="OverviewDepthContour" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>OverviewDepthContour</StyleName>
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
@@ -68,9 +164,8 @@
             <Parameter name="table">overview_depth_contour_line</Parameter>
         </Datasource>
     </Layer>
-    <Layer name="depthArea" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>depthArea</StyleName>
-        <StyleName>depthAreaLabel</StyleName>
+    <Layer name="OverviewDepthArea" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>OverviewDepthArea</StyleName>
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
@@ -78,15 +173,117 @@
             <Parameter name="table">overview_depth_area</Parameter>
         </Datasource>
     </Layer>
-    <Layer>
+    <Layer name="OverviewRiverLine" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>OverviewRiverLine</StyleName>
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
             <Parameter name="user">liliya</Parameter>
-            <Parameter name="table">overview_land_region_point</Parameter>
+            <Parameter name="table">overview_river_line</Parameter>
         </Datasource>
     </Layer>
 
+    <Layer name="OverviewWreckPoint" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>OverviewWreckPoint</StyleName>
+        <Datasource>
+            <Parameter name="type">postgis</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
+            <Parameter name="user">liliya</Parameter>
+            <Parameter name="table">overview_wreck_point</Parameter>
+        </Datasource>
+    </Layer>
+    <Layer name="OverviewBuoy" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>OverviewBuoy</StyleName>
+        <Datasource>
+            <Parameter name="type">postgis</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
+            <Parameter name="user">liliya</Parameter>
+            <Parameter name="table">overview_buoy_special_purpose_general_point</Parameter>
+        </Datasource>
+    </Layer>
+    <Layer name="GeneralLandArea" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>GeneralLandArea</StyleName>
+        <Datasource>
+            <Parameter name="type">postgis</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
+            <Parameter name="user">liliya</Parameter>
+            <Parameter name="table">general_land_area</Parameter>
+        </Datasource>
+    </Layer>
+    <Layer name="GeneralLandLine" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>GeneralLandLine</StyleName>
+        <Datasource>
+            <Parameter name="type">postgis</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
+            <Parameter name="user">liliya</Parameter>
+            <Parameter name="table">general_land_area_line</Parameter>
+        </Datasource>
+    </Layer>
+    <Layer name="GeneralCoastline" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>GeneralCoastline</StyleName>
+        <Datasource>
+            <Parameter name="type">postgis</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
+            <Parameter name="user">liliya</Parameter>
+            <Parameter name="table">general_coastline_line</Parameter>
+        </Datasource>
+    </Layer>
+    <Layer name="GeneralDepthContour" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>GeneralDepthContour</StyleName>
+        <Datasource>
+            <Parameter name="type">postgis</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
+            <Parameter name="user">liliya</Parameter>
+            <Parameter name="table">general_depth_contour_line</Parameter>
+        </Datasource>
+    </Layer>
+    <Layer name="GeneralDepthArea" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>GeneralDepthArea</StyleName>
+        <StyleName>depthAreaLabel</StyleName>
+        <Datasource>
+            <Parameter name="type">postgis</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
+            <Parameter name="user">liliya</Parameter>
+            <Parameter name="table">general_depth_area</Parameter>
+        </Datasource>
+    </Layer>
+    <Layer name="GeneralRiverLine" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>GeneralRiverLine</StyleName>
+        <Datasource>
+            <Parameter name="type">postgis</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
+            <Parameter name="user">liliya</Parameter>
+            <Parameter name="table">general_river_line</Parameter>
+        </Datasource>
+    </Layer>
+
+    <Layer name="GeneralWreckPoint" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>GeneralWreckPoint</StyleName>
+        <Datasource>
+            <Parameter name="type">postgis</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
+            <Parameter name="user">liliya</Parameter>
+            <Parameter name="table">general_wreck_point</Parameter>
+        </Datasource>
+    </Layer>
+    <Layer name="GeneralBuoy" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>GeneralBuoy</StyleName>
+        <Datasource>
+            <Parameter name="type">postgis</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
+            <Parameter name="user">liliya</Parameter>
+            <Parameter name="table">general_buoy_special_purpose_general_point</Parameter>
+        </Datasource>
+    </Layer>
+    <Layer name="GeneralLandRegionText" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>GeneralLandRegionText</StyleName>
+        <Datasource>
+            <Parameter name="type">postgis</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
+            <Parameter name="user">liliya</Parameter>
+            <Parameter name="table">general_land_region_point</Parameter>
+        </Datasource>
+    </Layer>
 </Map>
 
 
