@@ -40,7 +40,7 @@
                     var location = new OpenLayers.LonLat(coord.lon, coord.lat);
                     var size = new OpenLayers.Size(15, 15);
                     var offset = new OpenLayers.Pixel(-(size.w/2), size.h/2);
-                    var icon = new OpenLayers.Icon("/Users/liliya/repos/navinur/navinur/planner/templates/map-pin.png", size, offset);
+                    var icon = new OpenLayers.Icon("http://maps.google.com/mapfiles/ms/icons/red-pushpin.png", size, offset);
                     markers.addMarker(new OpenLayers.Marker(location, icon.clone()));
                 }
             }
