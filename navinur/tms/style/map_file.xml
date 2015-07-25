@@ -179,7 +179,7 @@
     <Style name="CoastalAnchorageArea">
         <Rule>
             <MaxScaleDenominator>18000000</MaxScaleDenominator>
-            <LineSymbolizer stroke-dasharray="1.1, 1.1" stroke="#FF00FF" stroke-width="0.2"/>
+            <LineSymbolizer stroke-dasharray="1.1, 1.1" stroke="#FF00FF" stroke-width="1"/>
         </Rule>
     </Style>
     <Style name="GeneralLandRegionText">
@@ -389,15 +389,16 @@
             <Parameter name="table">general_land_region_point</Parameter>
         </Datasource>
     </Layer>
-    <!--<Layer name="CoastalCoverageArea" srs="+proj=latlong +datum=WGS84" status="on">-->
-        <!--<StyleName>coverageArea</StyleName>-->
-        <!--<Datasource>-->
-            <!--<Parameter name="type">postgis</Parameter>-->
-            <!--<Parameter name="dbname">navinur_db</Parameter>-->
-            <!--<Parameter name="user">liliya</Parameter>-->
-            <!--<Parameter name="table">coastal_coverage_area</Parameter>-->
-        <!--</Datasource>-->
-    <!--</Layer>-->
+    <Layer name="CoastalCoverageArea" srs="+proj=latlong +datum=WGS84" status="on">
+        <StyleName>coverageArea</StyleName>
+        <Datasource>
+            <Parameter name="type">postgis</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
+            <Parameter name="user">liliya</Parameter>
+            <Parameter name="table">(select * from coastal_coverage_area where title='Approaches to Mississippi River')
+                as coastal_area</Parameter>
+        </Datasource>
+    </Layer>
     <Layer name="CoastalLandLine" srs="+proj=latlong +datum=WGS84" status="on">
         <StyleName>CoastalLandLine</StyleName>
         <Datasource>
