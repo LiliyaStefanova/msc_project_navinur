@@ -64,7 +64,6 @@ def tileMap(request, version, area_id):
         xml.append('    <Title>Bay of Mexico</Title>')
         xml.append('    <Abstract></Abstract>')
         xml.append('    <SRS>EPSG:4326</SRS>')
-        #xml.append('    <BoundingBox minx="-97" miny="17" maxx="-76" maxy="33" />')
         xml.append('    <BoundingBox minx="-180" miny="-90" maxx="180" maxy="90" />')
         xml.append('    <Origin x = "" y = "" />')
         xml.append('    <TileFormat width="' + str(TILE_WIDTH) + '" height="' + str(TILE_HEIGHT) + '"'
@@ -73,8 +72,7 @@ def tileMap(request, version, area_id):
         for zoomLevel in range(0, MAX_ZOOM_LEVEL + 1):
             units_per_pixel = _unitsPerPixel(zoomLevel)
             xml.append('    <TileSet href = "' + baseURL + '/' + str(zoomLevel) + '" units-per-pixel ="' + str(
-                units_per_pixel) +
-                       '" order = "' + str(zoomLevel) + '"/>')
+                units_per_pixel) + '" order = "' + str(zoomLevel) + '"/>')
         xml.append('    </TileSets>')
         xml.append('</TileMap>')
         return HttpResponse("\n".join(xml), content_type="text/xml")

@@ -7,8 +7,7 @@
     </Style>
     <Style name="coverageArea">
         <Rule>
-            <PolygonSymbolizer fill="#F0E68C"/>
-            <LineSymbolizer stroke="#404040" stroke-width="0.3"/>
+            <LineSymbolizer stroke="#FFFFFF" stroke-width="0.3"/>
         </Rule>
     </Style>
     <Style name="baseLayer">
@@ -95,7 +94,7 @@
     </Style>
     <Style name="DepthAreaText">
         <Rule>
-            <Filter>[drval1] &gt;= 0</Filter>
+            <Filter>[drval1] &gt;= 0.0000000000</Filter>
             <MaxScaleDenominator>18000000</MaxScaleDenominator>
             <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000" avoid-edges="true" allow-overlap="no">
                 [drval1]
@@ -180,7 +179,7 @@
     <Style name="CoastalAnchorageArea">
         <Rule>
             <MaxScaleDenominator>18000000</MaxScaleDenominator>
-            <PolygonPatternSymbolizer file="/Users/liliya/repos/navinur/navinur/tms/img/anchorage.png"/>
+            <LineSymbolizer stroke-dasharray="1.1, 1.1" stroke="#FF00FF" stroke-width="0.2"/>
         </Rule>
     </Style>
     <Style name="GeneralLandRegionText">
@@ -272,24 +271,33 @@
         </Datasource>
     </Layer>
 
-    <Layer name="OverviewWreckPoint" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>OverviewWreckPoint</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
-            <Parameter name="table">overview_wreck_point</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="OverviewBuoy" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>OverviewBuoy</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
-            <Parameter name="table">overview_buoy_special_purpose_general_point</Parameter>
-        </Datasource>
-    </Layer>
+    <!--<Layer name="OverviewWreckPoint" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>OverviewWreckPoint</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">liliya</Parameter>-->
+            <!--<Parameter name="table">overview_wreck_point</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="OverviewBuoy" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>OverviewBuoy</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">liliya</Parameter>-->
+            <!--<Parameter name="table">overview_buoy_special_purpose_general_point</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="GeneralCoverageArea" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>coverageArea</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">liliya</Parameter>-->
+            <!--<Parameter name="table">general_coverage_area</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
     <Layer name="GeneralLandArea" srs="+proj=latlong +datum=WGS84" status="on">
         <StyleName>GeneralLandArea</StyleName>
         <Datasource>
@@ -381,6 +389,15 @@
             <Parameter name="table">general_land_region_point</Parameter>
         </Datasource>
     </Layer>
+    <!--<Layer name="CoastalCoverageArea" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>coverageArea</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">liliya</Parameter>-->
+            <!--<Parameter name="table">coastal_coverage_area</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
     <Layer name="CoastalLandLine" srs="+proj=latlong +datum=WGS84" status="on">
         <StyleName>CoastalLandLine</StyleName>
         <Datasource>

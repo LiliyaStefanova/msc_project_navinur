@@ -78,11 +78,22 @@ WSGI_APPLICATION = 'navinur.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.contrib.gis.db.backends.postgis',
+#         'NAME': 'navinur_db',
+#         'USER': 'liliya',
+#     }
+# }
+
+# set up with SSH server address accordingly
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'navinur_db',
-        'USER': 'liliya',
+        'USER': 'postgres',
+        'HOST': '172.22.22.47',
+        'PORT': '5432',
     }
 }
 

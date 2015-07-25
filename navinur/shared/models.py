@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 
 from django.contrib.gis.db import models
 
+
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=80)
 
@@ -4292,9 +4293,9 @@ class GeneralWreckPoint(models.Model):
 class Layer(models.Model):
     topology = models.ForeignKey('Topology')
     layer_id = models.IntegerField()
-    schema_name = models.CharField(max_length=50)
-    table_name = models.CharField(max_length=50)
-    feature_column = models.CharField(max_length=50)
+    schema_name = models.CharField(max_length=1)
+    table_name = models.CharField(max_length=1)
+    feature_column = models.CharField(max_length=1)
     feature_type = models.IntegerField()
     level = models.IntegerField()
     child_id = models.IntegerField(blank=True, null=True)
@@ -4303,6 +4304,18 @@ class Layer(models.Model):
         managed = False
         db_table = 'layer'
         unique_together = (('topology', 'layer_id'), ('schema_name', 'table_name', 'feature_column'),)
+
+
+class Ne50MOcean(models.Model):
+    gid = models.AutoField(primary_key=True)
+    scalerank = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True)
+    featurecla = models.CharField(max_length=32, blank=True, null=True)
+    geom = models.MultiPolygonField(blank=True, null=True)
+    objects = models.GeoManager()
+
+    class Meta:
+        managed = False
+        db_table = 'ne_50m_ocean'
 
 
 class OverviewAdministrationAreaNamedArea(models.Model):
@@ -5721,6 +5734,26 @@ class OverviewWreckPoint(models.Model):
     class Meta:
         managed = False
         db_table = 'overview_wreck_point'
+
+
+class PathGrid(models.Model):
+    gid = models.AutoField(primary_key=True)
+    geom = models.PolygonField(blank=True, null=True)
+    objects = models.GeoManager()
+
+    class Meta:
+        managed = False
+        db_table = 'path_grid'
+
+
+class TmsBasemap(models.Model):
+    name = models.CharField(max_length=50)
+    geometry = models.MultiPolygonField()
+    objects = models.GeoManager()
+
+    class Meta:
+        managed = False
+        db_table = 'tms_basemap'
 
 
 class Topology(models.Model):
