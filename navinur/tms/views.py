@@ -115,7 +115,8 @@ def tile(request, version, area_id, zoom, x, y):
         map.background = mapnik.Color("#7391ad")
 
 
-        mapfile = "/Users/liliya/repos/navinur/navinur/tms/style/map_file.xml"
+        # mapfile = "/Users/liliya/repos/navinur/navinur/tms/style/map_file.xml"
+        mapfile = "/home/lstefa/repos/project_navinur/navinur/tms/style/map_file.xml"
         mapnik.load_map(map, mapfile)
         box = mapnik.Box2d(minLong, minLat, maxLong, maxLat)
         map.zoom_to_box(box)

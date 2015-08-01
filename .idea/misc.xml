@@ -19,7 +19,7 @@
       </profile-state>
     </entry>
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7.8 virtualenv at ~/virtualenv/py27_geo" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7.9 virtualenv at ~/virtualenvs/geo" project-jdk-type="Python SDK" />
   <component name="masterDetails">
     <states>
       <state key="ScopeChooserConfigurable.UI">
@@ -36,4 +36,3 @@
     </states>
   </component>
 </project>
-

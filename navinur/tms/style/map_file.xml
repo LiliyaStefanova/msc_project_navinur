@@ -18,7 +18,7 @@
     </Style>
     <Style name="baseLayerText">
         <Rule>
-             <MaxScaleDenominator>25000000</MaxScaleDenominator>
+            <MaxScaleDenominator>25000000</MaxScaleDenominator>
             <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[name]</TextSymbolizer>
         </Rule>
     </Style>
@@ -37,7 +37,7 @@
     <Style name="CoastalLandArea">
         <Rule>
             <MaxScaleDenominator>18000000</MaxScaleDenominator>
-            <PolygonSymbolizer fill="#F0E68C" />
+            <PolygonSymbolizer fill="#F0E68C"/>
         </Rule>
     </Style>
     <Style name="OverviewLandLine">
@@ -83,7 +83,8 @@
         <Rule>
             <MaxScaleDenominator>25000000</MaxScaleDenominator>
             <PolygonSymbolizer fill="#5F9EA0" gamma="0.63"/>
-            <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000" allow-overlap="no">[drval1]</TextSymbolizer>
+            <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000" allow-overlap="no">[drval1]
+            </TextSymbolizer>
         </Rule>
     </Style>
     <Style name="CoastalDepthArea">
@@ -96,7 +97,8 @@
         <Rule>
             <Filter>[drval1] &gt;= 0.0000000000</Filter>
             <MaxScaleDenominator>18000000</MaxScaleDenominator>
-            <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000" avoid-edges="true" allow-overlap="no">
+            <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000" avoid-edges="true"
+                            allow-overlap="no">
                 [drval1]
             </TextSymbolizer>
         </Rule>
@@ -141,39 +143,42 @@
     </Style>
     <Style name="OverviewWreckPoint">
         <Rule>
-            <PointSymbolizer allow-overlap="no" file="/Users/liliya/repos/navinur/navinur/tms/img/visible wreck.png"/>
+            <PointSymbolizer allow-overlap="no"
+                             file="/home/lstefa/repos/project_navinur/navinur/tms/img/visible wreck.png"/>
         </Rule>
     </Style>
     <Style name="GeneralWreckPoint">
         <Rule>
             <MaxScaleDenominator>25000000</MaxScaleDenominator>
-            <PointSymbolizer allow-overlap="no" file="/Users/liliya/repos/navinur/navinur/tms/img/visible wreck.png"/>
+            <PointSymbolizer allow-overlap="no"
+                             file="/home/lstefa/repos/project_navinur/navinur/tms/img/visible wreck.png"/>
         </Rule>
     </Style>
     <Style name="CoastalWreckPoint">
         <Rule>
             <MaxScaleDenominator>18000000</MaxScaleDenominator>
-            <PointSymbolizer allow-overlap="no" file="/Users/liliya/repos/navinur/navinur/tms/img/visible wreck.png"/>
+            <PointSymbolizer allow-overlap="no"
+                             file="/home/lstefa/repos/project_navinur/navinur/tms/img/visible wreck.png"/>
         </Rule>
     </Style>
     <Style name="OverviewBuoy">
         <Rule>
             <PointSymbolizer allow-overlap="no"
-                             file="/Users/liliya/repos/navinur/navinur/tms/img/beacon_special_purpose_general_p.png"/>
+                             file="/home/lstefa/repos/project_navinur/navinur/tms/img/beacon_special_purpose_general_p.png"/>
         </Rule>
     </Style>
     <Style name="GeneralBuoy">
         <Rule>
             <MaxScaleDenominator>25000000</MaxScaleDenominator>
             <PointSymbolizer allow-overlap="no"
-                             file="/Users/liliya/repos/navinur/navinur/tms/img/beacon_special_purpose_general_p.png"/>
+                             file="/home/lstefa/repos/project_navinur/navinur/tms/img/beacon_special_purpose_general_p.png"/>
         </Rule>
     </Style>
     <Style name="CoastalBuoy">
         <Rule>
             <MaxScaleDenominator>18000000</MaxScaleDenominator>
             <PointSymbolizer allow-overlap="no"
-                             file="/Users/liliya/repos/navinur/navinur/tms/img/beacon_special_purpose_general_p.png"/>
+                             file="/home/lstefa/repos/project_navinur/navinur/tms/img/beacon_special_purpose_general_p.png"/>
         </Rule>
     </Style>
     <Style name="CoastalAnchorageArea">
@@ -193,7 +198,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">ne_50m_ocean</Parameter>
         </Datasource>
     </Layer>
@@ -203,7 +210,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">tms_basemap</Parameter>
         </Datasource>
     </Layer>
@@ -212,7 +221,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">overview_coverage_area</Parameter>
         </Datasource>
     </Layer>
@@ -221,7 +232,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">overview_land_area</Parameter>
         </Datasource>
     </Layer>
@@ -230,7 +243,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">overview_land_area_line</Parameter>
         </Datasource>
     </Layer>
@@ -239,7 +254,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">overview_coastline_line</Parameter>
         </Datasource>
     </Layer>
@@ -248,7 +265,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">overview_depth_area</Parameter>
         </Datasource>
     </Layer>
@@ -257,7 +276,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">overview_depth_contour_line</Parameter>
         </Datasource>
     </Layer>
@@ -266,44 +287,54 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">overview_river_line</Parameter>
         </Datasource>
     </Layer>
 
     <!--<Layer name="OverviewWreckPoint" srs="+proj=latlong +datum=WGS84" status="on">-->
-        <!--<StyleName>OverviewWreckPoint</StyleName>-->
-        <!--<Datasource>-->
-            <!--<Parameter name="type">postgis</Parameter>-->
-            <!--<Parameter name="dbname">navinur_db</Parameter>-->
-            <!--<Parameter name="user">liliya</Parameter>-->
-            <!--<Parameter name="table">overview_wreck_point</Parameter>-->
-        <!--</Datasource>-->
+    <!--<StyleName>OverviewWreckPoint</StyleName>-->
+    <!--<Datasource>-->
+    <!--<Parameter name="type">postgis</Parameter>-->
+    <!--<Parameter name="dbname">navinur_db</Parameter>-->
+    <!--<Parameter name="user">postgres</Parameter>
+<Parameter name="password">password1</Parameter>
+<Parameter name="host">localhost</Parameter>-->
+    <!--<Parameter name="table">overview_wreck_point</Parameter>-->
+    <!--</Datasource>-->
     <!--</Layer>-->
     <!--<Layer name="OverviewBuoy" srs="+proj=latlong +datum=WGS84" status="on">-->
-        <!--<StyleName>OverviewBuoy</StyleName>-->
-        <!--<Datasource>-->
-            <!--<Parameter name="type">postgis</Parameter>-->
-            <!--<Parameter name="dbname">navinur_db</Parameter>-->
-            <!--<Parameter name="user">liliya</Parameter>-->
-            <!--<Parameter name="table">overview_buoy_special_purpose_general_point</Parameter>-->
-        <!--</Datasource>-->
+    <!--<StyleName>OverviewBuoy</StyleName>-->
+    <!--<Datasource>-->
+    <!--<Parameter name="type">postgis</Parameter>-->
+    <!--<Parameter name="dbname">navinur_db</Parameter>-->
+    <!--<Parameter name="user">postgres</Parameter>
+<Parameter name="password">password1</Parameter>
+<Parameter name="host">localhost</Parameter>-->
+    <!--<Parameter name="table">overview_buoy_special_purpose_general_point</Parameter>-->
+    <!--</Datasource>-->
     <!--</Layer>-->
     <!--<Layer name="GeneralCoverageArea" srs="+proj=latlong +datum=WGS84" status="on">-->
-        <!--<StyleName>coverageArea</StyleName>-->
-        <!--<Datasource>-->
-            <!--<Parameter name="type">postgis</Parameter>-->
-            <!--<Parameter name="dbname">navinur_db</Parameter>-->
-            <!--<Parameter name="user">liliya</Parameter>-->
-            <!--<Parameter name="table">general_coverage_area</Parameter>-->
-        <!--</Datasource>-->
+    <!--<StyleName>coverageArea</StyleName>-->
+    <!--<Datasource>-->
+    <!--<Parameter name="type">postgis</Parameter>-->
+    <!--<Parameter name="dbname">navinur_db</Parameter>-->
+    <!--<Parameter name="user">postgres</Parameter>
+<Parameter name="password">password1</Parameter>
+<Parameter name="host">localhost</Parameter>-->
+    <!--<Parameter name="table">general_coverage_area</Parameter>-->
+    <!--</Datasource>-->
     <!--</Layer>-->
     <Layer name="GeneralLandArea" srs="+proj=latlong +datum=WGS84" status="on">
         <StyleName>GeneralLandArea</StyleName>
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">general_land_area</Parameter>
         </Datasource>
     </Layer>
@@ -312,7 +343,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">general_land_area_line</Parameter>
         </Datasource>
     </Layer>
@@ -321,7 +354,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">general_coastline_line</Parameter>
         </Datasource>
     </Layer>
@@ -330,7 +365,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">general_depth_area</Parameter>
         </Datasource>
     </Layer>
@@ -339,7 +376,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">general_depth_contour_line</Parameter>
         </Datasource>
     </Layer>
@@ -348,7 +387,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">general_river_line</Parameter>
         </Datasource>
     </Layer>
@@ -358,7 +399,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">general_wreck_point</Parameter>
         </Datasource>
     </Layer>
@@ -367,7 +410,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">general_buoy_special_purpose_general_point</Parameter>
         </Datasource>
     </Layer>
@@ -376,7 +421,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">general_buoy_special_purpose_general_point</Parameter>
         </Datasource>
     </Layer>
@@ -385,7 +432,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">general_land_region_point</Parameter>
         </Datasource>
     </Layer>
@@ -394,9 +443,12 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">(select * from coastal_coverage_area where title='Approaches to Mississippi River')
-                as coastal_area</Parameter>
+                as coastal_area
+            </Parameter>
         </Datasource>
     </Layer>
     <Layer name="CoastalLandLine" srs="+proj=latlong +datum=WGS84" status="on">
@@ -404,7 +456,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">coastal_land_area_line</Parameter>
         </Datasource>
     </Layer>
@@ -414,7 +468,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">coastal_depth_area</Parameter>
         </Datasource>
     </Layer>
@@ -423,7 +479,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">coastal_depth_contour_line</Parameter>
         </Datasource>
     </Layer>
@@ -432,7 +490,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">coastal_river_line</Parameter>
         </Datasource>
     </Layer>
@@ -442,7 +502,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">coastal_wreck_point</Parameter>
         </Datasource>
     </Layer>
@@ -451,7 +513,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">coastal_buoy_special_purpose_general_point</Parameter>
         </Datasource>
     </Layer>
@@ -460,7 +524,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">coastal_land_region_point</Parameter>
         </Datasource>
     </Layer>
@@ -469,7 +535,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">coastal_anchorage_area</Parameter>
         </Datasource>
     </Layer>
