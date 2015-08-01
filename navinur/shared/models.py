@@ -5738,7 +5738,9 @@ class OverviewWreckPoint(models.Model):
 
 class PathGrid(models.Model):
     gid = models.AutoField(primary_key=True)
-    geom = models.PolygonField(blank=True, null=True)
+    geom = models.MultiPolygonField(srid=32616,
+                                    blank=True,
+                                    null=True)
     objects = models.GeoManager()
 
     class Meta:

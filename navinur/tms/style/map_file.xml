@@ -1,5 +1,10 @@
 <!DOCTYPE Map>
 <Map srs="+proj=latlong +datum=WGS84" background-color="#FFFFFF" minimum-version="0.7.2">
+    <Style name="grid">
+        <Rule>
+            <LineSymbolizer stroke="#000000" stroke-width="0.1"/>
+        </Rule>
+    </Style>
     <Style name="oceanBase">
         <Rule>
             <PolygonSymbolizer fill="#5F9EA0"/>
@@ -471,6 +476,15 @@
             <Parameter name="dbname">navinur_db</Parameter>
             <Parameter name="user">liliya</Parameter>
             <Parameter name="table">coastal_anchorage_area</Parameter>
+        </Datasource>
+    </Layer>
+    <Layer name="grid" srs="+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs" >
+        <StyleName>grid</StyleName>
+        <Datasource>
+            <Parameter name="type">postgis</Parameter>
+            <Parameter name="dbname">navinur_db</Parameter>
+            <Parameter name="user">liliya</Parameter>
+            <Parameter name="table">path_grid</Parameter>
         </Datasource>
     </Layer>
 </Map>
