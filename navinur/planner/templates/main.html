@@ -35,12 +35,23 @@
 
                 onClick: function(e) {
                     var coord = map.getLonLatFromViewPortPx(e.xy);
+                /*    var post_request = OpenLayers.Request.POST({
+                      url: "",
+                        data: {
+                           point: coord.x, coord.y
+                        },
+                        headers: {
+                           "Content-Type": "application/x-www-form-urlencoded"
+                        }
+                    });
+                    }
+                */
                     window.alert("Coordinates:" + coord);
-                    markers.clearMarkers();
+                   // markers.clearMarkers();
                     var location = new OpenLayers.LonLat(coord.lon, coord.lat);
                     var size = new OpenLayers.Size(15, 15);
-                    var offset = new OpenLayers.Pixel(0,0);
-                    var icon = new OpenLayers.Icon("http://maps.google.com/mapfiles/ms/icons/red-pushpin.png", size, offset);
+                    //var offset = new OpenLayers.Pixel(0,0);
+                    var icon = new OpenLayers.Icon("http://maps.google.com/mapfiles/ms/icons/red-pushpin.png", size);
                     markers.addMarker(new OpenLayers.Marker(location, icon.clone()));
 
                 }
