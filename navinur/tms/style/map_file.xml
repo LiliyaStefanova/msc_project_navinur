@@ -551,7 +551,9 @@
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">liliya</Parameter>
+            <Parameter name="user">postgres</Parameter>
+            <Parameter name="password">password1</Parameter>
+            <Parameter name="host">localhost</Parameter>
             <Parameter name="table">path_grid</Parameter>
         </Datasource>
     </Layer>

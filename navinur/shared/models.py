@@ -11,10 +11,21 @@ from __future__ import unicode_literals
 
 from django.contrib.gis.db import models
 
+class TestRoutes(models.Model):
+    gid = models.AutoField(primary_key=True)
+    name = models.CharField(unique= True, max_length=100)
+    start = models.CharField(max_length=150)
+    end = models.CharField(max_length=150)
+    distance = models.DecimalField(max_digits=65535, decimal_places=5, blank=True, null=True)
+    geom = models.MultiLineStringField(blank=True, null=True)
+    objects = models.GeoManager()
+
+    class Meta:
+        managed = True
+        db_table = 'test_routes'
 
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=80)
-
     class Meta:
         managed = False
         db_table = 'auth_group'
