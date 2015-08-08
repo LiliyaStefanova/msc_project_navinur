@@ -35,24 +35,32 @@
 
                 onClick: function(e) {
                     var coord = map.getLonLatFromViewPortPx(e.xy);
-                /*    var post_request = OpenLayers.Request.POST({
-                      url: "",
-                        data: {
-                           point: coord.x, coord.y
-                        },
-                        headers: {
-                           "Content-Type": "application/x-www-form-urlencoded"
-                        }
-                    });
-                    }
-                */
                     window.alert("Coordinates:" + coord);
                    // markers.clearMarkers();
                     var location = new OpenLayers.LonLat(coord.lon, coord.lat);
                     var size = new OpenLayers.Size(15, 15);
-                    //var offset = new OpenLayers.Pixel(0,0);
+                    var offset = new OpenLayers.Pixel(0,0);
                     var icon = new OpenLayers.Icon("http://maps.google.com/mapfiles/ms/icons/red-pushpin.png", size);
                     markers.addMarker(new OpenLayers.Marker(location, icon.clone()));
+
+                    var request = OpenLayers.Request.GET({
+                      url: "{{get_route_url}}",
+                      params: { latitude : coord.lat,
+                                longitude: coord.lon},
+                      callback: this.handleResponse
+                    });
+                },
+
+                handleResponse: function(request) {
+                    if(request.status != 200) {
+                        alert("Server returned a" + request.status + " error");
+                        return;
+                    };
+                    if(request.responseText != "") {
+                        window.location.href = request.responseText;
+                    };
+
+                }
 
                 }
             }
@@ -93,7 +101,7 @@
 <br/>
 
 <div style="margin-left: 20px">
-    <!--TODO implement properly -->
+    <!--TODO use this button to clear the current selection -->
     <button type="button"
             onclick='window.location="/router";'>Cancel
     </button>

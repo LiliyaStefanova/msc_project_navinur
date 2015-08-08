@@ -4,14 +4,11 @@ import django
 django.setup()
 from navinur.shared.models import PathGrid
 from navinur.shared.models import TestRoutes
-from navinur.shared.models import GeneralLandArea
-from navinur.shared.models import CoastalDepthArea
-from navinur.shared.models import GeneralDepthArea
-from navinur.shared.models import CoastalCoverageArea
 from django.contrib.gis.geos import LineString
 import pickle
-import grid_utils
-import queue
+from navinur.planner import queue, grid_utils
+
+
 # Create your views here.
 
 

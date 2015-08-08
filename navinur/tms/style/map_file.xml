@@ -5,6 +5,12 @@
             <LineSymbolizer stroke="#000000" stroke-width="0.1"/>
         </Rule>
     </Style>
+    <Style name="route">
+        <Rule>
+            <LineSymbolizer stroke="#DC143C" stroke-width="1"/>
+            <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[name]</TextSymbolizer>
+        </Rule>
+    </Style>
     <Style name="oceanBase">
         <Rule>
             <PolygonSymbolizer fill="#5F9EA0"/>
@@ -565,7 +571,7 @@
             <Parameter name="user">postgres</Parameter>
             <Parameter name="password">password1</Parameter>
             <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">'(select * from test_routes where name='Test BFS') as subquery'</Parameter>
+            <Parameter name="table">(select * from test_routes where name='Test BFS') as route</Parameter>
         </Datasource>
     </Layer>
 </Map>

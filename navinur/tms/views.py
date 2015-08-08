@@ -2,7 +2,6 @@
 
 from django.http import HttpResponse
 from django.http import Http404
-from django.conf import settings
 import traceback
 import math
 import mapnik
@@ -16,13 +15,13 @@ MAX_ZOOM_LEVEL = 11
 
 def root(request):
     try:
-        baseURL = request.build_absolute_uri()
+        base_url = request.build_absolute_uri()
         xml = []
         xml.append('<?xml version = "1.0" encoding="utf-8" ?>')
         xml.append('<Services>')
         xml.append('    <TileMapService ' +
                    'title = "Navinur tile map service" ' +
-                   'version = "1.0" href=" ' + baseURL + '1.0" />')
+                   'version = "1.0" href=" ' + base_url + '1.0" />')
         xml.append('</Services>')
         return HttpResponse("\n".join(xml), content_type="text/xml")
     except:
@@ -83,7 +82,7 @@ def tileMap(request, version, area_id):
 
 def tile(request, version, area_id, zoom, x, y):
     try:
-    # check parameters are specified correctly
+        # check parameters are specified correctly
         if version != "1.0" or area_id != "1":
             raise Http404
 
@@ -91,7 +90,7 @@ def tile(request, version, area_id, zoom, x, y):
         x = int(x)
         y = int(y)
 
-        #check level of zoom specified correctly
+        # check level of zoom specified correctly
         if zoom < 0 or zoom > MAX_ZOOM_LEVEL:
             raise Http404
 
@@ -105,17 +104,16 @@ def tile(request, version, area_id, zoom, x, y):
         maxLong = minLong + xExtent
         maxLat = minLat + yExtent
 
-        #ensure the values specified for each tile are correct
+        # ensure the values specified for each tile are correct
         if (minLong < -180 or maxLong > 180
             or minLat < -90 or maxLat > 90):
             raise Http404
 
-        #set up mapnik map
+        # set up mapnik map
         map = mapnik.Map(TILE_WIDTH, TILE_HEIGHT, "+proj=longlat +datum=WGS84")
         map.background = mapnik.Color("#7391ad")
 
-
-        # mapfile = "/Users/liliya/repos/navinur/navinur/tms/style/map_file.xml"
+        # TODO fix these links
         mapfile = "/home/lstefa/repos/project_navinur/navinur/tms/style/map_file.xml"
         mapnik.load_map(map, mapfile)
         box = mapnik.Box2d(minLong, minLat, maxLong, maxLat)

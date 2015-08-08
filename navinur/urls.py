@@ -17,7 +17,6 @@ from django.contrib.gis import admin
 from django.conf.urls import *
 admin.autodiscover()
 
-
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^tms/', include('navinur.tms.urls')),
