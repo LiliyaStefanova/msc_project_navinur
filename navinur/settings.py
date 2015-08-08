@@ -40,7 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'navinur.shared',
     'navinur.tms',
-    'navinur.planner'
+    'navinur.planner',
     'navinur.routing',
     'navinur.meteo'
 )

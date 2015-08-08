@@ -546,15 +546,26 @@
             <Parameter name="table">coastal_anchorage_area</Parameter>
         </Datasource>
     </Layer>
-    <Layer name="grid" srs="+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs" >
-        <StyleName>grid</StyleName>
+    <!--<Layer name="grid" srs="+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs" >-->
+        <!--<StyleName>grid</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">path_grid</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <Layer name="grid" srs="+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs">
+        <StyleName>route</StyleName>
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
             <Parameter name="user">postgres</Parameter>
             <Parameter name="password">password1</Parameter>
             <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">path_grid</Parameter>
+            <Parameter name="table">'(select * from test_routes where name='Test BFS') as subquery'</Parameter>
         </Datasource>
     </Layer>
 </Map>
