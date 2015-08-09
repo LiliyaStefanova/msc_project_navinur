@@ -12,8 +12,8 @@ qs = PathGrid.objects.all()
 
 
 def start_and_end_points():
-    start_pt = Point(-89.028, 29.087, srid=4326)
-    end_pt = Point(-89.005, 29.077, srid=4326)
+    start_pt = Point(-89.51, 28.95, srid=4326)
+    end_pt = Point(-88.99, 29.43, srid=4326)
     start_cell = PathGrid.objects.get(geom__contains=start_pt)
     end_cell = PathGrid.objects.get(geom__contains=end_pt)
     return start_cell.gid, end_cell.gid
@@ -29,3 +29,4 @@ def grid_contains_cell(cell):
 
 def number_cells_in_grid():
     return list(qs).__len__()
+

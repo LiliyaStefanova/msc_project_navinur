@@ -3,6 +3,9 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Trip Planner</title>
+    <link rel="stylesheet" href="http://openlayers.org/en/v3.1.1/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.7.0/ol.css" type="text/css">
     <style type="text/css">
         div#map {
         width : 1400px;
@@ -11,12 +14,13 @@
         }
     </style>
     <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.7.0/ol.css" type="text/css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.7.0/ol.js"></script>
+    <script src="http://openlayers.org/en/v3.1.1/build/ol.js" type="text/javascript"></script>
     <script src="http://openlayers.org/api/OpenLayers.js"></script>
     <script type="text/javascript">
+        var start_end_coords = [2];
+        var num_clicks = 0;
         OpenLayers.Control.Click = OpenLayers.Class(
             OpenLayers.Control, {
                 defaultHandlerOptions: {
@@ -32,40 +36,49 @@
                     OpenLayers.Control.prototype.initialize.apply(this, arguments);
                     this.handler = new OpenLayers.Handler.Click(this, {'click': this.onClick}, this.handlerOptions);
                 },
-
                 onClick: function(e) {
                     var coord = map.getLonLatFromViewPortPx(e.xy);
+                    //push adds the item to the end of the array
+                    start_end_coords.push(coord)
+                    num_clicks ++;
+                    if(num_clicks < 2) {
+                        alert("Enter destination")
+                    }
+                    else if(num_clicks === 2) {
+                        var request = OpenLayers.Request.GET({
+                            url      : "{{get_route_url}}",
+                            params   :  {start_lat : start_end_coords[0].lat,
+                                         start_lon : start_end_coords[0].lon,
+                                         end_lat   : start_end_coords[1].lat,
+                                         end_lon   : start_end_coords[1].lon,
+                            },
+                            callback : this.handleResponse
+                        });
+                    console.log(start_end_coords.length);
+                    }
+                    else {
+                        alert("Too many points entered, start again");
+                        markers.clearMarkers();
+                    }
                     window.alert("Coordinates:" + coord);
-                   // markers.clearMarkers();
+                    <!--markers.clearMarkers();-->
                     var location = new OpenLayers.LonLat(coord.lon, coord.lat);
                     var size = new OpenLayers.Size(15, 15);
                     var offset = new OpenLayers.Pixel(0,0);
-                    var icon = new OpenLayers.Icon("http://maps.google.com/mapfiles/ms/icons/red-pushpin.png", size);
+                    var icon = new OpenLayers.Icon("http://maps.google.com/mapfiles/ms/icons/red-pushpin.png", size, offset);
                     markers.addMarker(new OpenLayers.Marker(location, icon.clone()));
-
-                    var request = OpenLayers.Request.GET({
-                      url: "{{get_route_url}}",
-                      params: { latitude : coord.lat,
-                                longitude: coord.lon},
-                      callback: this.handleResponse
-                    });
                 },
-
                 handleResponse: function(request) {
                     if(request.status != 200) {
-                        alert("Server returned a" + request.status + " error");
+                        alert("Server returned a "+request.status+ " error");
                         return;
                     };
-                    if(request.responseText != "") {
+                    if(request.responseText != " ") {
                         window.location.href = request.responseText;
                     };
-
-                }
-
                 }
             }
          );
-
         function initMap(){
             map = new OpenLayers.Map('map',
                                      {maxResolution: 0.703125,
@@ -101,7 +114,7 @@
 <br/>
 
 <div style="margin-left: 20px">
-    <!--TODO use this button to clear the current selection -->
+    <!--TODO implement properly -->
     <button type="button"
             onclick='window.location="/router";'>Cancel
     </button>
