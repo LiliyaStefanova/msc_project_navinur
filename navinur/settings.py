@@ -41,7 +41,6 @@ INSTALLED_APPS = (
     'navinur.shared',
     'navinur.tms',
     'navinur.planner',
-    'navinur.routing',
     'navinur.meteo'
 )
 

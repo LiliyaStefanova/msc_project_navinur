@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Trip Planner</title>
+    <link rel="stylesheet" href="http://openlayers.org/en/v3.1.1/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.7.0/ol.css" type="text/css">
+    <style type="text/css">
+        div#map {
+        width : 1400px;
+        height: 800px;
+        border: 1px solid #ccc;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.7.0/ol.js"></script>
+    <script src="http://openlayers.org/en/v3.1.1/build/ol.js" type="text/javascript"></script>
+    <script src="http://openlayers.org/api/OpenLayers.js"></script>
+    <script type="text/javascript">
+        OpenLayers.Control.Click = OpenLayers.Class(
+            OpenLayers.Control, {
+                defaultHandlerOptions: {
+                    'single' : true,
+                    'double' : false,
+                    'pixelTolerance' : 0,
+                    'stopSingle' : false,
+                    'stopDouble' : false
+                },
+                initialize: function(options) {
+                    this.handlerOptions = OpenLayers.Util.extend(
+                        {}, this.defaultHandlerOptions);
+                    OpenLayers.Control.prototype.initialize.apply(this, arguments);
+                    this.handler = new OpenLayers.Handler.Click(this, {'click': this.onClick}, this.handlerOptions);
+                },
+                onClick: function(e) {
+                    var coord = map.getLonLatFromViewPortPx(e.xy);
+                    //push adds the item to the end of the array
+                    start_end_coords.push(coord)
+                    console.log(start_end_coords);
+                    num_clicks ++;
+                    if(num_clicks < 2) {
+                        alert("Enter destination")
+                    }
+                    else if(num_clicks === 2) {
+                        var request = OpenLayers.Request.GET({
+                            url      : "{{calc_route_url}}",
+                            params   :  {start_lat : start_end_coords[0].lat,
+                                         start_lon : start_end_coords[0].lon,
+                                         end_lat   : start_end_coords[1].lat,
+                                         end_lon   : start_end_coords[1].lon,
+                            },
+                            callback : this.handleResponse
+                        });
+                    console.log(start_end_coords.length);
+                    }
+                    else {
+                        alert("Too many points entered, start again");
+                        markers.clearMarkers();
+                    }
+                    window.alert("Coordinates:" + coord);
+                    <!--markers.clearMarkers();-->
+                    var location = new OpenLayers.LonLat(coord.lon, coord.lat);
+                    var size = new OpenLayers.Size(15, 15);
+                    var offset = new OpenLayers.Pixel(0,0);
+                    var icon = new OpenLayers.Icon("http://maps.google.com/mapfiles/ms/icons/red-pushpin.png", size, offset);
+                    markers.addMarker(new OpenLayers.Marker(location, icon.clone()));
+                },
+                handleResponse: function(request) {
+                    if(request.status != 200) {
+                        alert("Server returned a "+request.status+ " error");
+                        return;
+                    };
+                    if(request.responseText != " ") {
+                        window.location.href = request.responseText;
+                    };
+                }
+            }
+         );
+        function initMap(){
+            map = new OpenLayers.Map('map',
+                                     {maxResolution: 0.703125,
+                                      numZoomLevels: 11});
+            layer = new OpenLayers.Layer.TMS('TMS',
+                                             "{{ tms_url }}",
+                                              {serviceVersion: "1.0",
+                                              layername: "1",
+                                              type: 'png'});
+            route = new OpenLayers.Layer.
+            markers = new OpenLayers.Layer.Markers("Waypoints");
+            map.addLayer(layer);
+            map.addLayer(markers);
+            map.zoomToMaxExtent();
+            var click = new OpenLayers.Control.Click();
+            map.addControl(click);
+            click.activate();
+            }
+
+    </script>
+</head>
+<body onload="initMap()">
+<div class="container-fluid">
+    <h1>Plan your trip</h1>
+    <b>Choose a desired start and end point to your journey</b>
+    <br/>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <div id="map" class="map"></div>
+        </div>
+    </div>
+
+</div>
+
+<br/>
+
+<div style="margin-left: 20px">
+    <!--TODO implement properly -->
+    <button type="button"
+            onclick='window.location="/router";'>Cancel
+    </button>
+</div>
+</body>
+</html>

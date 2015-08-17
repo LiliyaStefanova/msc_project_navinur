@@ -2,7 +2,7 @@
 # You'll have to do the following manually to clean this up:
 #   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+#   * Remove `managed = True` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 #
 # Also note: You'll have to insert the output of 'django-admin sqlcustom [app_label]'
@@ -12,25 +12,11 @@ from __future__ import unicode_literals
 from django.contrib.gis.db import models
 
 
-
-class TestRoutes(models.Model):
-    gid = models.AutoField(primary_key=True)
-    name = models.CharField(unique= True, max_length=100)
-    start = models.CharField(max_length=150)
-    end = models.CharField(max_length=150)
-    distance = models.DecimalField(max_digits=1000, decimal_places=5, blank=True, null=True)
-    geom = models.LineStringField(blank=True, null=True)
-    objects = models.GeoManager()
+class AuthGroup(models.Model):
+    name = models.CharField(unique=True, max_length=80)
 
     class Meta:
         managed = True
-        db_table = 'test_routes'
-
-
-class AuthGroup(models.Model):
-    name = models.CharField(unique=True, max_length=80)
-    class Meta:
-        managed = False
         db_table = 'auth_group'
 
 
@@ -39,7 +25,7 @@ class AuthGroupPermissions(models.Model):
     permission = models.ForeignKey('AuthPermission')
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'auth_group_permissions'
         unique_together = (('group', 'permission'),)
 
@@ -50,7 +36,7 @@ class AuthPermission(models.Model):
     codename = models.CharField(max_length=100)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'auth_permission'
         unique_together = (('content_type', 'codename'),)
 
@@ -68,7 +54,7 @@ class AuthUser(models.Model):
     date_joined = models.DateTimeField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'auth_user'
 
 
@@ -77,7 +63,7 @@ class AuthUserGroups(models.Model):
     group = models.ForeignKey(AuthGroup)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'auth_user_groups'
         unique_together = (('user', 'group'),)
 
@@ -87,7 +73,7 @@ class AuthUserUserPermissions(models.Model):
     permission = models.ForeignKey(AuthPermission)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'auth_user_user_permissions'
         unique_together = (('user', 'permission'),)
 
@@ -104,13 +90,13 @@ class CoastalAdministrationAreaNamedArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_administration_area_named_area'
 
 
@@ -127,13 +113,13 @@ class CoastalAirportAirfieldArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_airport_airfield_area'
 
 
@@ -147,13 +133,13 @@ class CoastalAnchorageArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_anchorage_area'
 
 
@@ -167,14 +153,14 @@ class CoastalBeaconLateralPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     marsys = models.FloatField(blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -185,7 +171,7 @@ class CoastalBeaconLateralPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_beacon_lateral_point'
 
 
@@ -199,14 +185,14 @@ class CoastalBeaconSpecialPurposeGeneralPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     marsys = models.FloatField(blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -217,7 +203,7 @@ class CoastalBeaconSpecialPurposeGeneralPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_beacon_special_purpose_general_point'
 
 
@@ -230,14 +216,14 @@ class CoastalBridgeArea(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    horacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    horacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verccl = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    vercop = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verccl = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    vercop = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
@@ -245,13 +231,13 @@ class CoastalBridgeArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_bridge_area'
 
 
@@ -264,14 +250,14 @@ class CoastalBridgeLine(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    horacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    horacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verccl = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    vercop = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verccl = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    vercop = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
@@ -279,12 +265,12 @@ class CoastalBridgeLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_bridge_line'
 
 
@@ -297,14 +283,14 @@ class CoastalBuildingSinglePoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     functn = models.CharField(max_length=254, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -315,7 +301,7 @@ class CoastalBuildingSinglePoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_building_single_point'
 
 
@@ -326,22 +312,22 @@ class CoastalBuiltUpArea(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_built_up_area'
 
 
@@ -352,9 +338,9 @@ class CoastalBuiltupAreaPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -365,7 +351,7 @@ class CoastalBuiltupAreaPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_builtup_area_point'
 
 
@@ -379,8 +365,8 @@ class CoastalBuoyIsolatedDangerPoint(models.Model):
     marsys = models.FloatField(blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -391,7 +377,7 @@ class CoastalBuoyIsolatedDangerPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_buoy_isolated_danger_point'
 
 
@@ -406,8 +392,8 @@ class CoastalBuoyLateralPoint(models.Model):
     marsys = models.FloatField(blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -418,7 +404,7 @@ class CoastalBuoyLateralPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_buoy_lateral_point'
 
 
@@ -432,8 +418,8 @@ class CoastalBuoySafeWaterPoint(models.Model):
     marsys = models.FloatField(blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -444,7 +430,7 @@ class CoastalBuoySafeWaterPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_buoy_safe_water_point'
 
 
@@ -459,8 +445,8 @@ class CoastalBuoySpecialPurposeGeneralPoint(models.Model):
     marsys = models.FloatField(blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -471,7 +457,7 @@ class CoastalBuoySpecialPurposeGeneralPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_buoy_special_purpose_general_point'
 
 
@@ -485,13 +471,13 @@ class CoastalCableArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_cable_area'
 
 
@@ -502,30 +488,30 @@ class CoastalCableOverheadLine(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    icefac = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    icefac = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    vercsa = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    vercsa = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_cable_overhead_line'
 
 
 class CoastalCableSubmarineLine(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    burdep = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    burdep = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     catcbl = models.CharField(max_length=25, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
@@ -535,12 +521,12 @@ class CoastalCableSubmarineLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_cable_submarine_line'
 
 
@@ -549,22 +535,22 @@ class CoastalCanalArea(models.Model):
     objl = models.FloatField(blank=True, null=True)
     catcan = models.CharField(max_length=20, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
-    horacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horwid = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    horacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horwid = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_canal_area'
 
 
@@ -573,21 +559,21 @@ class CoastalCanalLine(models.Model):
     objl = models.FloatField(blank=True, null=True)
     catcan = models.CharField(max_length=20, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
-    horacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horwid = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    horacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horwid = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_canal_line'
 
 
@@ -600,13 +586,13 @@ class CoastalCargoTranshipmentArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_cargo_transhipment_area'
 
 
@@ -618,13 +604,13 @@ class CoastalCautionArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_caution_area'
 
 
@@ -640,7 +626,7 @@ class CoastalCautionAreaPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_caution_area_point'
 
 
@@ -657,7 +643,7 @@ class CoastalCoastguardStationPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_coastguard_station_point'
 
 
@@ -670,13 +656,13 @@ class CoastalContiguousZoneArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_contiguous_zone_area'
 
 
@@ -689,22 +675,22 @@ class CoastalCoverageArea(models.Model):
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
     title = models.CharField(max_length=80, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_coverage_area'
 
 
 class CoastalCurrentNonGravitationalPoint(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    curvel = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    curvel = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -714,7 +700,7 @@ class CoastalCurrentNonGravitationalPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_current_non_gravitational_point'
 
 
@@ -724,14 +710,14 @@ class CoastalDaymarkPoint(models.Model):
     catspm = models.CharField(max_length=254, blank=True, null=True)
     colour = models.CharField(max_length=254, blank=True, null=True)
     colpat = models.CharField(max_length=254, blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     topshp = models.FloatField(blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -741,82 +727,82 @@ class CoastalDaymarkPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_daymark_point'
 
 
 class CoastalDepthArea(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    drval1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    drval2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    drval1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    drval2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_depth_area'
 
 
 class CoastalDepthAreaLine(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    drval1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    drval2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    drval1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    drval2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_depth_area_line'
 
 
 class CoastalDepthContourLine(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    valdco = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valdco = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_depth_contour_line'
 
 
 class CoastalDredgedArea(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    drval1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    drval2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    drval1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    drval2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
@@ -824,13 +810,13 @@ class CoastalDredgedArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_dredged_area'
 
 
@@ -844,13 +830,13 @@ class CoastalDumpingGroundArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_dumping_ground_area'
 
 
@@ -868,7 +854,7 @@ class CoastalDumpingGroundPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_dumping_ground_point'
 
 
@@ -877,22 +863,22 @@ class CoastalDykeLine(models.Model):
     objl = models.FloatField(blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_dyke_line'
 
 
@@ -905,24 +891,24 @@ class CoastalExclusiveEconomicZoneArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_exclusive_economic_zone_area'
 
 
 class CoastalFairwayArea(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    drval1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    drval1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     trafic = models.FloatField(blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
@@ -930,13 +916,13 @@ class CoastalFairwayArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_fairway_area'
 
 
@@ -950,13 +936,13 @@ class CoastalFerryRouteArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_ferry_route_area'
 
 
@@ -970,12 +956,12 @@ class CoastalFerryRouteLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_ferry_route_line'
 
 
@@ -987,9 +973,9 @@ class CoastalFogSignalPoint(models.Model):
     sigfrq = models.FloatField(blank=True, null=True)
     siggen = models.FloatField(blank=True, null=True)
     siggrp = models.CharField(max_length=254, blank=True, null=True)
-    sigper = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    sigper = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     sigseq = models.CharField(max_length=254, blank=True, null=True)
-    valmxr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valmxr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -999,7 +985,7 @@ class CoastalFogSignalPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_fog_signal_point'
 
 
@@ -1010,25 +996,25 @@ class CoastalFortifiedStructureArea(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_fortified_structure_area'
 
 
@@ -1037,49 +1023,49 @@ class CoastalGateLine(models.Model):
     objl = models.FloatField(blank=True, null=True)
     catgat = models.CharField(max_length=20, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
-    drval1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    drval1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_gate_line'
 
 
 class CoastalLakeArea(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_lake_area'
 
 
@@ -1093,12 +1079,12 @@ class CoastalLandAreaLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_land_area_line'
 
 
@@ -1116,7 +1102,7 @@ class CoastalLandAreaPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_land_area_point'
 
 
@@ -1124,9 +1110,9 @@ class CoastalLandElevationPoint(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -1137,7 +1123,7 @@ class CoastalLandElevationPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_land_elevation_point'
 
 
@@ -1154,13 +1140,13 @@ class CoastalLandRegionArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_land_region_area'
 
 
@@ -1181,7 +1167,7 @@ class CoastalLandRegionPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_land_region_point'
 
 
@@ -1194,14 +1180,14 @@ class CoastalLandmarkPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     functn = models.CharField(max_length=254, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -1211,7 +1197,7 @@ class CoastalLandmarkPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_landmark_point'
 
 
@@ -1221,20 +1207,20 @@ class CoastalLightPoint(models.Model):
     catlit = models.CharField(max_length=254, blank=True, null=True)
     colour = models.CharField(max_length=254, blank=True, null=True)
     exclit = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     litchr = models.FloatField(blank=True, null=True)
     litvis = models.CharField(max_length=254, blank=True, null=True)
     marsys = models.FloatField(blank=True, null=True)
     mltylt = models.FloatField(blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    sectr1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    sectr2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    sectr1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    sectr2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     siggrp = models.CharField(max_length=254, blank=True, null=True)
-    sigper = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    sigper = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     sigseq = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    valnmr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    valnmr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -1245,7 +1231,7 @@ class CoastalLightPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_light_point'
 
 
@@ -1256,24 +1242,24 @@ class CoastalMarineFarmCultureArea(models.Model):
     expsou = models.FloatField(blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_marine_farm_culture_area'
 
 
@@ -1287,13 +1273,13 @@ class CoastalMilitaryPracticeArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_military_practice_area'
 
 
@@ -1307,12 +1293,12 @@ class CoastalMooringWarpingFacilityPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
@@ -1324,7 +1310,7 @@ class CoastalMooringWarpingFacilityPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_mooring_warping_facility_point'
 
 
@@ -1337,13 +1323,13 @@ class CoastalNauticalPublicationInformationArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_nautical_publication_information_area'
 
 
@@ -1351,18 +1337,18 @@ class CoastalNavigationLine(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
     catnav = models.CharField(max_length=20, blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_navigation_line'
 
 
@@ -1370,19 +1356,19 @@ class CoastalNavigationalSystemOfMarksArea(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
     marsys = models.FloatField(blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_navigational_system_of_marks_area'
 
 
@@ -1392,18 +1378,18 @@ class CoastalObstructionArea(models.Model):
     catobs = models.CharField(max_length=25, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
     expsou = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     natqua = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     natsur = models.CharField(max_length=254, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
@@ -1411,13 +1397,13 @@ class CoastalObstructionArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_obstruction_area'
 
 
@@ -1427,18 +1413,18 @@ class CoastalObstructionLine(models.Model):
     catobs = models.CharField(max_length=25, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
     expsou = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     natqua = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     natsur = models.CharField(max_length=254, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
@@ -1446,12 +1432,12 @@ class CoastalObstructionLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_obstruction_line'
 
 
@@ -1461,18 +1447,18 @@ class CoastalObstructionPoint(models.Model):
     catobs = models.CharField(max_length=25, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
     expsou = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     natqua = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     natsur = models.CharField(max_length=254, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
@@ -1484,7 +1470,7 @@ class CoastalObstructionPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_obstruction_point'
 
 
@@ -1497,13 +1483,13 @@ class CoastalOffshorePlatformPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -1514,7 +1500,7 @@ class CoastalOffshorePlatformPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_offshore_platform_point'
 
 
@@ -1526,11 +1512,11 @@ class CoastalPilePoint(models.Model):
     colpat = models.CharField(max_length=254, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -1540,7 +1526,7 @@ class CoastalPilePoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_pile_point'
 
 
@@ -1557,40 +1543,40 @@ class CoastalPilotBoardingPlaceArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_pilot_boarding_place_area'
 
 
 class CoastalPipelineSubmarineOnLandLine(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    burdep = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    burdep = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     catpip = models.CharField(max_length=254, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
-    drval1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    drval2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    drval1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    drval2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_pipeline_submarine_on_land_line'
 
 
@@ -1602,13 +1588,13 @@ class CoastalPrecautionaryArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_precautionary_area'
 
 
@@ -1621,12 +1607,12 @@ class CoastalPylonBridgeSupportArea(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
@@ -1634,13 +1620,13 @@ class CoastalPylonBridgeSupportArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_pylon_bridge_support_area'
 
 
@@ -1649,10 +1635,10 @@ class CoastalQualityOfDataArea(models.Model):
     objl = models.FloatField(blank=True, null=True)
     catqua = models.FloatField(blank=True, null=True)
     catzoc = models.FloatField(blank=True, null=True)
-    drval1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    drval2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    posacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    drval1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    drval2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    posacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     surend = models.CharField(max_length=254, blank=True, null=True)
     sursta = models.CharField(max_length=254, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
@@ -1661,13 +1647,13 @@ class CoastalQualityOfDataArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_quality_of_data_area'
 
 
@@ -1677,11 +1663,11 @@ class CoastalRadarTransponderBeaconPoint(models.Model):
     catrtb = models.CharField(max_length=40, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     radwal = models.CharField(max_length=254, blank=True, null=True)
-    sectr1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    sectr2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    sectr1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    sectr2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     siggrp = models.CharField(max_length=254, blank=True, null=True)
     sigseq = models.CharField(max_length=254, blank=True, null=True)
-    valmxr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valmxr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -1691,7 +1677,7 @@ class CoastalRadarTransponderBeaconPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_radar_transponder_beacon_point'
 
 
@@ -1701,9 +1687,9 @@ class CoastalRadioStationPoint(models.Model):
     calsgn = models.CharField(max_length=254, blank=True, null=True)
     catros = models.CharField(max_length=254, blank=True, null=True)
     comcha = models.CharField(max_length=254, blank=True, null=True)
-    estrng = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    estrng = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     sigfrq = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -1714,7 +1700,7 @@ class CoastalRadioStationPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_radio_station_point'
 
 
@@ -1722,12 +1708,12 @@ class CoastalRecommendedRouteCenterlineLine(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
     cattrk = models.CharField(max_length=50, blank=True, null=True)
-    drval1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    drval2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    drval1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    drval2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
     trafic = models.FloatField(blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
@@ -1736,12 +1722,12 @@ class CoastalRecommendedRouteCenterlineLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_recommended_route_centerline_line'
 
 
@@ -1749,12 +1735,12 @@ class CoastalRecommendedTrackLine(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
     cattrk = models.CharField(max_length=50, blank=True, null=True)
-    drval1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    drval2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    drval1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    drval2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
     trafic = models.FloatField(blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
@@ -1763,12 +1749,12 @@ class CoastalRecommendedTrackLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_recommended_track_line'
 
 
@@ -1782,13 +1768,13 @@ class CoastalRestrictedArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_restricted_area'
 
 
@@ -1801,13 +1787,13 @@ class CoastalRiverArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_river_area'
 
 
@@ -1820,20 +1806,20 @@ class CoastalRiverLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_river_line'
 
 
 class CoastalSandWavesPoint(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -1843,7 +1829,7 @@ class CoastalSandWavesPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_sand_waves_point'
 
 
@@ -1857,13 +1843,13 @@ class CoastalSeaAreaNamedWaterArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_sea_area_named_water_area'
 
 
@@ -1880,13 +1866,13 @@ class CoastalSeabedArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_seabed_area'
 
 
@@ -1907,7 +1893,7 @@ class CoastalSeabedAreaPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_seabed_area_point'
 
 
@@ -1920,29 +1906,29 @@ class CoastalShorelineConstructionArea(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horwid = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horwid = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_shoreline_construction_area'
 
 
@@ -1955,28 +1941,28 @@ class CoastalShorelineConstructionLine(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horwid = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horwid = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_shoreline_construction_line'
 
 
@@ -1989,16 +1975,16 @@ class CoastalShorelineConstructionPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horwid = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horwid = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -2009,7 +1995,7 @@ class CoastalShorelineConstructionPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_shoreline_construction_point'
 
 
@@ -2028,7 +2014,7 @@ class CoastalSignalStationWarningPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_signal_station_warning_point'
 
 
@@ -2042,14 +2028,14 @@ class CoastalSiloTankPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -2060,7 +2046,7 @@ class CoastalSiloTankPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_silo_tank_point'
 
 
@@ -2078,7 +2064,7 @@ class CoastalSmallCraftFacilityPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_small_craft_facility_point'
 
 
@@ -2093,7 +2079,7 @@ class CoastalSoundingPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_sounding_point'
 
 
@@ -2110,7 +2096,7 @@ class CoastalSpringPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_spring_point'
 
 
@@ -2119,12 +2105,12 @@ class CoastalTopmarkPoint(models.Model):
     objl = models.FloatField(blank=True, null=True)
     colour = models.CharField(max_length=254, blank=True, null=True)
     colpat = models.CharField(max_length=254, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     marsys = models.FloatField(blank=True, null=True)
     topshp = models.FloatField(blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -2135,7 +2121,7 @@ class CoastalTopmarkPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_topmark_point'
 
 
@@ -2143,19 +2129,19 @@ class CoastalTrafficSeparationSchemeLanePartArea(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
     cattss = models.CharField(max_length=11, blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_traffic_separation_scheme_lane_part_area'
 
 
@@ -2168,13 +2154,13 @@ class CoastalTrafficSeparationZoneArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_traffic_separation_zone_area'
 
 
@@ -2187,12 +2173,12 @@ class CoastalTrafficeSeparationSchemaBoundaryLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_traffice_separation_schema_boundary_line'
 
 
@@ -2200,11 +2186,11 @@ class CoastalTwoWayRoutePartArea(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
     cattrk = models.CharField(max_length=40, blank=True, null=True)
-    drval1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    drval2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    drval1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    drval2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
     trafic = models.FloatField(blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
@@ -2213,13 +2199,13 @@ class CoastalTwoWayRoutePartArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_two_way_route_part_area'
 
 
@@ -2231,9 +2217,9 @@ class CoastalUnderwaterAwashRockPoint(models.Model):
     natqua = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
@@ -2245,7 +2231,7 @@ class CoastalUnderwaterAwashRockPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_underwater_awash_rock_point'
 
 
@@ -2257,13 +2243,13 @@ class CoastalUnsurveyedArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_unsurveyed_area'
 
 
@@ -2272,12 +2258,12 @@ class CoastalVegetationPoint(models.Model):
     objl = models.FloatField(blank=True, null=True)
     catveg = models.CharField(max_length=254, blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -2287,7 +2273,7 @@ class CoastalVegetationPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_vegetation_point'
 
 
@@ -2301,13 +2287,13 @@ class CoastalWaterTurbulenceArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_water_turbulence_area'
 
 
@@ -2325,7 +2311,7 @@ class CoastalWaterTurbulencePoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_water_turbulence_point'
 
 
@@ -2343,7 +2329,7 @@ class CoastalWeedKelpPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_weed_kelp_point'
 
 
@@ -2354,28 +2340,28 @@ class CoastalWreckArea(models.Model):
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
     expsou = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_wreck_area'
 
 
@@ -2386,15 +2372,15 @@ class CoastalWreckPoint(models.Model):
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
     expsou = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -2405,8 +2391,27 @@ class CoastalWreckPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coastal_wreck_point'
+
+
+class ConvertedCoastalCoverage(models.Model):
+    gid = models.IntegerField(primary_key=True)
+    objl = models.FloatField(blank=True, null=True)
+    catcov = models.CharField(max_length=30, blank=True, null=True)
+    inform = models.CharField(max_length=254, blank=True, null=True)
+    sordat = models.CharField(max_length=254, blank=True, null=True)
+    sorind = models.CharField(max_length=254, blank=True, null=True)
+    dsnm = models.CharField(max_length=12, blank=True, null=True)
+    title = models.CharField(max_length=80, blank=True, null=True)
+    share_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    geom = models.MultiPolygonField(srid=32616, blank=True, null=True)
+    objects = models.GeoManager()
+
+    class Meta:
+        managed = True
+        db_table = 'converted_coastal_coverage'
 
 
 class DjangoAdminLog(models.Model):
@@ -2419,16 +2424,17 @@ class DjangoAdminLog(models.Model):
     user = models.ForeignKey(AuthUser)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'django_admin_log'
 
 
 class DjangoContentType(models.Model):
     app_label = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'django_content_type'
         unique_together = (('app_label', 'model'),)
 
@@ -2439,7 +2445,7 @@ class DjangoMigrations(models.Model):
     applied = models.DateTimeField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'django_migrations'
 
 
@@ -2449,7 +2455,7 @@ class DjangoSession(models.Model):
     expire_date = models.DateTimeField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'django_session'
 
 
@@ -2458,7 +2464,7 @@ class DjangoSite(models.Model):
     name = models.CharField(max_length=50)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'django_site'
 
 
@@ -2474,13 +2480,13 @@ class GeneralAdministrationAreaNamedArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_administration_area_named_area'
 
 
@@ -2494,13 +2500,13 @@ class GeneralAnchorageArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_anchorage_area'
 
 
@@ -2518,7 +2524,7 @@ class GeneralAnchorageAreaPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_anchorage_area_point'
 
 
@@ -2532,14 +2538,14 @@ class GeneralBeaconLateralPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     marsys = models.FloatField(blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -2550,7 +2556,7 @@ class GeneralBeaconLateralPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_beacon_lateral_point'
 
 
@@ -2564,14 +2570,14 @@ class GeneralBeaconSpecialPurposeGeneralPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     marsys = models.FloatField(blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -2582,7 +2588,7 @@ class GeneralBeaconSpecialPurposeGeneralPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_beacon_special_purpose_general_point'
 
 
@@ -2595,14 +2601,14 @@ class GeneralBridgeArea(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    horacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    horacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verccl = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    vercop = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verccl = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    vercop = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
@@ -2610,13 +2616,13 @@ class GeneralBridgeArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_bridge_area'
 
 
@@ -2629,14 +2635,14 @@ class GeneralBridgeLine(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    horacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    horacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verccl = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    vercop = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verccl = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    vercop = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
@@ -2644,12 +2650,12 @@ class GeneralBridgeLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_bridge_line'
 
 
@@ -2660,22 +2666,22 @@ class GeneralBuildUpArea(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_build_up_area'
 
 
@@ -2688,14 +2694,14 @@ class GeneralBuildingSinglePoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     functn = models.CharField(max_length=254, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -2706,7 +2712,7 @@ class GeneralBuildingSinglePoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_building_single_point'
 
 
@@ -2717,9 +2723,9 @@ class GeneralBuiltupAreaPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -2730,7 +2736,7 @@ class GeneralBuiltupAreaPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_builtup_area_point'
 
 
@@ -2745,8 +2751,8 @@ class GeneralBuoyLateralPoint(models.Model):
     marsys = models.FloatField(blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -2757,7 +2763,7 @@ class GeneralBuoyLateralPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_buoy_lateral_point'
 
 
@@ -2771,8 +2777,8 @@ class GeneralBuoySafeWaterPoint(models.Model):
     marsys = models.FloatField(blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -2783,7 +2789,7 @@ class GeneralBuoySafeWaterPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_buoy_safe_water_point'
 
 
@@ -2798,8 +2804,8 @@ class GeneralBuoySpecialPurposeGeneralPoint(models.Model):
     marsys = models.FloatField(blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -2810,14 +2816,14 @@ class GeneralBuoySpecialPurposeGeneralPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_buoy_special_purpose_general_point'
 
 
 class GeneralCableSubmarineLine(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    burdep = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    burdep = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     catcbl = models.CharField(max_length=25, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
@@ -2827,12 +2833,12 @@ class GeneralCableSubmarineLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_cable_submarine_line'
 
 
@@ -2841,22 +2847,22 @@ class GeneralCanalArea(models.Model):
     objl = models.FloatField(blank=True, null=True)
     catcan = models.CharField(max_length=20, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
-    horacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horwid = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    horacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horwid = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_canal_area'
 
 
@@ -2869,13 +2875,13 @@ class GeneralCargoTranshipmentArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_cargo_transhipment_area'
 
 
@@ -2887,13 +2893,13 @@ class GeneralCautionArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_caution_area'
 
 
@@ -2909,7 +2915,7 @@ class GeneralCautionAreaPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_caution_area_point'
 
 
@@ -2920,9 +2926,9 @@ class GeneralCoastlineLine(models.Model):
     colour = models.CharField(max_length=254, blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
@@ -2930,12 +2936,12 @@ class GeneralCoastlineLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_coastline_line'
 
 
@@ -2947,13 +2953,13 @@ class GeneralCompilationScaleOfDataArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_compilation_scale_of_data_area'
 
 
@@ -2966,13 +2972,13 @@ class GeneralContiguousZoneArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_contiguous_zone_area'
 
 
@@ -2980,9 +2986,9 @@ class GeneralControlPoint(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
     catctr = models.CharField(max_length=35, blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
@@ -2994,7 +3000,7 @@ class GeneralControlPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_control_point'
 
 
@@ -3007,22 +3013,22 @@ class GeneralCoverageArea(models.Model):
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
     title = models.CharField(max_length=80, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_coverage_area'
 
 
 class GeneralCurrentNonGravitationalPoint(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    curvel = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    curvel = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -3032,7 +3038,7 @@ class GeneralCurrentNonGravitationalPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_current_non_gravitational_point'
 
 
@@ -3042,14 +3048,14 @@ class GeneralDaymarkPoint(models.Model):
     catspm = models.CharField(max_length=254, blank=True, null=True)
     colour = models.CharField(max_length=254, blank=True, null=True)
     colpat = models.CharField(max_length=254, blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     topshp = models.FloatField(blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -3059,49 +3065,49 @@ class GeneralDaymarkPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_daymark_point'
 
 
 class GeneralDepthArea(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    drval1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    drval2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    drval1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    drval2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_depth_area'
 
 
 class GeneralDepthContourLine(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    valdco = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valdco = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_depth_contour_line'
 
 
@@ -3115,13 +3121,13 @@ class GeneralDumpingGroundArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_dumping_ground_area'
 
 
@@ -3139,7 +3145,7 @@ class GeneralDumpingGroundPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_dumping_ground_point'
 
 
@@ -3152,24 +3158,24 @@ class GeneralExclusiveEconomicZoneArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_exclusive_economic_zone_area'
 
 
 class GeneralFairwayArea(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    drval1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    drval1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     trafic = models.FloatField(blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
@@ -3177,13 +3183,13 @@ class GeneralFairwayArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_fairway_area'
 
 
@@ -3195,9 +3201,9 @@ class GeneralFogSignalPoint(models.Model):
     sigfrq = models.FloatField(blank=True, null=True)
     siggen = models.FloatField(blank=True, null=True)
     siggrp = models.CharField(max_length=254, blank=True, null=True)
-    sigper = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    sigper = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     sigseq = models.CharField(max_length=254, blank=True, null=True)
-    valmxr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valmxr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -3207,7 +3213,7 @@ class GeneralFogSignalPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_fog_signal_point'
 
 
@@ -3220,35 +3226,35 @@ class GeneralInshoreTrafficZoneArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_inshore_traffic_zone_area'
 
 
 class GeneralLakeArea(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_lake_area'
 
 
@@ -3262,13 +3268,13 @@ class GeneralLandArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_land_area'
 
 
@@ -3282,12 +3288,12 @@ class GeneralLandAreaLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_land_area_line'
 
 
@@ -3305,7 +3311,7 @@ class GeneralLandAreaPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_land_area_point'
 
 
@@ -3313,9 +3319,9 @@ class GeneralLandElevationPoint(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -3326,7 +3332,7 @@ class GeneralLandElevationPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_land_elevation_point'
 
 
@@ -3343,13 +3349,13 @@ class GeneralLandRegionArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_land_region_area'
 
 
@@ -3370,7 +3376,7 @@ class GeneralLandRegionPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_land_region_point'
 
 
@@ -3383,14 +3389,14 @@ class GeneralLandmarkPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     functn = models.CharField(max_length=254, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -3400,7 +3406,7 @@ class GeneralLandmarkPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_landmark_point'
 
 
@@ -3410,20 +3416,20 @@ class GeneralLightPoint(models.Model):
     catlit = models.CharField(max_length=254, blank=True, null=True)
     colour = models.CharField(max_length=254, blank=True, null=True)
     exclit = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     litchr = models.FloatField(blank=True, null=True)
     litvis = models.CharField(max_length=254, blank=True, null=True)
     marsys = models.FloatField(blank=True, null=True)
     mltylt = models.FloatField(blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    sectr1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    sectr2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    sectr1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    sectr2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     siggrp = models.CharField(max_length=254, blank=True, null=True)
-    sigper = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    sigper = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     sigseq = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    valnmr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    valnmr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -3434,7 +3440,7 @@ class GeneralLightPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_light_point'
 
 
@@ -3448,13 +3454,13 @@ class GeneralMilitaryPracticeArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_military_practice_area'
 
 
@@ -3468,12 +3474,12 @@ class GeneralMooringWarpingFacilityPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
@@ -3485,7 +3491,7 @@ class GeneralMooringWarpingFacilityPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_mooring_warping_facility_point'
 
 
@@ -3498,13 +3504,13 @@ class GeneralNauticalPublicationInformationArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_nautical_publication_information_area'
 
 
@@ -3512,19 +3518,19 @@ class GeneralNavigationalSystemOfMarksArea(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
     marsys = models.FloatField(blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_navigational_system_of_marks_area'
 
 
@@ -3534,18 +3540,18 @@ class GeneralObstructionArea(models.Model):
     catobs = models.CharField(max_length=25, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
     expsou = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     natqua = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     natsur = models.CharField(max_length=254, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
@@ -3553,13 +3559,13 @@ class GeneralObstructionArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_obstruction_area'
 
 
@@ -3569,18 +3575,18 @@ class GeneralObstructionLine(models.Model):
     catobs = models.CharField(max_length=25, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
     expsou = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     natqua = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     natsur = models.CharField(max_length=254, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
@@ -3588,12 +3594,12 @@ class GeneralObstructionLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_obstruction_line'
 
 
@@ -3603,18 +3609,18 @@ class GeneralObstructionPoint(models.Model):
     catobs = models.CharField(max_length=25, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
     expsou = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     natqua = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     natsur = models.CharField(max_length=254, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
@@ -3626,7 +3632,7 @@ class GeneralObstructionPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_obstruction_point'
 
 
@@ -3639,13 +3645,13 @@ class GeneralOffshorePlatformPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -3656,7 +3662,7 @@ class GeneralOffshorePlatformPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_offshore_platform_point'
 
 
@@ -3668,11 +3674,11 @@ class GeneralPilePoint(models.Model):
     colpat = models.CharField(max_length=254, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -3682,7 +3688,7 @@ class GeneralPilePoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_pile_point'
 
 
@@ -3695,35 +3701,35 @@ class GeneralPipelineOverheadLine(models.Model):
     convis = models.FloatField(blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_pipeline_overhead_line'
 
 
 class GeneralPipelineSubmarineOnLandPoint(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    burdep = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    burdep = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     catpip = models.CharField(max_length=254, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
-    drval1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    drval2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    drval1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    drval2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -3734,7 +3740,7 @@ class GeneralPipelineSubmarineOnLandPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_pipeline_submarine_on_land_point'
 
 
@@ -3743,10 +3749,10 @@ class GeneralQualityOfDataArea(models.Model):
     objl = models.FloatField(blank=True, null=True)
     catqua = models.FloatField(blank=True, null=True)
     catzoc = models.FloatField(blank=True, null=True)
-    drval1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    drval2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    posacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    drval1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    drval2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    posacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     surend = models.CharField(max_length=254, blank=True, null=True)
     sursta = models.CharField(max_length=254, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
@@ -3755,13 +3761,13 @@ class GeneralQualityOfDataArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_quality_of_data_area'
 
 
@@ -3771,11 +3777,11 @@ class GeneralRadarTransponderBeaconPoint(models.Model):
     catrtb = models.CharField(max_length=40, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     radwal = models.CharField(max_length=254, blank=True, null=True)
-    sectr1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    sectr2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    sectr1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    sectr2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     siggrp = models.CharField(max_length=254, blank=True, null=True)
     sigseq = models.CharField(max_length=254, blank=True, null=True)
-    valmxr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valmxr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -3785,7 +3791,7 @@ class GeneralRadarTransponderBeaconPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_radar_transponder_beacon_point'
 
 
@@ -3795,9 +3801,9 @@ class GeneralRadioStationPoint(models.Model):
     calsgn = models.CharField(max_length=254, blank=True, null=True)
     catros = models.CharField(max_length=254, blank=True, null=True)
     comcha = models.CharField(max_length=254, blank=True, null=True)
-    estrng = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    estrng = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     sigfrq = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -3808,7 +3814,7 @@ class GeneralRadioStationPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_radio_station_point'
 
 
@@ -3822,13 +3828,13 @@ class GeneralRestrictedArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_restricted_area'
 
 
@@ -3837,9 +3843,9 @@ class GeneralRetroReflectorPoint(models.Model):
     objl = models.FloatField(blank=True, null=True)
     colour = models.CharField(max_length=254, blank=True, null=True)
     colpat = models.CharField(max_length=254, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     marsys = models.FloatField(blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -3850,7 +3856,7 @@ class GeneralRetroReflectorPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_retro_reflector_point'
 
 
@@ -3863,13 +3869,13 @@ class GeneralRiverArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_river_area'
 
 
@@ -3882,12 +3888,12 @@ class GeneralRiverLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_river_line'
 
 
@@ -3901,13 +3907,13 @@ class GeneralSeaAreaNamedWaterArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_sea_area_named_water_area'
 
 
@@ -3924,13 +3930,13 @@ class GeneralSeabedArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_seabed_area'
 
 
@@ -3951,7 +3957,7 @@ class GeneralSeabedAreaPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_seabed_area_point'
 
 
@@ -3964,28 +3970,28 @@ class GeneralShorelineConstructionLine(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horwid = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horwid = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_shoreline_construction_line'
 
 
@@ -3999,14 +4005,14 @@ class GeneralSiloTankPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -4017,7 +4023,7 @@ class GeneralSiloTankPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_silo_tank_point'
 
 
@@ -4032,7 +4038,7 @@ class GeneralSoundingPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_sounding_point'
 
 
@@ -4049,7 +4055,7 @@ class GeneralSpringPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_spring_point'
 
 
@@ -4058,12 +4064,12 @@ class GeneralTopmarkPoint(models.Model):
     objl = models.FloatField(blank=True, null=True)
     colour = models.CharField(max_length=254, blank=True, null=True)
     colpat = models.CharField(max_length=254, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     marsys = models.FloatField(blank=True, null=True)
     topshp = models.FloatField(blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -4074,7 +4080,7 @@ class GeneralTopmarkPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_topmark_point'
 
 
@@ -4087,12 +4093,12 @@ class GeneralTrafficSeparationLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_traffic_separation_line'
 
 
@@ -4100,19 +4106,19 @@ class GeneralTrafficSeparationSchemeLanePartArea(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
     cattss = models.CharField(max_length=11, blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_traffic_separation_scheme_lane_part_area'
 
 
@@ -4125,13 +4131,13 @@ class GeneralTrafficSeparationZoneArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_traffic_separation_zone_area'
 
 
@@ -4144,12 +4150,12 @@ class GeneralTrafficeSeparationSchemaBoundaryLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_traffice_separation_schema_boundary_line'
 
 
@@ -4157,11 +4163,11 @@ class GeneralTwoWayRoutePartArea(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
     cattrk = models.CharField(max_length=40, blank=True, null=True)
-    drval1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    drval2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    drval1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    drval2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
     trafic = models.FloatField(blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
@@ -4170,13 +4176,13 @@ class GeneralTwoWayRoutePartArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_two_way_route_part_area'
 
 
@@ -4188,9 +4194,9 @@ class GeneralUnderwaterAwashRockPoint(models.Model):
     natqua = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
@@ -4202,7 +4208,7 @@ class GeneralUnderwaterAwashRockPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_underwater_awash_rock_point'
 
 
@@ -4214,13 +4220,13 @@ class GeneralUnsurveyedArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_unsurveyed_area'
 
 
@@ -4238,7 +4244,7 @@ class GeneralWaterTurbulencePoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_water_turbulence_point'
 
 
@@ -4249,28 +4255,28 @@ class GeneralWreckArea(models.Model):
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
     expsou = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_wreck_area'
 
 
@@ -4281,15 +4287,15 @@ class GeneralWreckPoint(models.Model):
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
     expsou = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -4300,22 +4306,33 @@ class GeneralWreckPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'general_wreck_point'
+
+
+class GridTable(models.Model):
+    id = models.CharField(max_length=10, blank=True, null=True)
+    gid = models.AutoField(primary_key=True)
+    geom = models.PolygonField(srid=32616, blank=True, null=True)
+    objects = models.GeoManager()
+
+    class Meta:
+        managed = True
+        db_table = 'grid_table'
 
 
 class Layer(models.Model):
     topology = models.ForeignKey('Topology')
     layer_id = models.IntegerField()
-    schema_name = models.CharField(max_length=1)
-    table_name = models.CharField(max_length=1)
-    feature_column = models.CharField(max_length=1)
+    schema_name = models.CharField(max_length=50)
+    table_name = models.CharField(max_length=50)
+    feature_column = models.CharField(max_length=50)
     feature_type = models.IntegerField()
     level = models.IntegerField()
     child_id = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'layer'
         unique_together = (('topology', 'layer_id'), ('schema_name', 'table_name', 'feature_column'),)
 
@@ -4328,7 +4345,7 @@ class Ne50MOcean(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'ne_50m_ocean'
 
 
@@ -4344,13 +4361,13 @@ class OverviewAdministrationAreaNamedArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_administration_area_named_area'
 
 
@@ -4368,7 +4385,7 @@ class OverviewAnchorageAreaPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_anchorage_area_point'
 
 
@@ -4382,14 +4399,14 @@ class OverviewBeaconLateralPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     marsys = models.FloatField(blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -4400,7 +4417,7 @@ class OverviewBeaconLateralPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_beacon_lateral_point'
 
 
@@ -4414,14 +4431,14 @@ class OverviewBeaconSpecialPurposeGeneralPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     marsys = models.FloatField(blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -4432,7 +4449,7 @@ class OverviewBeaconSpecialPurposeGeneralPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_beacon_special_purpose_general_point'
 
 
@@ -4445,14 +4462,14 @@ class OverviewBridgeLine(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    horacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    horacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verccl = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    vercop = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verccl = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    vercop = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
@@ -4460,12 +4477,12 @@ class OverviewBridgeLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_bridge_line'
 
 
@@ -4478,14 +4495,14 @@ class OverviewBuildingSinglePoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     functn = models.CharField(max_length=254, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -4496,7 +4513,7 @@ class OverviewBuildingSinglePoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_building_single_point'
 
 
@@ -4507,22 +4524,22 @@ class OverviewBuiltUpArea(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_built_up_area'
 
 
@@ -4533,9 +4550,9 @@ class OverviewBuiltupAreaPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -4546,7 +4563,7 @@ class OverviewBuiltupAreaPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_builtup_area_point'
 
 
@@ -4561,8 +4578,8 @@ class OverviewBuoyLateralPoint(models.Model):
     marsys = models.FloatField(blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -4573,7 +4590,7 @@ class OverviewBuoyLateralPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_buoy_lateral_point'
 
 
@@ -4587,8 +4604,8 @@ class OverviewBuoySafeWaterPoint(models.Model):
     marsys = models.FloatField(blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -4599,7 +4616,7 @@ class OverviewBuoySafeWaterPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_buoy_safe_water_point'
 
 
@@ -4614,8 +4631,8 @@ class OverviewBuoySpecialPurposeGeneralPoint(models.Model):
     marsys = models.FloatField(blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -4626,14 +4643,14 @@ class OverviewBuoySpecialPurposeGeneralPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_buoy_special_purpose_general_point'
 
 
 class OverviewCableSubmarineLine(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    burdep = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    burdep = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     catcbl = models.CharField(max_length=25, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
@@ -4643,12 +4660,12 @@ class OverviewCableSubmarineLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_cable_submarine_line'
 
 
@@ -4657,21 +4674,21 @@ class OverviewCanalLine(models.Model):
     objl = models.FloatField(blank=True, null=True)
     catcan = models.CharField(max_length=20, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
-    horacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horwid = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    horacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horwid = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_canal_line'
 
 
@@ -4684,13 +4701,13 @@ class OverviewCargoTranshipmentArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_cargo_transhipment_area'
 
 
@@ -4702,13 +4719,13 @@ class OverviewCautionArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_caution_area'
 
 
@@ -4724,7 +4741,7 @@ class OverviewCautionAreaPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_caution_area_point'
 
 
@@ -4735,9 +4752,9 @@ class OverviewCoastlineLine(models.Model):
     colour = models.CharField(max_length=254, blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
@@ -4745,12 +4762,12 @@ class OverviewCoastlineLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_coastline_line'
 
 
@@ -4763,13 +4780,13 @@ class OverviewContiguousZoneArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_contiguous_zone_area'
 
 
@@ -4782,22 +4799,22 @@ class OverviewCoverageArea(models.Model):
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
     title = models.CharField(max_length=80, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_coverage_area'
 
 
 class OverviewCurentNonGravitationalPoint(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    curvel = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    curvel = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -4807,7 +4824,7 @@ class OverviewCurentNonGravitationalPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_curent_non_gravitational_point'
 
 
@@ -4817,14 +4834,14 @@ class OverviewDaymarkPoint(models.Model):
     catspm = models.CharField(max_length=254, blank=True, null=True)
     colour = models.CharField(max_length=254, blank=True, null=True)
     colpat = models.CharField(max_length=254, blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     topshp = models.FloatField(blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -4834,49 +4851,49 @@ class OverviewDaymarkPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_daymark_point'
 
 
 class OverviewDepthArea(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    drval1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    drval2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    drval1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    drval2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_depth_area'
 
 
 class OverviewDepthContourLine(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    valdco = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valdco = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_depth_contour_line'
 
 
@@ -4890,13 +4907,13 @@ class OverviewDumpingGroundArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_dumping_ground_area'
 
 
@@ -4909,13 +4926,13 @@ class OverviewExclusiveEconomicZoneArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_exclusive_economic_zone_area'
 
 
@@ -4927,9 +4944,9 @@ class OverviewFogSignalPoint(models.Model):
     sigfrq = models.FloatField(blank=True, null=True)
     siggen = models.FloatField(blank=True, null=True)
     siggrp = models.CharField(max_length=254, blank=True, null=True)
-    sigper = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    sigper = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     sigseq = models.CharField(max_length=254, blank=True, null=True)
-    valmxr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valmxr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -4939,29 +4956,29 @@ class OverviewFogSignalPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_fog_signal_point'
 
 
 class OverviewLakeArea(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_lake_area'
 
 
@@ -4975,13 +4992,13 @@ class OverviewLandArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_land_area'
 
 
@@ -4995,12 +5012,12 @@ class OverviewLandAreaLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_land_area_line'
 
 
@@ -5018,7 +5035,7 @@ class OverviewLandAreaPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_land_area_point'
 
 
@@ -5026,9 +5043,9 @@ class OverviewLandElevationPoint(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -5039,7 +5056,7 @@ class OverviewLandElevationPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_land_elevation_point'
 
 
@@ -5056,13 +5073,13 @@ class OverviewLandRegionArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_land_region_area'
 
 
@@ -5083,7 +5100,7 @@ class OverviewLandRegionPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_land_region_point'
 
 
@@ -5096,14 +5113,14 @@ class OverviewLandmarkPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    elevat = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    elevat = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     functn = models.CharField(max_length=254, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -5113,7 +5130,7 @@ class OverviewLandmarkPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_landmark_point'
 
 
@@ -5127,13 +5144,13 @@ class OverviewMilitaryPracticeArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_military_practice_area'
 
 
@@ -5147,12 +5164,12 @@ class OverviewMooringWarpingFacilityPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
@@ -5164,7 +5181,7 @@ class OverviewMooringWarpingFacilityPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_mooring_warping_facility_point'
 
 
@@ -5177,13 +5194,13 @@ class OverviewNauticalPublicationInformationArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_nautical_publication_information_area'
 
 
@@ -5191,19 +5208,19 @@ class OverviewNavigationalSystemOfMarksArea(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
     marsys = models.FloatField(blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_navigational_system_of_marks_area'
 
 
@@ -5213,18 +5230,18 @@ class OverviewObstructionArea(models.Model):
     catobs = models.CharField(max_length=25, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
     expsou = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     natqua = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     natsur = models.CharField(max_length=254, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
@@ -5232,13 +5249,13 @@ class OverviewObstructionArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_obstruction_area'
 
 
@@ -5248,18 +5265,18 @@ class OverviewObstructionLine(models.Model):
     catobs = models.CharField(max_length=25, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
     expsou = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     natqua = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     natsur = models.CharField(max_length=254, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
@@ -5267,12 +5284,12 @@ class OverviewObstructionLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_obstruction_line'
 
 
@@ -5282,18 +5299,18 @@ class OverviewObstructionPoint(models.Model):
     catobs = models.CharField(max_length=25, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
     expsou = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     natqua = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     natsur = models.CharField(max_length=254, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
@@ -5305,7 +5322,7 @@ class OverviewObstructionPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_obstruction_point'
 
 
@@ -5318,13 +5335,13 @@ class OverviewOffshorePlatformPoint(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -5335,7 +5352,7 @@ class OverviewOffshorePlatformPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_offshore_platform_point'
 
 
@@ -5347,11 +5364,11 @@ class OverviewPilePoint(models.Model):
     colpat = models.CharField(max_length=254, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -5361,34 +5378,34 @@ class OverviewPilePoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_pile_point'
 
 
 class OverviewPipelineSubmarineOnLandLine(models.Model):
     gid = models.AutoField(primary_key=True)
     objl = models.FloatField(blank=True, null=True)
-    burdep = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    burdep = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     catpip = models.CharField(max_length=254, blank=True, null=True)
     condtn = models.FloatField(blank=True, null=True)
-    drval1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    drval2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    drval1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    drval2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     prodct = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_pipeline_submarine_on_land_line'
 
 
@@ -5398,11 +5415,11 @@ class OverviewRadarTransponderBeaconPoint(models.Model):
     catrtb = models.CharField(max_length=40, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     radwal = models.CharField(max_length=254, blank=True, null=True)
-    sectr1 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    sectr2 = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    sectr1 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    sectr2 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     siggrp = models.CharField(max_length=254, blank=True, null=True)
     sigseq = models.CharField(max_length=254, blank=True, null=True)
-    valmxr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valmxr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
@@ -5412,7 +5429,7 @@ class OverviewRadarTransponderBeaconPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_radar_transponder_beacon_point'
 
 
@@ -5422,9 +5439,9 @@ class OverviewRadioStationPoint(models.Model):
     calsgn = models.CharField(max_length=254, blank=True, null=True)
     catros = models.CharField(max_length=254, blank=True, null=True)
     comcha = models.CharField(max_length=254, blank=True, null=True)
-    estrng = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    estrng = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    orient = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    orient = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     sigfrq = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -5435,7 +5452,7 @@ class OverviewRadioStationPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_radio_station_point'
 
 
@@ -5449,13 +5466,13 @@ class OverviewRestrictedArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_restricted_area'
 
 
@@ -5468,13 +5485,13 @@ class OverviewRiverArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_river_area'
 
 
@@ -5487,12 +5504,12 @@ class OverviewRiverLine(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_river_line'
 
 
@@ -5506,13 +5523,13 @@ class OverviewSeaAreaNamedWaterArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_sea_area_named_water_area'
 
 
@@ -5530,7 +5547,7 @@ class OverviewSeaAreaNamedWaterAreaPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_sea_area_named_water_area_point'
 
 
@@ -5547,13 +5564,13 @@ class OverviewSeabedArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_seabed_area'
 
 
@@ -5574,7 +5591,7 @@ class OverviewSeabedAreaPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_seabed_area_point'
 
 
@@ -5587,28 +5604,28 @@ class OverviewShorelineConstructionLine(models.Model):
     condtn = models.FloatField(blank=True, null=True)
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horclr = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    horwid = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horclr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    horwid = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     natcon = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiLineStringField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_shoreline_construction_line'
 
 
@@ -5632,7 +5649,7 @@ class OverviewSlopingGroundPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_sloping_ground_point'
 
 
@@ -5647,7 +5664,7 @@ class OverviewSoundingPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_sounding_point'
 
 
@@ -5656,12 +5673,12 @@ class OverviewTopmarkPoint(models.Model):
     objl = models.FloatField(blank=True, null=True)
     colour = models.CharField(max_length=254, blank=True, null=True)
     colpat = models.CharField(max_length=254, blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     marsys = models.FloatField(blank=True, null=True)
     topshp = models.FloatField(blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     picrep = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -5672,7 +5689,7 @@ class OverviewTopmarkPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_topmark_point'
 
 
@@ -5684,9 +5701,9 @@ class OverviewUnderwaterAwashRockPoint(models.Model):
     natqua = models.CharField(max_length=254, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
@@ -5698,7 +5715,7 @@ class OverviewUnderwaterAwashRockPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_underwater_awash_rock_point'
 
 
@@ -5710,13 +5727,13 @@ class OverviewUnsurveyedArea(models.Model):
     sordat = models.CharField(max_length=254, blank=True, null=True)
     sorind = models.CharField(max_length=254, blank=True, null=True)
     dsnm = models.CharField(max_length=12, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    shape_len = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_len = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_unsurveyed_area'
 
 
@@ -5727,15 +5744,15 @@ class OverviewWreckPoint(models.Model):
     conrad = models.FloatField(blank=True, null=True)
     convis = models.FloatField(blank=True, null=True)
     expsou = models.FloatField(blank=True, null=True)
-    height = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     objnam = models.CharField(max_length=254, blank=True, null=True)
     quasou = models.CharField(max_length=254, blank=True, null=True)
-    souacc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    souacc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     tecsou = models.CharField(max_length=254, blank=True, null=True)
-    valsou = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
-    veracc = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    valsou = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    veracc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     verdat = models.FloatField(blank=True, null=True)
-    verlen = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    verlen = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     watlev = models.FloatField(blank=True, null=True)
     inform = models.CharField(max_length=254, blank=True, null=True)
     scamin = models.FloatField(blank=True, null=True)
@@ -5746,20 +5763,35 @@ class OverviewWreckPoint(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'overview_wreck_point'
 
 
 class PathGrid(models.Model):
     gid = models.AutoField(primary_key=True)
-    geom = models.MultiPolygonField(srid=32616,
-                                    blank=True,
-                                    null=True)
+    geom = models.MultiPolygonField(srid=32616, blank=True, null=True)
+    land_flag = models.NullBooleanField()
+    zero_depth_flag = models.NullBooleanField()
+    part_land_flag = models.NullBooleanField()
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'path_grid'
+
+
+class TestRoutes(models.Model):
+    gid = models.AutoField(primary_key=True)
+    name = models.CharField(unique=True, max_length=100)
+    start = models.CharField(max_length=150)
+    end = models.CharField(max_length=150)
+    distance = models.DecimalField(max_digits=1000, decimal_places=5, blank=True, null=True)
+    geom = models.LineStringField(blank=True, null=True)
+    objects = models.GeoManager()
+
+    class Meta:
+        managed = True
+        db_table = 'test_routes'
 
 
 class TmsBasemap(models.Model):
@@ -5768,7 +5800,7 @@ class TmsBasemap(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'tms_basemap'
 
 
@@ -5779,5 +5811,5 @@ class Topology(models.Model):
     hasz = models.BooleanField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'topology'
