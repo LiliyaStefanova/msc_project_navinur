@@ -608,7 +608,7 @@
             <Parameter name="user">postgres</Parameter>
             <Parameter name="password">password1</Parameter>
             <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">(select * from test_routes where name='Test BFS larger') as route</Parameter>
+            <Parameter name="table">(select * from test_routes where gid=2) as route</Parameter>
         </Datasource>
     </Layer>
 </Map>

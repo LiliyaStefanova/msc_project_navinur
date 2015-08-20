@@ -1,32 +1,44 @@
 __author__ = 'lstefa'
 
-import shapely
+import pyproj
 import heapq
 from navinur.shared.models import PathGrid
+import grid_utils
 
 
 class AStarPathFinder:
 
-    closed_nodes = []
-    open_nodes = []
-    visited = {}
-    qs = PathGrid.objects.all()
-
+    # TODO sort out constructor object
     def __init__(self):
-        None
+        self.qs = PathGrid.objects.all()
 
-    def astar_path_find(current, end, graph):
+    def initialize_heuristic(self, graph):
+        h = {}
+        for node in graph:
+            h[node] = 0
+        return h
 
+    def initialize_parents(self, graph):
+        parents = {}
+        for node in graph:
+            parents[node] = -1
+        return parents
+
+    def astar_path_find(self, current, target, graph):
+        h = self.initialize_heuristic(graph)
+        parents = self.initialize_parents(graph)
+        geod = pyproj.Geod(ellps="WGS84")
+        # open and closed lists implemented as sets for better performance
         open_nodes = set()
         closed_nodes = set()
+        # heapq priority queue structure included in order to efficiently provide the minimum next heuristic value
         open_heap = []
-        # add starting location to opening list and empty closed list
 
         # uses appending and reversing for faster traversing through the path
         def find_path(c):
             path = [c]
-            while c.parent is not None:
-                c = c.parent
+            while parents[c] is not -1:
+                c = parents[c]
                 path.append(c)
             path.reverse()
             return path
@@ -35,21 +47,22 @@ class AStarPathFinder:
         open_heap.append((0, current))
         while open_nodes:
             current = heapq.heappop(open_heap)[1]
-            if current == end:
+            if current == target:
                 return find_path(current)
             open_nodes.remove(current)
             closed_nodes.add(current)
             for cell in graph[current]:
                 if cell not in closed_nodes:
-                    # assign heuristics value to cell
+                    db_entry = PathGrid.objects.get(pk=cell)
+                    if db_entry.land_flag or db_entry.zero_depth_flag:
+                        h[cell] = 1000000
+                    else:
+                        clon, clat = grid_utils.find_cell_centre_coords(current, self.qs)
+                        tlon, tlat = grid_utils.find_cell_centre_coords(target, self.qs)
+                        h[cell] = geod.inv(clon, clat, tlon, tlat)[2]
                     if cell not in open_nodes:
                         open_nodes.add(cell)
-                        heapq.heappush(open_heap, (cell.h, cell))
+                        heapq.heappush(open_heap, (h[cell], cell))
+                    parents[cell] = current
         return []
-
-
-    def get_cost(graph, current, end):
-        distance = current.distance(end)
-        return distance
-
 

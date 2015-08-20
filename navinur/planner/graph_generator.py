@@ -25,15 +25,17 @@ def generate_graph():
 
 def generate_heurstic_graph():
     g = {}
+    h = 0
     for cell in qs_all_grid:
         y = []
         for neighbour in PathGrid.objects.filter(geom__touches=cell.geom):
             n = neighbour.gid
             y.append(n)
-        g[cell.gid] = y
+        g[(cell.gid, h)] = y
 
     f = open('heuristic_outfile.txt', 'wb')
     pickle.dump(g, f)
     f.close()
 
 generate_heurstic_graph()
+
