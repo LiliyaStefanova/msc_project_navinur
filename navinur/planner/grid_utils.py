@@ -13,10 +13,10 @@ from navinur.shared.models import PathGrid
 qs = PathGrid.objects.all()
 
 
-def start_and_end_points():
-    start_pt = Point(-89.51, 28.95, srid=4326)
-    end_pt = Point(-88.99, 29.43, srid=4326)
-    # GeoDjango will c onvert the geometry of the point to the correct SRID of table being looked up
+def start_end_points_to_cells(start_pt, end_pt):
+    # start_pt = Point(-89.51, 28.95, srid=4326)
+    # end_pt = Point(-88.99, 29.43, srid=4326)
+    # GeoDjango will convert the geometry of the point to the correct SRID of table being looked up
     start_cell = PathGrid.objects.get(geom__contains=start_pt)
     end_cell = PathGrid.objects.get(geom__contains=end_pt)
     return start_cell.gid, end_cell.gid
