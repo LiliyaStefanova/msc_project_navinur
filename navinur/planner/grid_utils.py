@@ -7,7 +7,6 @@ from pyproj import Proj
 
 django.setup()
 from django.contrib.gis.db.models import Extent
-from django.contrib.gis.geos import Point
 from navinur.shared.models import PathGrid
 
 qs = PathGrid.objects.all()
@@ -49,16 +48,10 @@ def find_cell_centre_coords(cell, query_string):
 def convert_to_latlon(p):
     utm16 = Proj(init='epsg:32616')
     unproj = Proj(init='epsg:4326')
-    long, lat = pyproj.transform(utm16, unproj, p.x, p.y)
-    return long, lat
+    lon, lat = pyproj.transform(utm16, unproj, p.x, p.y)
+    return lon, lat
 
 
 def cell_containing_point(pt):
     cell = PathGrid.objects.get(geom__contains=pt)
     return cell.geom
-
-# point = Point(255609.0000000000000000,
-# 3205174.0000000000000000, srid=32616)
-# # c = cell_containing_point(point)
-# print(convert_to_latlon(point))
-# print(find_cell_centre_coords(start_and_end_points()[0], qs))

@@ -5,6 +5,7 @@
     <title>Route Planner</title>
     <!--<link rel="stylesheet"  type="text/css" href="openlayers-2.13.1/theme/default/style.css"/>-->
     <!--<link rel="stylesheet" type="text/css" href="general.css"/>-->
+    <link rel="stylesheet" type="text/css" href="http://openlayers.org/api/OpenLayers.css"/>
     <style type="text/css">
     #map {
     background-color: rgb(0, 0, 0);
@@ -44,6 +45,10 @@
     <script type="text/javascript">
         var start_end_coords = [];
         var num_clicks = 0;
+        var box_extents = [
+        [-97.94, 17.80,-76.10, 33.57],
+        [-90.25, 27.91,-88.32, 30.33]
+        ];
         OpenLayers.Control.Click = OpenLayers.Class(
             OpenLayers.Control, {
                 defaultHandlerOptions: {
@@ -61,9 +66,9 @@
                 },
                 onClick: function(e) {
                     var coord = map.getLonLatFromViewPortPx(e.xy);
-                    if(coord.lon<90 || coord.lon>-88 || coord.lat>30 || coord.lat<27) {
-                        alert("No route navigation available for this area")
-                        window.location.reload()
+                    if(coord.lon<-90 || coord.lon>-88 || coord.lat>30 || coord.lat<27) {
+                        alert("No route navigation available for this area");
+                        <!--window.location.href = document.URL;-->
                         }
                     window.alert("Coordinates:" + coord);
                     //push adds the item to the end of the array
@@ -126,12 +131,24 @@
                                               "View Old Routes" +"</a>"
                                               });
             markers = new OpenLayers.Layer.Markers("Waypoints");
+            var boxes = new OpenLayers.Layer.Vector("Boxes");
+            for(var i = 0; i<box_extents.length; i++){
+                ext = box_extents[i];
+                bounds = OpenLayers.Bounds.fromArray(ext);
+                box = new OpenLayers.Feature.Vector(bounds.toGeometry());
+                boxes.addFeatures(box);
+            }
             map.addLayer(layer);
             map.addLayer(markers);
-            map.zoomToMaxExtent();
+            map.addLayers(boxes)
             var click = new OpenLayers.Control.Click();
             map.addControl(click);
+            map.addControl(new OpenLayers.Control.LayerSwitcher());
+            var select_feature = new OpenLayers.Control.SelectFeature(boxes);
+            map.addControl(select_feature);
             click.activate();
+            select_feature.activate();
+             map.zoomToMaxExtent();
             map.setCenter([-70, 25], 3)
             }
     </script>
