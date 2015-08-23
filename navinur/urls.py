@@ -15,6 +15,9 @@ Including another URLconf
 """
 from django.contrib.gis import admin
 from django.conf.urls import *
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 admin.autodiscover()
 
 urlpatterns = [
@@ -22,4 +25,4 @@ urlpatterns = [
     url(r'^tms/', include('navinur.tms.urls')),
     url(r'^planner/', include('navinur.planner.urls')),
     url(r'^meteo/', include('navinur.meteo.urls'))
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

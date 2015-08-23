@@ -109,7 +109,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
-    "django.core.context_processors.static",
+    "django.core.context_processors.staticfiles",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
 )
@@ -125,7 +125,16 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.8/howto/static-files/
+# https://docs.djangoproject.com/en/1.8/howto/staticfiles-files/
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATIC_URL = '/staticfiles/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'staticfiles')
+)

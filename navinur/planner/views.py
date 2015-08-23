@@ -24,6 +24,14 @@ def display_map(request):
                    'tms_url': tms_url})
 
 
+def display_route(request, route_id):
+    tms_url = "http://" + request.get_host() + "/tms/"
+    display_route_url = "http://"+request.get_host()+"/planner/display_route/"+route_id
+    return render(request, "main.html",
+                  {'tms_url': tms_url}
+                  )
+
+
 def calc_route(request):
     try:
         start_lat = float(request.GET['start_lat'])
@@ -45,6 +53,7 @@ def calc_route(request):
 def a_star_route(start, target):
     print ("Route start point: {}".format(start))
     print ("Route end point: {}".format(target))
+    # TODO fix this path
     g = pickle.load(open('/home/lstefa/repos/project_navinur/navinur/planner/outfile.txt', 'rb'))
     gra = graph.Graph(g)
     print("Graph dictionary generated...")
