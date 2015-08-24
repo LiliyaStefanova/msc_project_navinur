@@ -29,21 +29,19 @@ def root(request):
         return HttpResponse("Error")
 
 
-def service(request, version):
+def service(request, version, route_id):
     # creation of a service xml file which will be accessed by Openlayers
     try:
         if version != "1.0":
             raise Http404
         base_url = request.build_absolute_uri()
-        area_id = "1"
         xml = []
         xml.append('<?xml version = "1.0" encoding = "utf-8" ?>')
         xml.append('<TileMapService version="1.0" services="' + base_url + '">')
         xml.append('<Title> Navinur Tile Map Service</Title>')
         xml.append('<Abstract></Abstract>')
         xml.append('    <TileMaps>')
-        xml.append('        <TileMap title= "Bay of Mexico" srs="EPSG:4326" href= "' + base_url + '/'
-                   + area_id + '"/>')
+        xml.append('       <TileMap title= "Bay of Mexico" srs="EPSG:4326" href= "' + base_url + '/' + route_id + '"/>')
         xml.append('    </TileMaps>')
         xml.append('</TileMapService>')
         return HttpResponse("\n".join(xml), content_type="text/xml")
@@ -52,7 +50,8 @@ def service(request, version):
         return HttpResponse("Error")
 
 
-def tile_map(request, version, area_id):
+def tile_map(request, version, route_id):
+    print("Request looks like:{}".format(request))
     if version != "1.0":
         raise Http404
     try:
@@ -80,10 +79,10 @@ def tile_map(request, version, area_id):
         return HttpResponse("Error")
 
 
-def tile(request, version, area_id, zoom, x, y):
+def tile(request, version, route_id, zoom, x, y):
     try:
         # check parameters are specified correctly
-        if version != "1.0" or area_id != "1":
+        if version != "1.0":
             raise Http404
 
         zoom = int(zoom)
@@ -114,6 +113,18 @@ def tile(request, version, area_id, zoom, x, y):
 
         # TODO fix these links
         mapfile = "/home/lstefa/repos/project_navinur/navinur/tms/style/map_file.xml"
+
+        route_layer = mapnik.Layer("Routes")
+        if route_id != 0:
+            query = "(select * from test_routes where gid =" + route_id + ") as route"
+            params = dict(dbname='navinur_db', table=query, user='postgres', password='password1', host='localhost')
+            data_source = mapnik.PostGIS(**params)
+            route_layer.datasource = data_source
+
+            route_layer.styles.append("route")
+
+    # TODO fix these links
+        map.layers.append(route_layer)
         mapnik.load_map(map, mapfile)
         box = mapnik.Box2d(min_long, min_lat, max_long, max_lat)
         map.zoom_to_box(box)
@@ -130,4 +141,3 @@ def tile(request, version, area_id, zoom, x, y):
 
 def _units_per_pixel(zoom_level):
     return 0.703125 / math.pow(2, zoom_level)
-

@@ -8,16 +8,17 @@ import grid_utils
 
 class AStarPathFinder:
 
-    # TODO sort out constructor object
     def __init__(self):
         self.qs = PathGrid.objects.all()
 
+    @staticmethod
     def initialize_heuristic(self, graph):
         h = {}
         for node in graph:
             h[node] = 0
         return h
 
+    @staticmethod
     def initialize_parents(self, graph):
         parents = {}
         for node in graph:
@@ -25,8 +26,8 @@ class AStarPathFinder:
         return parents
 
     def astar_path_find(self, current, target, graph):
-        h = self.initialize_heuristic(graph)
-        parents = self.initialize_parents(graph)
+        h = self.initialize_heuristic(self, graph)
+        parents = self.initialize_parents(self, graph)
         geod = pyproj.Geod(ellps="WGS84")
         # open and closed lists implemented as sets for better performance
         open_nodes = set()
@@ -54,7 +55,7 @@ class AStarPathFinder:
             for cell in graph[current]:
                 if cell not in closed_nodes:
                     db_entry = PathGrid.objects.get(pk=cell)
-                    if db_entry.land_flag or db_entry.zero_depth_flag:
+                    if db_entry.land_flag or db_entry.zero_depth_flag or db_entry.part_land_flag:
                         h[cell] = 1000000
                     else:
                         clon, clat = grid_utils.find_cell_centre_coords(current, self.qs)

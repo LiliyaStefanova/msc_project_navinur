@@ -16,17 +16,17 @@ import traceback
 # Create your views here.
 
 
-def display_map(request):
+def display_map(request, route_id):
     tms_url = "http://" + request.get_host() + "/tms/"
     calc_route_url = "http://" + request.get_host() + "/planner/calc_route"
     return render(request, "main.html",
-                  {'calc_route_url': calc_route_url,
+                  {'route_id': route_id,
+                   'calc_route_url': calc_route_url,
                    'tms_url': tms_url})
 
 
 def display_route(request, route_id):
     tms_url = "http://" + request.get_host() + "/tms/"
-    display_route_url = "http://"+request.get_host()+"/planner/display_route/"+route_id
     return render(request, "main.html",
                   {'tms_url': tms_url}
                   )

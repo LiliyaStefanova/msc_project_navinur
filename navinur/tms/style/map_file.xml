@@ -33,11 +33,11 @@
             <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[name]</TextSymbolizer>
         </Rule>
     </Style>
-    <Style name="tempLandPoly">
-        <Rule>
-            <PolygonSymbolizer fill="#FFFFFF"/>
-        </Rule>
-    </Style>
+    <!--<Style name="tempLandPoly">-->
+    <!--<Rule>-->
+    <!--<PolygonSymbolizer fill="#FFFFFF"/>-->
+    <!--</Rule>-->
+    <!--</Style>-->
     <Style name="OverviewLandArea">
         <Rule>
             <PolygonSymbolizer fill="#F0E68C"/>
@@ -91,11 +91,13 @@
     </Style>
     <Style name="OverviewDepthArea">
         <Rule>
+            <Filter>[drval1] &gt;= 0</Filter>
             <PolygonSymbolizer fill="#5F9EA0"/>
         </Rule>
     </Style>
     <Style name="GeneralDepthArea">
         <Rule>
+            <Filter>[drval1] &gt;= 0</Filter>
             <MaxScaleDenominator>25000000</MaxScaleDenominator>
             <PolygonSymbolizer fill="#5F9EA0" gamma="0.63"/>
             <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000" allow-overlap="no">[drval1]
@@ -104,21 +106,22 @@
     </Style>
     <Style name="CoastalDepthArea">
         <Rule>
+            <Filter>[drval1] &gt;= 0</Filter>
             <MaxScaleDenominator>18000000</MaxScaleDenominator>
             <PolygonSymbolizer fill="#5F9EA0"/>
         </Rule>
     </Style>
     <Style name="DryingHeight">
-        <Filter>[drval1] &lt;= 0</Filter>
-        <PolygonSymbolizer fille="#999933"/>
+        <Rule>
+            <Filter>[drval1] &lt;= 0</Filter>
+            <PolygonSymbolizer fill="#CFD784"/>
+        </Rule>
     </Style>
     <Style name="DepthAreaText">
         <Rule>
-            <Filter>[drval1] &gt;= 0</Filter>
             <MaxScaleDenominator>18000000</MaxScaleDenominator>
             <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000" avoid-edges="true"
-                            allow-overlap="no">
-                [drval1]
+                            allow-overlap="no">[drval1]
             </TextSymbolizer>
         </Rule>
     </Style>
@@ -162,8 +165,7 @@
     </Style>
     <Style name="OverviewWreckPoint">
         <Rule>
-            <PointSymbolizer allow-overlap="no"
-                             file="../img/visible wreck.png"/>
+            <PointSymbolizer allow-overlap="no" file="../img/visible wreck.png"/>
         </Rule>
     </Style>
     <Style name="GeneralWreckPoint">
@@ -207,6 +209,7 @@
             <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[objnam]</TextSymbolizer>
         </Rule>
     </Style>
+     <!--Map data extraction starts here -->
     <Layer name="ocean" srs="+proj=latlong +datum=WGS84" status="on">
         <StyleName>oceanBase</StyleName>
         <Datasource>
@@ -228,17 +231,6 @@
             <Parameter name="password">password1</Parameter>
             <Parameter name="host">localhost</Parameter>
             <Parameter name="table">tms_basemap</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="OverviewCoverageArea" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>coverageArea</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">overview_coverage_area</Parameter>
         </Datasource>
     </Layer>
     <Layer name="OverviewLandArea" srs="+proj=latlong +datum=WGS84" status="on">
@@ -276,6 +268,7 @@
     </Layer>
     <Layer name="OverviewDepthArea" srs="+proj=latlong +datum=WGS84" status="on">
         <StyleName>OverviewDepthArea</StyleName>
+        <StyleName>DryingHeight</StyleName>
         <Datasource>
             <Parameter name="type">postgis</Parameter>
             <Parameter name="dbname">navinur_db</Parameter>
@@ -308,36 +301,14 @@
         </Datasource>
     </Layer>
 
-    <!--<Layer name="OverviewWreckPoint" srs="+proj=latlong +datum=WGS84" status="on">-->
-    <!--<StyleName>OverviewWreckPoint</StyleName>-->
-    <!--<Datasource>-->
-    <!--<Parameter name="type">postgis</Parameter>-->
-    <!--<Parameter name="dbname">navinur_db</Parameter>-->
-    <!--<Parameter name="user">postgres</Parameter>
-    <Parameter name="password">password1</Parameter>
-    <Parameter name="host">localhost</Parameter>-->
-    <!--<Parameter name="table">overview_wreck_point</Parameter>-->
-    <!--</Datasource>-->
-    <!--</Layer>-->
-    <!--<Layer name="OverviewBuoy" srs="+proj=latlong +datum=WGS84" status="on">-->
-    <!--<StyleName>OverviewBuoy</StyleName>-->
-    <!--<Datasource>-->
-    <!--<Parameter name="type">postgis</Parameter>-->
-    <!--<Parameter name="dbname">navinur_db</Parameter>-->
-    <!--<Parameter name="user">postgres</Parameter>
-    <Parameter name="password">password1</Parameter>
-    <Parameter name="host">localhost</Parameter>-->
-    <!--<Parameter name="table">overview_buoy_special_purpose_general_point</Parameter>-->
-    <!--</Datasource>-->
-    <!--</Layer>-->
     <!--<Layer name="GeneralCoverageArea" srs="+proj=latlong +datum=WGS84" status="on">-->
     <!--<StyleName>coverageArea</StyleName>-->
     <!--<Datasource>-->
     <!--<Parameter name="type">postgis</Parameter>-->
     <!--<Parameter name="dbname">navinur_db</Parameter>-->
-    <!--<Parameter name="user">postgres</Parameter>
-    <Parameter name="password">password1</Parameter>
-    <Parameter name="host">localhost</Parameter>-->
+    <!--<Parameter name="user">postgres</Parameter>-->
+    <!--<Parameter name="password">password1</Parameter>-->
+    <!--<Parameter name="host">localhost</Parameter>-->
     <!--<Parameter name="table">general_coverage_area</Parameter>-->
     <!--</Datasource>-->
     <!--</Layer>-->
@@ -453,19 +424,6 @@
             <Parameter name="table">general_land_region_point</Parameter>
         </Datasource>
     </Layer>
-    <Layer name="CoastalCoverageArea" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>coverageArea</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">(select * from coastal_coverage_area where title='Approaches to Mississippi River')
-                as coastal_area
-            </Parameter>
-        </Datasource>
-    </Layer>
     <Layer name="CoastalLandLine" srs="+proj=latlong +datum=WGS84" status="on">
         <StyleName>CoastalLandLine</StyleName>
         <Datasource>
@@ -558,37 +516,26 @@
         </Datasource>
     </Layer>
     <!--<Layer name="temp" srs="+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs">-->
-        <!--<StyleName>tempLandPoly</StyleName>-->
-        <!--<Datasource>-->
-            <!--<Parameter name="type">postgis</Parameter>-->
-            <!--<Parameter name="dbname">navinur_db</Parameter>-->
-            <!--<Parameter name="user">postgres</Parameter>-->
-            <!--<Parameter name="password">password1</Parameter>-->
-            <!--<Parameter name="host">localhost</Parameter>-->
-            <!--<Parameter name="table">temp_within</Parameter>-->
-        <!--</Datasource>-->
+    <!--<StyleName>tempLandPoly</StyleName>-->
+    <!--<Datasource>-->
+    <!--<Parameter name="type">postgis</Parameter>-->
+    <!--<Parameter name="dbname">navinur_db</Parameter>-->
+    <!--<Parameter name="user">postgres</Parameter>-->
+    <!--<Parameter name="password">password1</Parameter>-->
+    <!--<Parameter name="host">localhost</Parameter>-->
+    <!--<Parameter name="table">temp_within</Parameter>-->
+    <!--</Datasource>-->
     <!--</Layer>-->
-    <Layer name="grid" srs="+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs">
-        <StyleName>grid</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">(select * from path_grid where land_flag='true') as land</Parameter>
-        </Datasource>
-    </Layer>
     <!--<Layer name="grid" srs="+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs">-->
-        <!--<StyleName>tempLandPoly</StyleName>-->
-        <!--<Datasource>-->
-            <!--<Parameter name="type">postgis</Parameter>-->
-            <!--<Parameter name="dbname">navinur_db</Parameter>-->
-            <!--<Parameter name="user">postgres</Parameter>-->
-            <!--<Parameter name="password">password1</Parameter>-->
-            <!--<Parameter name="host">localhost</Parameter>-->
-            <!--<Parameter name="table">temp_zero_depth</Parameter>-->
-        <!--</Datasource>-->
+    <!--<StyleName>tempLandPoly</StyleName>-->
+    <!--<Datasource>-->
+    <!--<Parameter name="type">postgis</Parameter>-->
+    <!--<Parameter name="dbname">navinur_db</Parameter>-->
+    <!--<Parameter name="user">postgres</Parameter>-->
+    <!--<Parameter name="password">password1</Parameter>-->
+    <!--<Parameter name="host">localhost</Parameter>-->
+    <!--<Parameter name="table">temp_partial</Parameter>-->
+    <!--</Datasource>-->
     <!--</Layer>-->
     <Layer name="land" srs="+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs">
         <StyleName>grid</StyleName>
@@ -601,17 +548,17 @@
             <Parameter name="table">path_grid</Parameter>
         </Datasource>
     </Layer>
-    <Layer name="route" srs="+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs">
-        <StyleName>route</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">(select * from test_routes where gid=2) as route</Parameter>
-        </Datasource>
-    </Layer>
+    <!--<Layer name="route" srs="+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs">-->
+        <!--<StyleName>route</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">(select * from test_routes where gid=25) as route</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
 </Map>
 
 

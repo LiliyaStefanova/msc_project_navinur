@@ -46,7 +46,7 @@
         var start_end_coords = [];
         var num_clicks = 0;
         var box_extents = [
-        [-97.94, 17.80,-76.10, 33.57],
+        <!--[-97.94, 17.80,-76.10, 33.57],-->
         [-90.25, 27.91,-88.32, 30.33]
         ];
         OpenLayers.Control.Click = OpenLayers.Class(
@@ -120,7 +120,7 @@
             layer = new OpenLayers.Layer.TMS('TMS',
                                              "{{ tms_url }}",
                                               {serviceVersion: "1.0",
-                                              layername: "1",
+                                              layername:"{{route_id}}" ,
                                               type: 'png',
                                               attribution:
                                               "<a href=''>" +
@@ -130,8 +130,8 @@
                                               "<a href=''>" +
                                               "View Old Routes" +"</a>"
                                               });
-            markers = new OpenLayers.Layer.Markers("Waypoints");
-            var boxes = new OpenLayers.Layer.Vector("Boxes");
+            markers = new OpenLayers.Layer.Markers("Route Markers");
+            var boxes = new OpenLayers.Layer.Vector("Highlight navigation data");
             for(var i = 0; i<box_extents.length; i++){
                 ext = box_extents[i];
                 bounds = OpenLayers.Bounds.fromArray(ext);
@@ -140,7 +140,7 @@
             }
             map.addLayer(layer);
             map.addLayer(markers);
-            map.addLayers(boxes)
+            map.addLayer(boxes)
             var click = new OpenLayers.Control.Click();
             map.addControl(click);
             map.addControl(new OpenLayers.Control.LayerSwitcher());
@@ -149,7 +149,7 @@
             click.activate();
             select_feature.activate();
              map.zoomToMaxExtent();
-            map.setCenter([-70, 25], 3)
+            map.setCenter([-75, 25], 3)
             }
     </script>
 </head>
