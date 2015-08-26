@@ -5,13 +5,12 @@ from django.http import Http404
 import traceback
 import math
 import mapnik
-
+import logging
 
 TILE_WIDTH = 256
 TILE_HEIGHT = 256
 # overview, general, coastal, approach
 MAX_ZOOM_LEVEL = 11
-
 
 def root(request):
     try:
@@ -114,7 +113,7 @@ def tile(request, version, route_id, zoom, x, y):
         # TODO fix these links
         mapfile = "/home/lstefa/repos/project_navinur/navinur/tms/style/map_file.xml"
 
-        # Ocean base
+
         common_params = dict(dbname='navinur_db', user='postgres', password='password1', host='localhost')
 
         ocean_layer = mapnik.Layer("OceanBase")
@@ -122,53 +121,233 @@ def tile(request, version, route_id, zoom, x, y):
         params['table'] = 'ne_50m_ocean'
         data_source = mapnik.PostGIS(**params)
         ocean_layer.datasource = data_source
-        ocean_layer.styles.append("oceanBase")
+        ocean_layer.styles.append("OceanBase")
         map.layers.append(ocean_layer)
 
-        # Land base
-        base_layer = mapnik.Layer("LandBase")
+        base_land_layer = mapnik.Layer("LandBase")
         params = common_params
         params['table'] = 'tms_basemap'
         data_source = mapnik.PostGIS(**params)
-        base_layer.datasource = data_source
-        base_layer.styles.append("baseLayer")
-        base_layer.styles.append("baseLayerText")
-        map.layers.append(base_layer)
+        base_land_layer.datasource = data_source
+        base_land_layer.styles.append("BaseLayer")
+        base_land_layer.styles.append("BaseLayerText")
+        map.layers.append(base_land_layer)
 
-        # Overview land
-        overview_land_layer = mapnik.Layer("LandBase")
+        overview_land_area_layer = mapnik.Layer("OverviewLandArea")
         params = common_params
         params['table'] = 'overview_land_area'
         data_source = mapnik.PostGIS(**params)
-        overview_land_layer.datasource = data_source
-        overview_land_layer.styles.append("OverviewLandArea")
-        map.layers.append(overview_land_layer)
+        overview_land_area_layer.datasource = data_source
+        overview_land_area_layer.styles.append("OverviewLandArea")
+        map.layers.append(overview_land_area_layer)
 
-        path_grid_layer = mapnik.Layer("PathGrid")
+        overview_land_line_layer = mapnik.Layer("OverviewLandLine")
         params = common_params
-        query = "(select ST_Transform(geom, 32616) from path_grid) as grid"
-        params['table'] = query
-        params['srid'] = '32616'
-        params['geometry_field'] = 'geom'
+        params['table'] = 'overview_land_area_line'
         data_source = mapnik.PostGIS(**params)
-        path_grid_layer.datasource = data_source
-        path_grid_layer.styles.append("grid")
-        map.layers.append(path_grid_layer)
+        overview_land_line_layer.datasource = data_source
+        overview_land_line_layer.styles.append("OverviewLandLine")
+        map.layers.append(overview_land_line_layer)
 
-        route_layer = mapnik.Layer("Routes")
+        overview_coastline_layer = mapnik.Layer("OverviewCoastline")
+        params = common_params
+        params['table'] = 'overview_coastline_line'
+        data_source = mapnik.PostGIS(**params)
+        overview_coastline_layer.datasource = data_source
+        overview_coastline_layer.styles.append("OverviewCoastline")
+        map.layers.append(overview_coastline_layer)
+
+        overview_depth_area = mapnik.Layer("OverviewDepthArea")
+        params = common_params
+        params['table'] = 'overview_depth_area'
+        data_source = mapnik.PostGIS(**params)
+        overview_depth_area.datasource = data_source
+        overview_depth_area.styles.append("OverviewdDepthArea")
+        overview_depth_area.styles.append("DryingHeight")
+        map.layers.append(overview_depth_area)
+
+        overview_depthcontour_layer = mapnik.Layer("OverviewDepthContour")
+        params = common_params
+        params['table'] = 'overview_depth_contour_line'
+        data_source = mapnik.PostGIS(**params)
+        overview_depthcontour_layer.datasource = data_source
+        overview_depthcontour_layer.styles.append("OverviewDepthContour")
+        map.layers.append(overview_depthcontour_layer)
+
+        overview_river_line_layer = mapnik.Layer("OverviewRiverLine")
+        params = common_params
+        params['table'] = 'overview_river_line'
+        data_source = mapnik.PostGIS(**params)
+        overview_river_line_layer.datasource = data_source
+        overview_river_line_layer.styles.append("OverviewRiverLine")
+        map.layers.append(overview_river_line_layer)
+
+        general_land_area_layer = mapnik.Layer("GeneralLandArea")
+        params = common_params
+        params['table'] = 'general_land_area'
+        data_source = mapnik.PostGIS(**params)
+        general_land_area_layer.datasource = data_source
+        general_land_area_layer.styles.append("GeneralLandArea")
+        map.layers.append(general_land_area_layer)
+
+        general_land_line_layer = mapnik.Layer("GeneralLandLine")
+        params = common_params
+        params['table'] = 'general_land_area_line'
+        data_source = mapnik.PostGIS(**params)
+        general_land_line_layer.datasource = data_source
+        general_land_line_layer.styles.append("GeneralLandLine")
+        map.layers.append(general_land_line_layer)
+
+        general_coast_line_layer = mapnik.Layer("GeneralCoastLine")
+        params = common_params
+        params['table'] = 'general_coastline_line'
+        data_source = mapnik.PostGIS(**params)
+        general_coast_line_layer.datasource = data_source
+        general_coast_line_layer.styles.append("GeneralCoastline")
+        map.layers.append(general_coast_line_layer)
+
+        general_depth_area_layer = mapnik.Layer("GeneralDepthArea")
+        params = common_params
+        params['table'] = 'general_depth_area'
+        data_source = mapnik.PostGIS(**params)
+        general_depth_area_layer.datasource = data_source
+        general_depth_area_layer.styles.append("GeneralDepthArea")
+        general_depth_area_layer.styles.append("DryingHeight")
+        map.layers.append(general_depth_area_layer)
+
+        general_depthContour_layer = mapnik.Layer("GeneralDepthContour")
+        params = common_params
+        params['table'] = 'general_depth_contour_line'
+        data_source = mapnik.PostGIS(**params)
+        general_depthContour_layer.datasource = data_source
+        general_depthContour_layer.styles.append("GeneralDepthContour")
+        map.layers.append(general_depthContour_layer)
+
+        general_river_line_layer = mapnik.Layer("GeneralRiverLine")
+        params = common_params
+        params['table'] = 'general_river_line'
+        data_source = mapnik.PostGIS(**params)
+        general_river_line_layer.datasource = data_source
+        general_river_line_layer.styles.append("GeneralRiverLine")
+        map.layers.append(general_river_line_layer)
+
+        general_wreck_point_layer = mapnik.Layer("GeneralWreckPoint")
+        params = common_params
+        params['table'] = 'general_wreck_point'
+        data_source = mapnik.PostGIS(**params)
+        general_wreck_point_layer.datasource = data_source
+        general_wreck_point_layer.styles.append("GeneralWreckPoint")
+        map.layers.append(general_wreck_point_layer)
+
+        general_buoy_layer = mapnik.Layer("GeneralBuoyPoint")
+        params = common_params
+        params['table'] = 'general_buoy_special_purpose_general_point'
+        data_source = mapnik.PostGIS(**params)
+        general_buoy_layer.datasource = data_source
+        general_buoy_layer.styles.append("GeneralBuoyPoint")
+        map.layers.append(general_buoy_layer)
+
+        general_anchorage_layer = mapnik.Layer("GeneralAnchorage")
+        params = common_params
+        params['table'] = 'general_anchorage_area'
+        data_source = mapnik.PostGIS(**params)
+        general_anchorage_layer.datasource = data_source
+        general_anchorage_layer.styles.append("GeneralAnchorage")
+        map.layers.append(general_anchorage_layer)
+
+        general_land_region_layer = mapnik.Layer("GeneralLandRegion")
+        params = common_params
+        params['table'] = 'general_land_region_point'
+        data_source = mapnik.PostGIS(**params)
+        general_land_region_layer.datasource = data_source
+        general_land_region_layer.styles.append("GeneralLandRegionText")
+        map.layers.append(general_land_region_layer)
+
+        coastal_land_line_layer = mapnik.Layer("CoastalLandLine")
+        params = common_params
+        params['table'] = 'coastal_land_area_line'
+        data_source = mapnik.PostGIS(**params)
+        coastal_land_line_layer.datasource = data_source
+        coastal_land_line_layer.styles.append("CoastalLandLine")
+        map.layers.append(coastal_land_line_layer)
+
+        coastal_depth_area_layer = mapnik.Layer("CoastalDepthArea")
+        params = common_params
+        params['table'] = 'coastal_depth_area'
+        data_source = mapnik.PostGIS(**params)
+        coastal_depth_area_layer.datasource = data_source
+        coastal_depth_area_layer.styles.append("CoastalDepthArea")
+        coastal_depth_area_layer.styles.append("DryingHeight")
+        coastal_depth_area_layer.styles.append("DepthAreaText")
+        map.layers.append(coastal_land_line_layer)
+
+        coastal_depth_contour_layer = mapnik.Layer("CoastalDepthContour")
+        params = common_params
+        params['table'] = 'coastal_depth_contour_line'
+        data_source = mapnik.PostGIS(**params)
+        coastal_depth_contour_layer.datasource = data_source
+        coastal_depth_contour_layer.styles.append("CoastalDepthContour")
+        map.layers.append(coastal_depth_contour_layer)
+
+        coastal_river_line_layer = mapnik.Layer("CoastalRiverLine")
+        params = common_params
+        params['table'] = 'coastal_river_line'
+        data_source = mapnik.PostGIS(**params)
+        coastal_river_line_layer.datasource = data_source
+        coastal_river_line_layer.styles.append("CoastalRiverLine")
+        map.layers.append(coastal_river_line_layer)
+
+        coastal_wreck_point_layer = mapnik.Layer("CoastalWreckPoint")
+        params = common_params
+        params['table'] = 'coastal_wreck_point'
+        data_source = mapnik.PostGIS(**params)
+        coastal_wreck_point_layer.datasource = data_source
+        coastal_wreck_point_layer.styles.append("CoastalWreckPoint")
+        map.layers.append(coastal_wreck_point_layer)
+
+        coastal_buoy_layer = mapnik.Layer("CoastalBuoyPoint")
+        params = common_params
+        params['table'] = 'coastal_buoy_special_purpose_general_point'
+        data_source = mapnik.PostGIS(**params)
+        coastal_buoy_layer.datasource = data_source
+        coastal_buoy_layer.styles.append("CoastalBuoy")
+        map.layers.append(coastal_buoy_layer)
+
+        coastal_land_region_layer = mapnik.Layer("CoastalLandRegionText")
+        params = common_params
+        params['table'] = 'coastal_land_region_point'
+        data_source = mapnik.PostGIS(**params)
+        coastal_land_region_layer.datasource = data_source
+        coastal_land_region_layer.styles.append("CoastalLandRegionText")
+        map.layers.append(coastal_land_region_layer)
+
+        coastal_anchorage_layer = mapnik.Layer("CoastalAnchorageArea")
+        params = common_params
+        params['table'] = 'coastal_anchorage_area'
+        data_source = mapnik.PostGIS(**params)
+        coastal_anchorage_layer.datasource = data_source
+        coastal_anchorage_layer.styles.append("CoastalAnchorageArea")
+        map.layers.append(coastal_anchorage_layer)
+
+        route_layer = mapnik.Layer("Route", "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
 
         if route_id != "0":
-            query = "(select ST_Transform(geom, 4326) from test_routes) as routes"
+            query = "(select * from test_routes where gid=" + route_id + ") as route"
             params = dict(dbname='navinur_db', user='postgres', password='password1', host='localhost',
-                          table=query, srid='32616', geometry_field='geom')
+                          table=query, geometry_field='geom')
+            data_source = mapnik.PostGIS(**params)
+            route_layer.datasource = data_source
 
-        data_source = mapnik.PostGIS(**params)
-        route_layer.datasource = data_source
-
-        route_layer.styles.append("route")
+            route_layer.styles.append("Route")
 
     # TODO fix these links
         map.layers.append(route_layer)
+
+        if False:
+            map = mapnik.Map(TILE_WIDTH, TILE_HEIGHT, "+proj=longlat +datum=WGS84")
+            map.background = mapnik.Color("#7391ad")
+            mapfile = "/home/lstefa/repos/project_navinur/navinur/tms/style/map_combined_old.xml"
+
         mapnik.load_map(map, mapfile)
         box = mapnik.Box2d(min_long, min_lat, max_long, max_lat)
         map.zoom_to_box(box)
@@ -186,532 +365,6 @@ def tile(request, version, route_id, zoom, x, y):
 def _units_per_pixel(zoom_level):
     return 0.703125 / math.pow(2, zoom_level)
 
-#
-#
-#
-#
-# < Layer
-# name = "OverviewLandLine"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > OverviewLandLine < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > overview_land_area_line < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "OverviewCoastLine"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > OverviewCoastLine < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > overview_coastline_line < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "OverviewDepthArea"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > OverviewDepthArea < / StyleName >
-# < StyleName > DryingHeight < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > overview_depth_area < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "OverviewDepthContour"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > OverviewDepthContour < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > overview_depth_contour_line < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "OverviewRiverLine"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > OverviewRiverLine < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > overview_river_line < / Parameter >
-# < / Datasource >
-# < / Layer >
-#
-# < Layer
-# name = "GeneralCoverageArea"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > coverageArea < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > general_coverage_area < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "GeneralLandArea"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > GeneralLandArea < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > general_land_area < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "GeneralLandLine"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > GeneralLandLine < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > general_land_area_line < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "GeneralCoastline"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > GeneralCoastline < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > general_coastline_line < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "GeneralDepthArea"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > GeneralDepthArea < / StyleName >
-# < StyleName > DryingHeight < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > general_depth_area < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "GeneralDepthContour"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > GeneralDepthContour < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > general_depth_contour_line < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "GeneralRiverLine"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > GeneralRiverLine < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > general_river_line < / Parameter >
-# < / Datasource >
-# < / Layer >
-#
-# < Layer
-# name = "GeneralWreckPoint"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > GeneralWreckPoint < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > general_wreck_point < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "GeneralBuoy"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > GeneralBuoy < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > general_buoy_special_purpose_general_point < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "GeneralAnchorage"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > GeneralAnchorage < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > general_buoy_special_purpose_general_point < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "GeneralLandRegionText"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > GeneralLandRegionText < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > general_land_region_point < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "CoastalLandLine"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > CoastalLandLine < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > coastal_land_area_line < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "CoastalDepthArea"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > CoastalDepthArea < / StyleName >
-# < StyleName > DryingHeight < / StyleName >
-# < StyleName > DepthAreaText < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > coastal_depth_area < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "CoastalDepthContour"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > CoastalDepthContour < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > coastal_depth_contour_line < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "CoastalRiverLine"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > CoastalRiverLine < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > coastal_river_line < / Parameter >
-# < / Datasource >
-# < / Layer >
-#
-# < Layer
-# name = "CoastalWreckPoint"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > CoastalWreckPoint < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > coastal_wreck_point < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "CoastalBuoy"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > CoastalBuoy < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > coastal_buoy_special_purpose_general_point < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "CoastalLandRegionText"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > CoastalLandRegionText < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > coastal_land_region_point < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "CoastalAnchorageArea"
-# srs = "+proj=latlong +datum=WGS84"
-# status = "on" >
-# < StyleName > CoastalAnchorageArea < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > coastal_anchorage_area < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "temp"
-# srs = "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs" >
-# < StyleName > tempLandPoly < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > temp_within < / Parameter >
-# < / Datasource >
-# < / Layer >
-# < Layer
-# name = "grid"
-# srs = "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs" >
-# < StyleName > tempLandPoly < / StyleName >
-# < Datasource >
-# < Parameter
-# name = "type" > postgis < / Parameter >
-# < Parameter
-# name = "dbname" > navinur_db < / Parameter >
-# < Parameter
-# name = "user" > postgres < / Parameter >
-# < Parameter
-# name = "password" > password1 < / Parameter >
-# < Parameter
-# name = "host" > localhost < / Parameter >
-# < Parameter
-# name = "table" > temp_partial < / Parameter >
-# < / Datasource >
-# < / Layer >
+
+
+

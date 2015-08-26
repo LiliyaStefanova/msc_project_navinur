@@ -5,29 +5,29 @@
             <LineSymbolizer stroke="#000000" stroke-width="0.1"/>
         </Rule>
     </Style>
-    <Style name="route">
+    <Style name="Route">
         <Rule>
             <LineSymbolizer stroke="#DC143C" stroke-width="1"/>
-            <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[name]</TextSymbolizer>
+            <!--<TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[name]</TextSymbolizer>-->
         </Rule>
     </Style>
-    <Style name="oceanBase">
+    <Style name="OceanBase">
         <Rule>
             <PolygonSymbolizer fill="#5F9EA0"/>
         </Rule>
     </Style>
-    <Style name="coverageArea">
+    <Style name="CoverageArea">
         <Rule>
             <LineSymbolizer stroke="#FFFFFF" stroke-width="0.3"/>
         </Rule>
     </Style>
-    <Style name="baseLayer">
+    <Style name="BaseLayer">
         <Rule>
             <PolygonSymbolizer fill="#F0E68C"/>
             <LineSymbolizer stroke="#404040" stroke-width="0.2"/>
         </Rule>
     </Style>
-    <Style name="baseLayerText">
+    <Style name="BaseLayerText">
         <Rule>
             <MaxScaleDenominator>25000000</MaxScaleDenominator>
             <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[name]</TextSymbolizer>
@@ -210,96 +210,96 @@
         </Rule>
     </Style>
      <!--Map data extraction starts here -->
-    <Layer name="ocean" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>oceanBase</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">ne_50m_ocean</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="baseMap" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>baseLayer</StyleName>
-        <StyleName>baseLayerText</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">tms_basemap</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="OverviewLandArea" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>OverviewLandArea</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">overview_land_area</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="OverviewLandLine" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>OverviewLandLine</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">overview_land_area_line</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="OverviewCoastLine" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>OverviewCoastLine</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">overview_coastline_line</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="OverviewDepthArea" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>OverviewDepthArea</StyleName>
-        <StyleName>DryingHeight</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">overview_depth_area</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="OverviewDepthContour" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>OverviewDepthContour</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">overview_depth_contour_line</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="OverviewRiverLine" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>OverviewRiverLine</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">overview_river_line</Parameter>
-        </Datasource>
-    </Layer>
+    <!--<Layer name="ocean" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>oceanBase</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">ne_50m_ocean</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="baseMap" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>baseLayer</StyleName>-->
+        <!--<StyleName>baseLayerText</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">tms_basemap</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="OverviewLandArea" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>OverviewLandArea</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">overview_land_area</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="OverviewLandLine" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>OverviewLandLine</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">overview_land_area_line</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="OverviewCoastLine" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>OverviewCoastLine</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">overview_coastline_line</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="OverviewDepthArea" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>OverviewDepthArea</StyleName>-->
+        <!--<StyleName>DryingHeight</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">overview_depth_area</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="OverviewDepthContour" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>OverviewDepthContour</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">overview_depth_contour_line</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="OverviewRiverLine" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>OverviewRiverLine</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">overview_river_line</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
 
     <!--<Layer name="GeneralCoverageArea" srs="+proj=latlong +datum=WGS84" status="on">-->
     <!--<StyleName>coverageArea</StyleName>-->
@@ -312,209 +312,209 @@
     <!--<Parameter name="table">general_coverage_area</Parameter>-->
     <!--</Datasource>-->
     <!--</Layer>-->
-    <Layer name="GeneralLandArea" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>GeneralLandArea</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">general_land_area</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="GeneralLandLine" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>GeneralLandLine</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">general_land_area_line</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="GeneralCoastline" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>GeneralCoastline</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">general_coastline_line</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="GeneralDepthArea" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>GeneralDepthArea</StyleName>
-        <StyleName>DryingHeight</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">general_depth_area</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="GeneralDepthContour" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>GeneralDepthContour</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">general_depth_contour_line</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="GeneralRiverLine" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>GeneralRiverLine</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">general_river_line</Parameter>
-        </Datasource>
-    </Layer>
+    <!--<Layer name="GeneralLandArea" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>GeneralLandArea</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">general_land_area</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="GeneralLandLine" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>GeneralLandLine</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">general_land_area_line</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="GeneralCoastline" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>GeneralCoastline</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">general_coastline_line</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="GeneralDepthArea" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>GeneralDepthArea</StyleName>-->
+        <!--<StyleName>DryingHeight</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">general_depth_area</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="GeneralDepthContour" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>GeneralDepthContour</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">general_depth_contour_line</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="GeneralRiverLine" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>GeneralRiverLine</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">general_river_line</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
 
-    <Layer name="GeneralWreckPoint" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>GeneralWreckPoint</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">general_wreck_point</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="GeneralBuoy" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>GeneralBuoy</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">general_buoy_special_purpose_general_point</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="GeneralAnchorage" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>GeneralAnchorage</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">general_buoy_special_purpose_general_point</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="GeneralLandRegionText" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>GeneralLandRegionText</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">general_land_region_point</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="CoastalLandLine" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>CoastalLandLine</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">coastal_land_area_line</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="CoastalDepthArea" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>CoastalDepthArea</StyleName>
-        <StyleName>DryingHeight</StyleName>
-        <StyleName>DepthAreaText</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">coastal_depth_area</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="CoastalDepthContour" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>CoastalDepthContour</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">coastal_depth_contour_line</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="CoastalRiverLine" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>CoastalRiverLine</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">coastal_river_line</Parameter>
-        </Datasource>
-    </Layer>
+    <!--<Layer name="GeneralWreckPoint" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>GeneralWreckPoint</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">general_wreck_point</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="GeneralBuoy" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>GeneralBuoy</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">general_buoy_special_purpose_general_point</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="GeneralAnchorage" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>GeneralAnchorage</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">general_buoy_special_purpose_general_point</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="GeneralLandRegionText" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>GeneralLandRegionText</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">general_land_region_point</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="CoastalLandLine" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>CoastalLandLine</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">coastal_land_area_line</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="CoastalDepthArea" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>CoastalDepthArea</StyleName>-->
+        <!--<StyleName>DryingHeight</StyleName>-->
+        <!--<StyleName>DepthAreaText</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">coastal_depth_area</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="CoastalDepthContour" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>CoastalDepthContour</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">coastal_depth_contour_line</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="CoastalRiverLine" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>CoastalRiverLine</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">coastal_river_line</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
 
-    <Layer name="CoastalWreckPoint" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>CoastalWreckPoint</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">coastal_wreck_point</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="CoastalBuoy" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>CoastalBuoy</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">coastal_buoy_special_purpose_general_point</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="CoastalLandRegionText" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>CoastalLandRegionText</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">coastal_land_region_point</Parameter>
-        </Datasource>
-    </Layer>
-    <Layer name="CoastalAnchorageArea" srs="+proj=latlong +datum=WGS84" status="on">
-        <StyleName>CoastalAnchorageArea</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">coastal_anchorage_area</Parameter>
-        </Datasource>
-    </Layer>
+    <!--<Layer name="CoastalWreckPoint" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>CoastalWreckPoint</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">coastal_wreck_point</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="CoastalBuoy" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>CoastalBuoy</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">coastal_buoy_special_purpose_general_point</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="CoastalLandRegionText" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>CoastalLandRegionText</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">coastal_land_region_point</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
+    <!--<Layer name="CoastalAnchorageArea" srs="+proj=latlong +datum=WGS84" status="on">-->
+        <!--<StyleName>CoastalAnchorageArea</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">coastal_anchorage_area</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
     <!--<Layer name="temp" srs="+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs">-->
     <!--<StyleName>tempLandPoly</StyleName>-->
     <!--<Datasource>-->
@@ -537,17 +537,17 @@
     <!--<Parameter name="table">temp_partial</Parameter>-->
     <!--</Datasource>-->
     <!--</Layer>-->
-    <Layer name="land" srs="+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs">
-        <StyleName>grid</StyleName>
-        <Datasource>
-            <Parameter name="type">postgis</Parameter>
-            <Parameter name="dbname">navinur_db</Parameter>
-            <Parameter name="user">postgres</Parameter>
-            <Parameter name="password">password1</Parameter>
-            <Parameter name="host">localhost</Parameter>
-            <Parameter name="table">path_grid</Parameter>
-        </Datasource>
-    </Layer>
+    <!--<Layer name="land" srs="+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs">-->
+        <!--<StyleName>grid</StyleName>-->
+        <!--<Datasource>-->
+            <!--<Parameter name="type">postgis</Parameter>-->
+            <!--<Parameter name="dbname">navinur_db</Parameter>-->
+            <!--<Parameter name="user">postgres</Parameter>-->
+            <!--<Parameter name="password">password1</Parameter>-->
+            <!--<Parameter name="host">localhost</Parameter>-->
+            <!--<Parameter name="table">path_grid</Parameter>-->
+        <!--</Datasource>-->
+    <!--</Layer>-->
     <!--<Layer name="route" srs="+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs">-->
         <!--<StyleName>route</StyleName>-->
         <!--<Datasource>-->
@@ -556,7 +556,7 @@
             <!--<Parameter name="user">postgres</Parameter>-->
             <!--<Parameter name="password">password1</Parameter>-->
             <!--<Parameter name="host">localhost</Parameter>-->
-            <!--<Parameter name="table">(select * from test_routes where gid=25) as route</Parameter>-->
+            <!--<Parameter name="table">test_routes</Parameter>-->
         <!--</Datasource>-->
     <!--</Layer>-->
 </Map>
