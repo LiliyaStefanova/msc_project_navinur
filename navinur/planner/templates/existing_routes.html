@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View existing routes</title>
+    <style type="text/css">
+        body
+        {
+            font: .90em "Tahoma", "Arial", "Helvetica", "sans-serif";
+        }
+        ol
+        {
+            margin: 0;
+            padding: 0 1.5em;
+        }
+        table
+        {
+            color: #000;
+            background: #E4E6D4;
+            border-collapse: collapse;
+            width: 550px;
+            border: 5px solid #ACAC58;
+        }
+        thead
+        {
+            color: #000;
+            background: #ACAC58;
+        }
+        thead th
+        {
+            padding: 1em 1em .5em;
+            border-bottom: 1px dotted #FFF;
+            font-size: 120%;
+            text-align:left;
+        }
+        thead tr
+        {
+        }
+        td
+        {
+            padding: .5em 1em;
+        }
+        #middle
+        {
+            background-color: #D4D58D;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <h1>View Existing Routes</h1>
+    <table border="0" cellspacing="0" cellpadding="5" style="padding-left:20px">
+    <col>
+    <col>
+    <col>
+    <col id="middle">
+        <thead>
+        <tr>
+            <th>ID</th><th>Name</th><th>Distance</th><th>View route</th>
+        </tr>
+        </thead>
+        {% for route in routes %}
+            <tr>
+                <td>
+                    <span style="font-family: monospace">{{ route.gid }}</span>
+                </td>
+                <td>
+                    <span style="font-family: monospace">{{ route.name }}</span>
+                </td>
+                <td>
+                    <span style="font-family: monospace">{{ route.distance }}</span>
+                </td>
+                <td>
+                    <a href="/planner/display_route/{{route.gid}}">Display</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

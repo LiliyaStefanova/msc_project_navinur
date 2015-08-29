@@ -5786,7 +5786,7 @@ class TestRoutes(models.Model):
     start = models.CharField(max_length=150)
     end = models.CharField(max_length=150)
     distance = models.DecimalField(max_digits=1000, decimal_places=5, blank=True, null=True)
-    geom = models.LineStringField(blank=True, null=True)
+    geom = models.LineStringField(srid=32616, blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:

@@ -7,7 +7,7 @@ from navinur.shared.models import PathGrid, TestRoutes
 from django.contrib.gis.geos import LineString, Point
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotFound
 from navinur.planner import grid_utils, graph, bfs_path_finder, a_star_path_finder
-import  navinur.tms
+import shapely
 import pickle
 import random
 import traceback
@@ -28,7 +28,8 @@ def display_map(request, route_id):
 def display_route(request, route_id):
     tms_url = "http://" + request.get_host() + "/tms/"
     return render(request, "main.html",
-                  {'tms_url': tms_url}
+                  {'route_id': route_id,
+                   'tms_url': tms_url}
                   )
 
 
@@ -40,9 +41,9 @@ def calc_route(request):
         end_lon = float(request.GET['end_lon'])
         start_pt = Point(start_lon, start_lat, srid=4326)
         end_pt = Point(end_lon, end_lat, srid=4326)
-        start_node = grid_utils.start_end_points_to_cells(start_pt, end_pt)[0]
-        end_node = grid_utils.start_end_points_to_cells(start_pt, end_pt)[1]
-        # route_id = 1
+        start_end = grid_utils.start_end_points_to_cells(start_pt, end_pt)
+        start_node = start_end[0]
+        end_node = start_end[1]
         route_id = a_star_route(start_node, end_node)
         return HttpResponse("/planner/display_route/" + str(route_id))
     except:
@@ -58,13 +59,14 @@ def a_star_route(start, target):
     gra = graph.Graph(g)
     print("Graph dictionary generated...")
     astar_finder = a_star_path_finder.AStarPathFinder()
-    path = astar_finder.astar_path_find(start, target, gra.graph_dict)
+    path = astar_finder.a_star_alternative(start, target, gra.graph_dict)
     waypoints = []
     for item in path:
         cell = PathGrid.objects.get(pk=item)
         centre_point = cell.geom.centroid
         waypoints.append(centre_point)
-    route_line = LineString(waypoints)
+    route_line = LineString(waypoints, srid=32616)
+    distance = shapely
     route = TestRoutes(name='Test route No {}'.format(random.randint(1, 100000)), start=start, end=target,
                        distance=0, geom=route_line)
     route.save()
@@ -89,3 +91,9 @@ def bfs_route(start, target):
     route = TestRoutes(name='Test route No' + str(random.random), start=start, end=target,
                        distance=0, geom=route_line)
     route.save()
+
+
+def existing_routes(request):
+    routes = TestRoutes.objects.all().order_by("gid")
+    return render(request, "existing_routes.html",
+                  {'routes': routes})

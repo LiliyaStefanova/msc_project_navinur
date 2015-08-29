@@ -4,6 +4,8 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "navinur.settings")
 import django
 import pyproj
 from pyproj import Proj
+from django.contrib.gis.geos import Point
+import traceback
 
 django.setup()
 from django.contrib.gis.db.models import Extent
@@ -16,8 +18,12 @@ def start_end_points_to_cells(start_pt, end_pt):
     # start_pt = Point(-89.51, 28.95, srid=4326)
     # end_pt = Point(-88.99, 29.43, srid=4326)
     # GeoDjango will convert the geometry of the point to the correct SRID of table being looked up
+    print("Start point is: {}".format(start_pt))
+    print("End point is: {}".format(end_pt))
     start_cell = PathGrid.objects.get(geom__contains=start_pt)
+    print(start_cell.gid)
     end_cell = PathGrid.objects.get(geom__contains=end_pt)
+    print(end_cell.gid)
     return start_cell.gid, end_cell.gid
 
 

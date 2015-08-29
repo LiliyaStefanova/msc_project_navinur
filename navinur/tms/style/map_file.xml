@@ -8,7 +8,7 @@
     <Style name="Route">
         <Rule>
             <LineSymbolizer stroke="#DC143C" stroke-width="1"/>
-            <!--<TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[name]</TextSymbolizer>-->
+            <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[name]</TextSymbolizer>
         </Rule>
     </Style>
     <Style name="OceanBase">

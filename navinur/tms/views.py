@@ -213,15 +213,16 @@ def tile(request, version, route_id, zoom, x, y):
         general_depth_area_layer.datasource = data_source
         general_depth_area_layer.styles.append("GeneralDepthArea")
         general_depth_area_layer.styles.append("DryingHeight")
+        general_depth_area_layer.styles.append("DepthAreaText")
         map.layers.append(general_depth_area_layer)
 
-        general_depthContour_layer = mapnik.Layer("GeneralDepthContour")
+        general_depthcontour_layer = mapnik.Layer("GeneralDepthContour")
         params = common_params
         params['table'] = 'general_depth_contour_line'
         data_source = mapnik.PostGIS(**params)
-        general_depthContour_layer.datasource = data_source
-        general_depthContour_layer.styles.append("GeneralDepthContour")
-        map.layers.append(general_depthContour_layer)
+        general_depthcontour_layer.datasource = data_source
+        general_depthcontour_layer.styles.append("GeneralDepthContour")
+        map.layers.append(general_depthcontour_layer)
 
         general_river_line_layer = mapnik.Layer("GeneralRiverLine")
         params = common_params
@@ -254,14 +255,6 @@ def tile(request, version, route_id, zoom, x, y):
         general_anchorage_layer.datasource = data_source
         general_anchorage_layer.styles.append("GeneralAnchorage")
         map.layers.append(general_anchorage_layer)
-
-        general_land_region_layer = mapnik.Layer("GeneralLandRegion")
-        params = common_params
-        params['table'] = 'general_land_region_point'
-        data_source = mapnik.PostGIS(**params)
-        general_land_region_layer.datasource = data_source
-        general_land_region_layer.styles.append("GeneralLandRegionText")
-        map.layers.append(general_land_region_layer)
 
         coastal_land_line_layer = mapnik.Layer("CoastalLandLine")
         params = common_params
@@ -313,6 +306,22 @@ def tile(request, version, route_id, zoom, x, y):
         coastal_buoy_layer.styles.append("CoastalBuoy")
         map.layers.append(coastal_buoy_layer)
 
+        coastal_anchorage_layer = mapnik.Layer("CoastalAnchorageArea")
+        params = common_params
+        params['table'] = 'coastal_anchorage_area'
+        data_source = mapnik.PostGIS(**params)
+        coastal_anchorage_layer.datasource = data_source
+        coastal_anchorage_layer.styles.append("CoastalAnchorageArea")
+        map.layers.append(coastal_anchorage_layer)
+
+        general_land_region_layer = mapnik.Layer("GeneralLandRegion")
+        params = common_params
+        params['table'] = 'general_land_region_point'
+        data_source = mapnik.PostGIS(**params)
+        general_land_region_layer.datasource = data_source
+        general_land_region_layer.styles.append("GeneralLandRegionText")
+        map.layers.append(general_land_region_layer)
+
         coastal_land_region_layer = mapnik.Layer("CoastalLandRegionText")
         params = common_params
         params['table'] = 'coastal_land_region_point'
@@ -321,13 +330,13 @@ def tile(request, version, route_id, zoom, x, y):
         coastal_land_region_layer.styles.append("CoastalLandRegionText")
         map.layers.append(coastal_land_region_layer)
 
-        coastal_anchorage_layer = mapnik.Layer("CoastalAnchorageArea")
+        path_grid_layer = mapnik.Layer("PathGrid", "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
         params = common_params
-        params['table'] = 'coastal_anchorage_area'
+        params['table'] = 'path_grid'
         data_source = mapnik.PostGIS(**params)
-        coastal_anchorage_layer.datasource = data_source
-        coastal_anchorage_layer.styles.append("CoastalAnchorageArea")
-        map.layers.append(coastal_anchorage_layer)
+        path_grid_layer.datasource = data_source
+        path_grid_layer.styles.append("grid")
+        map.layers.append(path_grid_layer)
 
         route_layer = mapnik.Layer("Route", "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
 
