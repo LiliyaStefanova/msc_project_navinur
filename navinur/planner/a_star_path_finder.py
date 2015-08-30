@@ -5,12 +5,15 @@ import heapq
 from navinur.shared.models import PathGrid
 import grid_utils
 import priority_queue
+import pickle
 
 
 class AStarPathFinder:
 
     def __init__(self):
         self.qs = PathGrid.objects.all()
+        self.weights = pickle.load(open('/home/lstefa/repos/project_navinur/navinur/planner/weights.txt', 'rb'))
+        print("Weights initialized...")
 
     @staticmethod
     def initialize_heuristic(self, graph):
@@ -32,7 +35,43 @@ class AStarPathFinder:
         clon, clat = grid_utils.find_cell_centre_coords(current, self.qs)
         return geod.inv(clon, clat, tlon, tlat)[2]
 
-    def astar_path_find(self, current, target, graph):
+    def cost(self, a, b):
+        for n in self.weights[a]:
+            if n[0] == b:
+                return n[1]
+
+    def a_star_path_finder(self, start, target, graph):
+        frontier = priority_queue.PriorityQueue()
+        frontier.put(start, 0)
+        came_from = {}
+        cost_so_far = {}
+        came_from[start] = None
+        cost_so_far[start] = 0
+        while not frontier.empty():
+            current = frontier.pop()
+            if current == target:
+                break
+
+            for next in graph[current]:
+                new_cost = cost_so_far[current] + self.cost(current, next)
+                if next not in cost_so_far or new_cost < cost_so_far[next]:
+                    cost_so_far[next] = new_cost
+                    priority = new_cost + self.heuristic(target, current)
+                    frontier.put(next, priority)
+                    came_from[next] = current
+
+        return came_from, cost_so_far
+
+    def reconstruct_path(self, came_from, start, goal):
+        current = goal
+        path = [current]
+        while current != start:
+            current = came_from[current]
+            path.append(current)
+        path.reverse()
+        return path
+
+    def astar_alternative_impl(self, current, target, graph):
         h = self.initialize_heuristic(self, graph)
         parents = self.initialize_parents(self, graph)
         tlon, tlat = grid_utils.find_cell_centre_coords(target, self.qs)
@@ -72,35 +111,6 @@ class AStarPathFinder:
                         heapq.heappush(open_heap, (h[cell], cell))
                     parents[cell] = current
         return []
-
-    def a_star_alternative(self, start, target, graph):
-        frontier = priority_queue.PriorityQueue()
-        frontier.put(start, 0)
-        came_from = {}
-        cost_so_far = {}
-        came_from[start] = None
-        cost_so_far[start] = 0
-        priority = 0
-
-        while not frontier.empty():
-            current = frontier.pop()
-            if current == target:
-                break
-
-            for next in graph[current]:
-                new_cost = cost_so_far[current] + graph.cost(current, next)
-                if next not in cost_so_far or new_cost < cost_so_far[next]:
-                    db_entry = PathGrid.objects.get(pk=next)
-                    if db_entry.land_flag or db_entry.zero_depth_flag or db_entry.part_land_flag:
-                        priority = 1000000 + self.heuristic(current, target)
-                    cost_so_far[next] = new_cost
-                    priority = new_cost + self.heuristic(target, current)
-                    frontier.put(next, priority)
-                    came_from[next] = current
-
-        return came_from, cost_so_far
-
-
 
 
 

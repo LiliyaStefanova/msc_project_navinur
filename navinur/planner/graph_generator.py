@@ -1,8 +1,6 @@
 __author__ = 'lstefa'
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "navinur.settings")
-import django
-django.setup()
 from navinur.shared.models import PathGrid
 import pickle
 
@@ -37,5 +35,26 @@ def generate_heurstic_graph():
     pickle.dump(g, f)
     f.close()
 
-generate_heurstic_graph()
 
+def initialize_weights():
+
+    weights = {}
+    for cell in qs_all_grid:
+        temp = []
+        for neighbour in PathGrid.objects.filter(geom__touches=cell.geom):
+            if neighbour.land_flag or neighbour.zero_depth_flag or neighbour.part_land_flag:
+                w = 10000000
+                temp.append((neighbour.gid, w))
+            else:
+                w = 1
+                temp.append((neighbour.gid, w))
+        weights[cell.gid] = temp
+    for value in weights.itervalues():
+        print(value == 10000000)
+    f = open('weights.txt', 'wb')
+    pickle.dump(weights, f)
+    f.close()
+
+
+generate_graph()
+initialize_weights()

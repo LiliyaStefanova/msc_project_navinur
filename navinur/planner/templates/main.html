@@ -3,9 +3,11 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Route Planner</title>
-    <!--<link rel="stylesheet"  type="text/css" href="openlayers-2.13.1/theme/default/style.css"/>-->
-    <!--<link rel="stylesheet" type="text/css" href="general.css"/>-->
-    <link rel="stylesheet" type="text/css" href="http://openlayers.org/api/OpenLayers.css"/>
+    <!--<% staticfiles %>-->
+    <!--<link rel="stylesheet" type="text/css" href="http://openlayers.org/api/OpenLayers.css"/>-->
+    <!--<link rel="stylesheet" type="text/css"-->
+          <!--href="{% static 'home/lstefa/repos/project_navinur/navinur/-->
+                           <!--static/planner/openlayers-2.13.1/theme/default/style.css' %}" />-->
     <style type="text/css">
     #map {
     background-color: rgb(0, 0, 0);
@@ -46,7 +48,7 @@
         var start_end_coords = [];
         var num_clicks = 0;
         var box_extents = [
-        <!--[-97.94, 17.80,-76.10, 33.57],-->
+        <!-- Larger outline area: [-97.94, 17.80,-76.10, 33.57],-->
         [-90.25, 27.91,-88.32, 30.33]
         ];
         OpenLayers.Control.Click = OpenLayers.Class(
@@ -68,7 +70,7 @@
                     var coord = map.getLonLatFromViewPortPx(e.xy);
                     if(coord.lon<-90 || coord.lon>-88 || coord.lat>30 || coord.lat<27) {
                         alert("No route navigation available for this area");
-                        <!--window.location.href = document.URL;-->
+                        window.location.href = document.URL;
                         }
                     window.alert("Coordinates:" + coord);
                     //push adds the item to the end of the array
@@ -123,12 +125,12 @@
                                               layername:"{{route_id}}" ,
                                               type: 'png',
                                               attribution:
+                                              "<a href='/planner/index/0'>" +
+                                              "New route</a>" +
+                                              "<a href='/planner/existing_routes' target='_blank'>" +
+                                              "Existing routes</a>" +
                                               "<a href=''>" +
-                                              "Boat Specification</a>" +
-                                              "<a href=''>" +
-                                              "Weather</a>" +
-                                              "<a href='/planner/existing_routes'>" +
-                                              "Existing Routes" +"</a>"
+                                              "Weather" +"</a>",
                                               });
             markers = new OpenLayers.Layer.Markers("Route Markers");
             var boxes = new OpenLayers.Layer.Vector("Highlight navigation data");

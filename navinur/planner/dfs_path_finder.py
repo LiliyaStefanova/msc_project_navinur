@@ -1,6 +1,7 @@
 __author__ = 'lstefa'
 
 
+#does not return anything
 def find_path(self, start_vertex, end_vertex, path=None):
     path = [] if path is None else path
     graph = self.graph_dict

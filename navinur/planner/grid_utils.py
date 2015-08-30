@@ -5,7 +5,7 @@ import django
 import pyproj
 from pyproj import Proj
 from django.contrib.gis.geos import Point
-import traceback
+
 
 django.setup()
 from django.contrib.gis.db.models import Extent
@@ -61,3 +61,7 @@ def convert_to_latlon(p):
 def cell_containing_point(pt):
     cell = PathGrid.objects.get(geom__contains=pt)
     return cell.geom
+
+
+def get_line_segments_from_geometry(geom):
+    segments = []

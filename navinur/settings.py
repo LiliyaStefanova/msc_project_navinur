@@ -41,7 +41,7 @@ INSTALLED_APPS = (
     'navinur.shared',
     'navinur.tms',
     'navinur.planner',
-    'navinur.meteo'
+    'navinur.meteo',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -109,7 +109,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
-    "django.core.context_processors.staticfiles",
+    "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
 )
@@ -125,16 +125,27 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.8/howto/staticfiles-files/
+# https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = ''
 
-STATIC_URL = '/staticfiles/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'staticfiles')
 )
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
+
+PROJECT_DIR = os.path.dirname(__file__)
+
+# TEMPLATE_DIRS = (
+#     os.path.join(PROJECT_DIR, '../templates')
+# )

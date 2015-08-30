@@ -7,13 +7,15 @@ from navinur.shared.models import PathGrid, TestRoutes
 from django.contrib.gis.geos import LineString, Point
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotFound
 from navinur.planner import grid_utils, graph, bfs_path_finder, a_star_path_finder
-import shapely
+import pyproj
 import pickle
 import random
 import traceback
 
 
 # Create your views here.
+
+qs = PathGrid.objects.all()
 
 
 def display_map(request, route_id):
@@ -56,18 +58,25 @@ def a_star_route(start, target):
     print ("Route end point: {}".format(target))
     # TODO fix this path
     g = pickle.load(open('/home/lstefa/repos/project_navinur/navinur/planner/outfile.txt', 'rb'))
+    # g = pickle.load(open('./outfile.txt', 'rb'))
     gra = graph.Graph(g)
     print("Graph dictionary generated...")
     astar_finder = a_star_path_finder.AStarPathFinder()
-    path = astar_finder.a_star_alternative(start, target, gra.graph_dict)
+    # path = astar_finder.astar_path_find(start, target, gra.graph_dict)
+    reverse_path = astar_finder.a_star_path_finder(start, target, gra.graph_dict)[0]
+    path = astar_finder.reconstruct_path(astar_finder.a_star_path_finder(start, target, gra.graph_dict)[0],
+                                         start, target)
     waypoints = []
     for item in path:
         cell = PathGrid.objects.get(pk=item)
         centre_point = cell.geom.centroid
         waypoints.append(centre_point)
     route_line = LineString(waypoints, srid=32616)
-    distance = shapely
-    route = TestRoutes(name='Test route No {}'.format(random.randint(1, 100000)), start=start, end=target,
+    geod = pyproj.Geod(ellps="WGS84")
+    # tlon, tlat = grid_utils.find_cell_centre_coords(target, qs)
+    # clon, clat = grid_utils.find_cell_centre_coords(current, qs)
+    # distance = geod.inv(clon, clat, tlon, tlat)[2]
+    route = TestRoutes(name='Route No {}'.format(random.randint(1, 100000)), start=start, end=target,
                        distance=0, geom=route_line)
     route.save()
     return route.gid
@@ -97,3 +106,4 @@ def existing_routes(request):
     routes = TestRoutes.objects.all().order_by("gid")
     return render(request, "existing_routes.html",
                   {'routes': routes})
+
