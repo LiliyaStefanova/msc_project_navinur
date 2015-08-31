@@ -7,7 +7,7 @@
     </Style>
     <Style name="Route">
         <Rule>
-            <LineSymbolizer stroke="#DC143C" stroke-width="1"/>
+            <LineSymbolizer stroke="#8C001A" stroke-width="5"/>
             <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[name]</TextSymbolizer>
         </Rule>
     </Style>

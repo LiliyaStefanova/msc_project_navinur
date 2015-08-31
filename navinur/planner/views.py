@@ -5,7 +5,7 @@ import django
 django.setup()
 from navinur.shared.models import PathGrid, TestRoutes
 from django.contrib.gis.geos import LineString, Point
-from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotFound
+from django.http import HttpResponse
 from navinur.planner import grid_utils, graph, bfs_path_finder, a_star_path_finder
 import pyproj
 import pickle
@@ -14,8 +14,6 @@ import traceback
 
 
 # Create your views here.
-
-qs = PathGrid.objects.all()
 
 
 def display_map(request, route_id):
@@ -43,7 +41,7 @@ def calc_route(request):
         end_lon = float(request.GET['end_lon'])
         start_pt = Point(start_lon, start_lat, srid=4326)
         end_pt = Point(end_lon, end_lat, srid=4326)
-        start_end = grid_utils.start_end_points_to_cells(start_pt, end_pt)
+        start_end = grid_utils.GridUtilities.start_end_points_to_cells(start_pt, end_pt)
         start_node = start_end[0]
         end_node = start_end[1]
         route_id = a_star_route(start_node, end_node)
@@ -51,6 +49,12 @@ def calc_route(request):
     except:
         traceback.print_exc()
         return HttpResponse("")
+
+
+def existing_routes(request):
+    routes = TestRoutes.objects.all().order_by("gid")
+    return render(request, "existing_routes.html",
+                  {'routes': routes})
 
 
 def a_star_route(start, target):
@@ -62,8 +66,6 @@ def a_star_route(start, target):
     gra = graph.Graph(g)
     print("Graph dictionary generated...")
     astar_finder = a_star_path_finder.AStarPathFinder()
-    # path = astar_finder.astar_path_find(start, target, gra.graph_dict)
-    reverse_path = astar_finder.a_star_path_finder(start, target, gra.graph_dict)[0]
     path = astar_finder.reconstruct_path(astar_finder.a_star_path_finder(start, target, gra.graph_dict)[0],
                                          start, target)
     waypoints = []
@@ -73,6 +75,7 @@ def a_star_route(start, target):
         waypoints.append(centre_point)
     route_line = LineString(waypoints, srid=32616)
     geod = pyproj.Geod(ellps="WGS84")
+    # qs = PathGrid.objects.all()
     # tlon, tlat = grid_utils.find_cell_centre_coords(target, qs)
     # clon, clat = grid_utils.find_cell_centre_coords(current, qs)
     # distance = geod.inv(clon, clat, tlon, tlat)[2]
@@ -83,8 +86,6 @@ def a_star_route(start, target):
 
 
 def bfs_route(start, target):
-    print ("Start point: {}".format(start))
-    print ("End point: {}".format(target))
     g = pickle.load(open('outfile.txt', 'rb'))
     gra = graph.Graph(g)
     print("Graph generated...")
@@ -101,9 +102,4 @@ def bfs_route(start, target):
                        distance=0, geom=route_line)
     route.save()
 
-
-def existing_routes(request):
-    routes = TestRoutes.objects.all().order_by("gid")
-    return render(request, "existing_routes.html",
-                  {'routes': routes})
 
