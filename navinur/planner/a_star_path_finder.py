@@ -31,8 +31,8 @@ class AStarPathFinder:
 
     def heuristic(self, current, target):
         geod = pyproj.Geod(ellps="WGS84")
-        tlon, tlat = grid_utils.find_cell_centre_coords(target, self.qs)
-        clon, clat = grid_utils.find_cell_centre_coords(current, self.qs)
+        tlon, tlat = grid_utils.GridUtilities.find_cell_centre_coords(target, self.qs)
+        clon, clat = grid_utils.GridUtilities.find_cell_centre_coords(current, self.qs)
         return geod.inv(clon, clat, tlon, tlat)[2]
 
     def cost(self, a, b):
@@ -74,7 +74,7 @@ class AStarPathFinder:
     def astar_alternative_impl(self, current, target, graph):
         h = self.initialize_heuristic(self, graph)
         parents = self.initialize_parents(self, graph)
-        tlon, tlat = grid_utils.find_cell_centre_coords(target, self.qs)
+        tlon, tlat = grid_utils.GridUtilities.find_cell_centre_coords(target, self.qs)
         geod = pyproj.Geod(ellps="WGS84")
         # open and closed lists implemented as sets for better performance
         open_nodes = set()

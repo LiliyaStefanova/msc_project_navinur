@@ -4,7 +4,6 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "navinur.settings")
 import django
 import pyproj
 from pyproj import Proj
-from django.contrib.gis.geos import Point
 
 
 django.setup()

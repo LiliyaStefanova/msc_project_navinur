@@ -16,11 +16,11 @@
             <PolygonSymbolizer fill="#5F9EA0"/>
         </Rule>
     </Style>
-    <Style name="CoverageArea">
-        <Rule>
-            <LineSymbolizer stroke="#FFFFFF" stroke-width="0.3"/>
-        </Rule>
-    </Style>
+    <!--<Style name="CoverageArea">-->
+        <!--<Rule>-->
+            <!--<LineSymbolizer stroke="#FFFFFF" stroke-width="0.3"/>-->
+        <!--</Rule>-->
+    <!--</Style>-->
     <Style name="BaseLayer">
         <Rule>
             <PolygonSymbolizer fill="#F0E68C"/>

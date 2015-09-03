@@ -307,7 +307,7 @@ def initialize_map_layers(map):
     coastal_depth_area_layer.styles.append("CoastalDepthArea")
     coastal_depth_area_layer.styles.append("DryingHeight")
     coastal_depth_area_layer.styles.append("DepthAreaText")
-    map.layers.append(coastal_land_line_layer)
+    map.layers.append(coastal_depth_area_layer)
 
     coastal_depth_contour_layer = mapnik.Layer("CoastalDepthContour")
     params = common_params
@@ -365,10 +365,10 @@ def initialize_map_layers(map):
     coastal_land_region_layer.styles.append("CoastalLandRegionText")
     map.layers.append(coastal_land_region_layer)
 
-    path_grid_layer = mapnik.Layer("PathGrid", "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
-    params = common_params
-    params['table'] = 'path_grid'
-    data_source = mapnik.PostGIS(**params)
-    path_grid_layer.datasource = data_source
-    path_grid_layer.styles.append("grid")
-    map.layers.append(path_grid_layer)
+    # path_grid_layer = mapnik.Layer("PathGrid", "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
+    # params = common_params
+    # params['table'] = 'path_grid'
+    # data_source = mapnik.PostGIS(**params)
+    # path_grid_layer.datasource = data_source
+    # path_grid_layer.styles.append("grid")
+    # map.layers.append(path_grid_layer)
