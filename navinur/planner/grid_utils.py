@@ -18,11 +18,17 @@ class GridUtilities:
 
     @staticmethod
     def start_end_points_to_cells(start_pt, end_pt):
+        """
+        Accepts lat/lon coordinates and returns the gid of the cells in the  grid which contain them
+        :param start_pt: start coordinates
+        :param end_pt: end coordinates
+        :return: start and end cell gid
+        """
         # start_pt = Point(-89.51, 28.95, srid=4326)
         # end_pt = Point(-88.99, 29.43, srid=4326)
         print("Start point is: {}".format(start_pt))
         print("End point is: {}".format(end_pt))
-        # GeoDjango will convert the geometry of the point to the correct SRID of table being looked up
+        # GeoDjango will convert the geometry of the point to the correct SRID of the table in the query expression
         start_cell = PathGrid.objects.get(geom__contains=start_pt)
         print(start_cell.gid)
         end_cell = PathGrid.objects.get(geom__contains=end_pt)
@@ -44,12 +50,12 @@ class GridUtilities:
     @staticmethod
     def convert_to_latlon(p):
         utm16 = Proj(init='epsg:32616')
-        unproj = Proj(init='epsg:4326')
-        lon, lat = pyproj.transform(utm16, unproj, p.x, p.y)
+        geo = Proj(init='epsg:4326')
+        lon, lat = pyproj.transform(utm16, geo, p.x, p.y)
         return lon, lat
 
     @staticmethod
-    def find_cell_centre_coords(cell, query_string):
+    def find_cell_centre_coord(cell, query_string):
         polygon = query_string.get(pk=cell)
         centre_point = polygon.geom.centroid
         return GridUtilities.convert_to_latlon(centre_point)

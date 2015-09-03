@@ -5,6 +5,7 @@ from django.contrib.gis.geos import Point, LineString
 
 from django.test import TestCase
 
+
 class RoutePlannerTestCases(TestCase):
 
     def setUp(self):
@@ -12,8 +13,6 @@ class RoutePlannerTestCases(TestCase):
         self.start_pt = Point(-89.51, 28.95, srid=4326)
         self.end_pt = Point(-88.99, 29.43, srid=4326)
         self.graph = graph.Graph
-        self.graph = graph_initializer.GraphInitializer.generate_graph()
-        self.weights = graph_initializer.GraphInitializer.initialize_weights()
 
 
     #TODO how to test http request and response
@@ -25,4 +24,9 @@ class RoutePlannerTestCases(TestCase):
    #calculate_route_test(self):
 
 
+class GraphAlgorithmTestCases(TestCase):
 
+    def setUp(self):
+        self.start_pt = Point(-89.51, 28.95, srid=4326)
+        self.end_pt = Point(-88.99, 29.43, srid=4326)
+        self.graph = graph.Graph(self)

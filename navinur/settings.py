@@ -146,6 +146,8 @@ STATICFILES_FINDERS = (
 
 PROJECT_DIR = os.path.dirname(__file__)
 
+NAVINUR_GRAPH_CACHE_DIR = '/var/tmp/navinur-cache'
+
 # TEMPLATE_DIRS = (
 #     os.path.join(PROJECT_DIR, '../templates')
 # )

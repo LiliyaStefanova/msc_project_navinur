@@ -6,7 +6,8 @@ import traceback
 import math
 import mapnik
 import os
-os.path.abspath("")
+if __name__ == '__main__':
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "navinur.settings")
 
 TILE_WIDTH = 256
 TILE_HEIGHT = 256

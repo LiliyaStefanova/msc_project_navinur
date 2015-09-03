@@ -1,14 +1,51 @@
+import sys
+
 __author__ = 'lstefa'
 import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "navinur.settings")
+
+if __name__ == '__main__':
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "navinur.settings")
+
 from navinur.shared.models import PathGrid
 import pickle
+from django.conf import settings
+
+
+class GraphSerializer(object):
+
+    def __init__(self):
+        self.cache_dir = settings.NAVINUR_GRAPH_CACHE_DIR
+        self.outfile_location = os.path.join(self.cache_dir, 'outfile.txt')
+        self.heuristic_location = os.path.join(self.cache_dir, 'heuristic_outfile.txt')
+        self.weightfile_location = os.path.join(self.cache_dir, 'weights.txt')
+
+    def write_outfile(self, graph):
+        f = open(self.outfile_location, 'wb')
+        pickle.dump(graph, f)
+        f.close()
+
+    def write_heuristic_outfile(self, graph):
+        f = open(self.heuristic_location, 'wb')
+        pickle.dump(graph, f)
+        f.close()
+
+    def write_weights_outfile(self, graph):
+        f = open(self.weightfile_location, 'wb')
+        pickle.dump(graph, f)
+        f.close()
 
 
 class GraphInitializer:
 
-    def __init__(self):
+    PROHIBITED_WEIGHT = 10000000
+    REGULAR_WEIGHT = 1
+
+    def __init__(self, serializer):
+        """
+        :type serializer: GraphSerializer
+        """
         self.qs_all_grid = PathGrid.objects.all()
+        self.serializer = serializer
 
     def generate_graph(self):
         g = {}
@@ -18,9 +55,7 @@ class GraphInitializer:
                 n = neighbour.gid
                 y.append(n)
             g[cell.gid] = y
-        f = open('outfile.txt', 'wb')
-        pickle.dump(g, f)
-        f.close()
+        self.serializer.write_outfile(g)
 
     def generate_heurstic_graph(self):
         g = {}
@@ -31,10 +66,7 @@ class GraphInitializer:
                 n = neighbour.gid
                 y.append(n)
             g[(cell.gid, h)] = y
-
-        f = open('heuristic_outfile.txt', 'wb')
-        pickle.dump(g, f)
-        f.close()
+        self.serializer.write_heuristic_outfile(g)
 
     def initialize_weights(self):
         weights = {}
@@ -42,19 +74,20 @@ class GraphInitializer:
             temp = []
             for neighbour in PathGrid.objects.filter(geom__touches=cell.geom):
                 if neighbour.land_flag or neighbour.zero_depth_flag or neighbour.part_land_flag:
-                    w = 10000000
+                    w = GraphInitializer.PROHIBITED_WEIGHT
                     temp.append((neighbour.gid, w))
                 else:
-                    w = 1
+                    w = GraphInitializer.REGULAR_WEIGHT
                     temp.append((neighbour.gid, w))
             weights[cell.gid] = temp
-        for value in weights.itervalues():
-            print(value == 10000000)
-        f = open('weights.txt', 'wb')
-        pickle.dump(weights, f)
-        f.close()
+        self.serializer.write_weights_outfile(weights)
 
 
-initializer = GraphInitializer()
-initializer.generate_graph()
-initializer.initialize_weights()
+def main():
+    initializer = GraphInitializer()
+    initializer.generate_graph()
+    initializer.initialize_weights()
+
+if __name__ == '__main__':
+    sys.exit(main())
+
