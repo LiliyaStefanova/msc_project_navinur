@@ -42,6 +42,7 @@ class GridUtilities:
     def number_cells_in_grid(self):
         return list(self.qs).__len__()
 
+    @staticmethod
     def find_cell_centre_projected(cell, query_string):
         polygon = query_string.get(pk=cell)
         centre_point = polygon.geom.centroid
@@ -51,7 +52,7 @@ class GridUtilities:
     def convert_to_latlon(p):
         utm16 = Proj(init='epsg:32616')
         geo = Proj(init='epsg:4326')
-        lon, lat = pyproj.transform(utm16, geo, p.x, p.y)
+        lon, lat = pyproj.transform(utm16, geo, p[0], p[1])
         return lon, lat
 
     @staticmethod
