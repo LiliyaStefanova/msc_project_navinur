@@ -6,7 +6,12 @@ django.setup()
 from navinur.shared.models import PathGrid, TestRoutes
 from django.contrib.gis.geos import LineString, Point
 from django.http import HttpResponse
-from navinur.planner import grid_utils, graph, bfs_path_finder, a_star_path_finder
+from navinur.planner import grid_utils, graph, bfs_path_finder, a_star_path_finder, graph_initializer
+from grid_utils import GridUtilities
+from osgeo import ogr
+from django.contrib.gis.gdal import OGRGeometry
+from django.contrib.gis.geos import Point, GEOSGeometry
+from graph_initializer import GraphSerializer
 import pyproj
 import pickle
 import random
@@ -60,27 +65,27 @@ def existing_routes(request):
 def a_star_route(start, target):
     print ("Route start point: {}".format(start))
     print ("Route end point: {}".format(target))
-    # TODO fix this path
-    g = pickle.load(open('/home/lstefa/repos/project_navinur/navinur/planner/outfile.txt', 'rb'))
-    # g = pickle.load(open('./outfile.txt', 'rb'))
+    serializer = GraphSerializer()
+    g = pickle.load(open(serializer.outfile_location))
     gra = graph.Graph(g)
     print("Graph dictionary generated...")
-    astar_finder = a_star_path_finder.AStarPathFinder()
+    astar_finder = a_star_path_finder.AStarPathFinder(serializer)
     path = astar_finder.reconstruct_path(astar_finder.a_star_path_finder(start, target, gra.graph_dict)[0],
                                          start, target)
-    waypoints = []
+    waypoints_proj = []
+    waypoints_geo = []
     for item in path:
         cell = PathGrid.objects.get(pk=item)
-        centre_point = cell.geom.centroid
-        waypoints.append(centre_point)
-    route_line = LineString(waypoints, srid=32616)
-    geod = pyproj.Geod(ellps="WGS84")
-    # qs = PathGrid.objects.all()
-    # tlon, tlat = grid_utils.find_cell_centre_coords(target, qs)
-    # clon, clat = grid_utils.find_cell_centre_coords(current, qs)
-    # distance = geod.inv(clon, clat, tlon, tlat)[2]
+        centre_point_geo = GridUtilities.convert_to_latlon(cell.geom.centroid)
+        centre_point_proj = cell.geom.centroid
+        waypoints_proj.append(centre_point_proj)
+        waypoints_geo.append(centre_point_geo)
+    route_line_proj = LineString(waypoints_proj, srid=32616)
+    route_line_geom = LineString(waypoints_geo, srid=4326)
+    ogr_geom = route_line_proj.ogr
     route = TestRoutes(name='Route No {}'.format(random.randint(1, 100000)), start=start, end=target,
-                       distance=0, geom=route_line)
+                       distance=0, geom=route_line_proj,
+                       geom_4326=route_line_geom)
     route.save()
     return route.gid
 
@@ -99,7 +104,8 @@ def bfs_route(start, target):
         waypoints.append(centre_point)
     route_line = LineString(waypoints)
     route = TestRoutes(name='Test route No' + str(random.random), start=start, end=target,
-                       distance=0, geom=route_line)
+                       distance=GridUtilities.calc_geom_length(route_line), geom=route_line)
     route.save()
+    return route.gid
 
 

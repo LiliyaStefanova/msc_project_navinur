@@ -3,11 +3,9 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Route Planner</title>
-    <!--<% staticfiles %>-->
-    <!--<link rel="stylesheet" type="text/css" href="http://openlayers.org/api/OpenLayers.css"/>-->
-    <!--<link rel="stylesheet" type="text/css"-->
-          <!--href="{% static 'home/lstefa/repos/project_navinur/navinur/-->
-                           <!--static/planner/openlayers-2.13.1/theme/default/style.css' %}" />-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/twitter-bootstrap/twitter-bootstrap-v2/docs/assets/css/bootstrap.css" >
     <style type="text/css">
     #map {
     background-color: rgb(0, 0, 0);
@@ -16,6 +14,7 @@
     left: 0;
     width: 100%;
     height: 100%;
+    z-index:0;
     }
     .olControlAttribution {
     padding: 1em;
@@ -41,9 +40,32 @@
     div.olControlZoom a:hover {
     background: rgb(255, 255, 255);
     color: rgb(40, 40, 40);
+    }
+    #overlay{
+    position:absolute;
+    width:500px;
+    height:30px;
+    background-color:silver;
+    border:1px solid gray;
+    opacity: 0.5;
+    filter:alpha(opacity:50);
+    text-align:center;
+    font: 400 14px "helvetica",sans-serif;
+    top:10%;
+    left:30%;
+    top:10px;
+    z-index:9999;
+    }
+    #pleaseWaitDialog{
+        z-index:9999;
+    }
     </style>
     <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://twitter-bootstrap-v2/docs/assets/js/jquery.js"></script>
+    <script src="https://twitter-bootstrap-v2/docs/assets/js/bootstrap-alert.js"></script>
     <script src="http://openlayers.org/api/OpenLayers.js"></script>
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>-->
     <script type="text/javascript">
         var start_end_coords = [];
         var num_clicks = 0;
@@ -78,7 +100,8 @@
                     console.log(start_end_coords);
                     num_clicks ++;
                     if(num_clicks < 2) {
-                        alert("Enter destination")
+                        alert("Enter destination");
+                        $('#area-error').show();
                     }
                     else if(num_clicks === 2) {
                         var request = OpenLayers.Request.GET({
@@ -89,7 +112,8 @@
                                          end_lon   : start_end_coords[1].lon},
                             callback : this.handleResponse
                         });
-                    console.log(start_end_coords.length);
+                        $('#overlay').hide();
+                        alert("Your route is generating....please wait");
                     }
                     else {
                         alert("Too many points entered, start again");
@@ -97,7 +121,6 @@
                         markers.clearMarkers();
                         window.location.reload()
                     }
-                    <!--markers.clearMarkers();--G>
                     var location = new OpenLayers.LonLat(coord.lon, coord.lat);
                     var size = new OpenLayers.Size(15, 15);
                     var offset = new OpenLayers.Pixel(0,0);
@@ -128,9 +151,9 @@
                                               "<a href='/planner/index/0'>" +
                                               "New route</a>" +
                                               "<a href='/planner/existing_routes' target='_blank'>" +
-                                              "Existing routes</a>" +
-                                              "<a href=''>" +
-                                              "Weather" +"</a>",
+                                              "Existing routes</a>",
+                                              <!--"<a href=''>" +-->
+                                              <!--"Weather" +"</a>",-->
                                               });
             markers = new OpenLayers.Layer.Markers("Route Markers");
             var boxes = new OpenLayers.Layer.Vector("Highlight navigation data");
@@ -150,15 +173,42 @@
             map.addControl(select_feature);
             click.activate();
             select_feature.activate();
-             map.zoomToMaxExtent();
+            map.zoomToMaxExtent();
             map.setCenter([-75, 25], 3)
             }
+        var waitingBar;
+        waitingBar = waitingBar || (function() {
+            var pleaseWaitDiv = $('<div class="modal hide" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false"> <div class="modal-header"> <h1>Please wait...</h1></div> <div class="modal-body"> <div class="progress progress-striped active"><div class="bar" style="width: 100%;"> </div></div></div></div>');
+            return {
+                showPleaseWait: function() {
+                    pleaseWaitDiv.modal();
+                },
+                hidePleaseWait:function() {
+                    pleaseWaitDiv.modal('hide');
+                },
+            };
+        })();
     </script>
 </head>
 <body onload="initMap()">
-            <div id="tags">
-                box, vector, annotation, light
-            </div>
-            <div id="map" class="map"></div>
+    <div id="tags">
+        box, vector, annotation, light
+    </div>
+    <div id="map"></div>
+    <div id="overlay">Click on preferred start/end points to plan a journey</div>
+    <div class="modal hide" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-header">
+        <h1>Please wait...</h1>
+    </div>
+    <div class="modal-body">
+        <div class="progress progress-striped active">
+            <div class="bar" style="width:100%"></div>
+        </div>
+    </div>
+    </div>
+    <div class="alert alert-error" id="area-error" style="display:none;">
+        <a class="close" data-dismiss="alert">x</a>
+        <h4 class="alert-heading">No navigational data available for this area</h4>
+    </div>
 </body>
 </html>

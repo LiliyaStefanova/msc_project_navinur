@@ -57,7 +57,7 @@ class GraphInitializer:
             g[cell.gid] = y
         self.serializer.write_outfile(g)
 
-    def generate_heurstic_graph(self):
+    def generate_heuristic_graph(self):
         g = {}
         h = 0
         for cell in self.qs_all_grid:

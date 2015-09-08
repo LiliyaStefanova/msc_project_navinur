@@ -7,7 +7,8 @@
     </Style>
     <Style name="Route">
         <Rule>
-            <LineSymbolizer stroke="#8C001A" stroke-width="5"/>
+            <MaxScaleDenominator>18000000</MaxScaleDenominator>
+            <LineSymbolizer stroke="#8C001A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
             <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[name]</TextSymbolizer>
         </Rule>
     </Style>
@@ -114,6 +115,7 @@
     <Style name="DryingHeight">
         <Rule>
             <Filter>[drval1] &lt;= 0</Filter>
+            <MaxScaleDenominator>18000000</MaxScaleDenominator>
             <PolygonSymbolizer fill="#CFD784"/>
         </Rule>
     </Style>
@@ -207,6 +209,12 @@
         <Rule>
             <MaxScaleDenominator>25000000</MaxScaleDenominator>
             <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[objnam]</TextSymbolizer>
+        </Rule>
+    </Style>
+    <Style name="RouteIcons">
+        <Rule>
+            <MaxScaleDenominator>18000000</MaxScaleDenominator>
+            <PointSymbolizer allow-overlap="no" file="../img/route_icon.png"/>
         </Rule>
     </Style>
 </Map>

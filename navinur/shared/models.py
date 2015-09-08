@@ -5770,9 +5770,9 @@ class OverviewWreckPoint(models.Model):
 class PathGrid(models.Model):
     gid = models.AutoField(primary_key=True)
     geom = models.MultiPolygonField(srid=32616, blank=True, null=True)
-    land_flag = models.BooleanField()
-    zero_depth_flag = models.BooleanField()
-    part_land_flag = models.BooleanField()
+    land_flag = models.NullBooleanField()
+    zero_depth_flag = models.NullBooleanField()
+    part_land_flag = models.NullBooleanField()
     objects = models.GeoManager()
 
     class Meta:
@@ -5787,6 +5787,7 @@ class TestRoutes(models.Model):
     end = models.CharField(max_length=150)
     distance = models.DecimalField(max_digits=1000, decimal_places=5, blank=True, null=True)
     geom = models.LineStringField(srid=32616, blank=True, null=True)
+    geom_4326 = models.LineStringField(srid=4326, blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:

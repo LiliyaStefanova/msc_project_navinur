@@ -4,8 +4,8 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "navinur.settings")
 import django
 import pyproj
 from pyproj import Proj
-
-
+from osgeo import ogr, osr
+from django.contrib.gis.gdal import OGRGeometry
 django.setup()
 from django.contrib.gis.db.models import Extent
 from navinur.shared.models import PathGrid
@@ -68,4 +68,38 @@ class GridUtilities:
 
     @staticmethod
     def get_line_segments_from_geometry(geom):
-        segments = []
+        """
+        :type geom: OGRGeometry
+        """
+        pt_count = geom.point_count
+        line_segs = []
+        if pt_count > 0:
+            seg = []
+            for i in range(pt_count):
+                seg.append(geom)
+            line_segs.append(seg)
+        for i in range(pt_count):
+            sub_geom = geom
+            line_segs.extend(GridUtilities.get_line_segments_from_geometry(sub_geom))
+        return line_segs
+
+    @staticmethod
+    def calc_geom_length(geom):
+        segments = GridUtilities.get_line_segments_from_geometry(geom)
+
+        geod = pyproj.Geod(ellps='WGS84')
+
+        total_distance = 0.0
+        for segment in segments:
+            for i in range(len(segment)-1):
+                pt_1 = segment[i]
+                pt_2 = segment[i+1]
+
+                lon1, lat1 = pt_1
+                lon2, lat2 = pt_2
+
+                angle_to, angle_from, distance = geod.inv(lon1, lat1, lon2, lat2)
+
+                total_distance += distance
+
+        return total_distance

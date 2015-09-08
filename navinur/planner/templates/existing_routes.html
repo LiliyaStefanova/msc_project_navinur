@@ -6,7 +6,12 @@
     <style type="text/css">
         body
         {
-            font: .90em "Tahoma", "Arial", "Helvetica", "sans-serif";
+            font: 1.0em "Helvetica", "sans-serif";
+            background-color: #E4E6D4;
+            background-attachment:fixed;
+            <!--opacity: 0.5;-->
+            <!--filter:alpha(opacity:50);-->
+            z-index:0;
         }
         ol
         {
@@ -20,6 +25,7 @@
             border-collapse: collapse;
             width: 550px;
             border: 5px solid #ACAC58;
+            z-index:6000;
         }
         thead
         {
@@ -33,9 +39,6 @@
             font-size: 120%;
             text-align:left;
         }
-        thead tr
-        {
-        }
         td
         {
             padding: .5em 1em;
@@ -43,13 +46,14 @@
         #middle
         {
             background-color: #D4D58D;
-            opacity: 0.6;
+            opacity: 0.5;
+            filter:alpha(opacity:50);
         }
     </style>
 </head>
 <body>
-    <h1>View Existing Routes</h1>
-    <table border="0" cellspacing="0" cellpadding="5" style="padding-left:20px">
+    <h1 align="center">View Existing Routes</h1>
+    <table border="0" cellspacing="0" cellpadding="5" style="padding-left:20px" align="center">
     <col>
     <col>
     <col>

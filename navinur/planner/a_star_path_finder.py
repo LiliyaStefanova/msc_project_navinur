@@ -7,6 +7,7 @@ import pyproj
 import heapq
 from navinur.shared.models import PathGrid
 import grid_utils
+import pickle
 import priority_queue
 
 
@@ -18,7 +19,7 @@ class AStarPathFinder:
         """
         self.qs = PathGrid.objects.all()
         self.serializer = serializer
-        self.weights = serializer.weightfile_location
+        self.weights = pickle.load(open(serializer.weightfile_location))
         print("Weights initialized...")
 
     def heuristic(self, current, target):
@@ -69,7 +70,7 @@ class AStarPathFinder:
                 new_cost = cost_so_far[current] + self.cost(current, n)
                 if n not in cost_so_far or new_cost < cost_so_far[n]:
                     cost_so_far[n] = new_cost
-                    priority = new_cost + self.heuristic(target, current)
+                    priority = new_cost + self.heuristic(target, n)
                     frontier.put(n, priority)
                     came_from[n] = current
 

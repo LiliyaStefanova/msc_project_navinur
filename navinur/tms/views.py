@@ -3,8 +3,12 @@
 from django.http import HttpResponse
 from django.http import Http404
 import traceback
+from navinur.shared.models import PathGrid
+from navinur import settings
+from navinur.planner.grid_utils import GridUtilities
 import math
 import mapnik
+import shapely
 import os
 if __name__ == '__main__':
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "navinur.settings")
@@ -13,6 +17,8 @@ TILE_WIDTH = 256
 TILE_HEIGHT = 256
 # overview, general, coastal, approach
 MAX_ZOOM_LEVEL = 11
+cache_dir = settings.NAVINUR_GRAPH_CACHE_DIR
+mapfile_location = os.path.join(cache_dir, 'map_file.xml')
 
 
 def root(request):
@@ -112,12 +118,10 @@ def tile(request, version, route_id, zoom, x, y):
         map = mapnik.Map(TILE_WIDTH, TILE_HEIGHT, "+proj=longlat +datum=WGS84")
         map.background = mapnik.Color("#7391ad")
 
-        # TODO fix these links
         mapfile = "/home/lstefa/repos/project_navinur/navinur/tms/style/map_file.xml"
-        # mapfile = os.path.join(os.path.dirname(__file__), "map_file.xml")
-
         initialize_map_layers(map)
         route_layer = mapnik.Layer("Route", "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
+        icons_layer = mapnik.Layer("Route", "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
 
         if route_id != "0":
             query = "(select * from test_routes where gid=" + route_id + ") as route"
@@ -127,8 +131,10 @@ def tile(request, version, route_id, zoom, x, y):
             route_layer.datasource = data_source
 
             route_layer.styles.append("Route")
+            icons_layer.styles.append("Icons")
 
         map.layers.append(route_layer)
+
 
         mapnik.load_map(map, mapfile)
         box = mapnik.Box2d(min_long, min_lat, max_long, max_lat)
@@ -147,6 +153,13 @@ def tile(request, version, route_id, zoom, x, y):
 
 def _units_per_pixel(zoom_level):
     return 0.703125 / math.pow(2, zoom_level)
+
+
+def create_point_geom(start_gid, end_gid):
+    query = PathGrid.objects
+    start_pt = GridUtilities.find_cell_centre_coord(start_gid, query)
+    end_pt = GridUtilities.find_cell_centre_coord(end_gid, query)
+    return start_pt, end_pt
 
 
 def initialize_map_layers(map):
