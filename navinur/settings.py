@@ -41,7 +41,7 @@ INSTALLED_APPS = (
     'navinur.shared',
     'navinur.tms',
     'navinur.planner',
-    'navinur.meteo',
+    'django_nose',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -102,6 +102,15 @@ DATABASES = {
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
+
+# Use nose to run all tests
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+# Tell nose to measure coverage on the 'shared' and 'tms' and 'planner' apps
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=planner,shared, tms',
+]
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",

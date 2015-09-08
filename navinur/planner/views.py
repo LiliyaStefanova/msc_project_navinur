@@ -37,8 +37,12 @@ def display_route(request, route_id):
                    'tms_url': tms_url}
                   )
 
+_ROUTE_FACTORY = None
+
 
 def calc_route(request):
+    global _ROUTE_FACTORY
+
     try:
         start_lat = float(request.GET['start_lat'])
         start_lon = float(request.GET['start_lon'])
@@ -49,7 +53,10 @@ def calc_route(request):
         start_end = grid_utils.GridUtilities.start_end_points_to_cells(start_pt, end_pt)
         start_node = start_end[0]
         end_node = start_end[1]
-        route_id = a_star_route(start_node, end_node)
+
+        _ROUTE_FACTORY = _ROUTE_FACTORY or AStarFactory()
+        route_id = _ROUTE_FACTORY.create_route(start_node, end_node)
+
         return HttpResponse("/planner/display_route/" + str(route_id))
     except:
         traceback.print_exc()
@@ -62,32 +69,36 @@ def existing_routes(request):
                   {'routes': routes})
 
 
-def a_star_route(start, target):
-    print ("Route start point: {}".format(start))
-    print ("Route end point: {}".format(target))
-    serializer = GraphSerializer()
-    g = pickle.load(open(serializer.outfile_location))
-    gra = graph.Graph(g)
-    print("Graph dictionary generated...")
-    astar_finder = a_star_path_finder.AStarPathFinder(serializer)
-    path = astar_finder.reconstruct_path(astar_finder.a_star_path_finder(start, target, gra.graph_dict)[0],
-                                         start, target)
-    waypoints_proj = []
-    waypoints_geo = []
-    for item in path:
-        cell = PathGrid.objects.get(pk=item)
-        centre_point_geo = GridUtilities.convert_to_latlon(cell.geom.centroid)
-        centre_point_proj = cell.geom.centroid
-        waypoints_proj.append(centre_point_proj)
-        waypoints_geo.append(centre_point_geo)
-    route_line_proj = LineString(waypoints_proj, srid=32616)
-    route_line_geom = LineString(waypoints_geo, srid=4326)
-    ogr_geom = route_line_proj.ogr
-    route = TestRoutes(name='Route No {}'.format(random.randint(1, 100000)), start=start, end=target,
-                       distance=0, geom=route_line_proj,
-                       geom_4326=route_line_geom)
-    route.save()
-    return route.gid
+class AStarFactory(object):
+
+    def __init__(self):
+        self.serializer = GraphSerializer()
+        self.g = pickle.load(open(self.serializer.outfile_location))
+        self.gra = graph.Graph(self.g)
+        self.path_finder = a_star_path_finder.AStarPathFinder(self.serializer)
+
+    def create_route(self, start, target):
+        print ("Route start point: {}".format(start))
+        print ("Route end point: {}".format(target))
+        print("Graph dictionary generated...")
+        reverse_path = self.path_finder.find_path(start, target, self.gra.graph_dict)
+        path = self.path_finder.reconstruct_path(reverse_path[0], start, target)
+        waypoints_proj = []
+        waypoints_geo = []
+        for item in path:
+            cell = PathGrid.objects.get(pk=item)
+            centre_point_geo = GridUtilities.convert_to_latlon(cell.geom.centroid)
+            centre_point_proj = cell.geom.centroid
+            waypoints_proj.append(centre_point_proj)
+            waypoints_geo.append(centre_point_geo)
+        route_line_proj = LineString(waypoints_proj, srid=32616)
+        route_line_geom = LineString(waypoints_geo, srid=4326)
+        ogr_geom = route_line_proj.ogr
+        route = TestRoutes(name='Route No {}'.format(random.randint(1, 100000)), start=start, end=target,
+                           distance=0, geom=route_line_proj,
+                           geom_4326=route_line_geom)
+        route.save()
+        return route.gid
 
 
 def bfs_route(start, target):

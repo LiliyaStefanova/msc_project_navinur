@@ -9,8 +9,9 @@ from grid_utils import GridUtilities
 from django.contrib.gis.geos import Point, LineString
 from django.test import TestCase
 from django.test import Client
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 import pyproj
+import pickle
 
 
 class GridUtilitiesTestCases(unittest.TestCase):
@@ -54,14 +55,15 @@ class GridUtilitiesTestCases(unittest.TestCase):
         """
         expected_proj_lon = 255609
         point = GridUtilities.find_cell_centre_projected(self.start_cell_id, self.querystring)
+        self.assertTrue(isinstance(point, Point))
         self.assertEqual(expected_proj_lon, point.coords[0])
 
     def test_convert_to_lat_lon(self):
         input_proj_coord = (255609, 3205174)
         expected_coords = (-89.50754515153298, 28.95124700010566)
         self.assertEqual(expected_coords, GridUtilities.convert_to_latlon(input_proj_coord))
-        self.assertTrue(type(expected_coords[0]) is float)
-        self.assertTrue(type(expected_coords[1]) is float)
+        self.assertTrue(isinstance(expected_coords[0], float))
+        self.assertTrue(isinstance(expected_coords[1], float))
 
     def test_find_cell_centre_coord(self):
         """
@@ -75,8 +77,8 @@ class GridUtilitiesTestCases(unittest.TestCase):
         """
         expected_point = (-89.50754515153298, 28.95124700010566)
         self.assertEqual(expected_point, GridUtilities.find_cell_centre_coord(self.start_cell_id, self.querystring))
-        self.assertTrue(type(expected_point[0]) is float)
-        self.assertTrue(type(expected_point[1]) is float)
+        self.assertTrue(isinstance(expected_point[0], float))
+        self.assertTrue(isinstance(expected_point[1], float))
 
 
 class GraphAlgorithmTestCases(TestCase):
@@ -84,6 +86,7 @@ class GraphAlgorithmTestCases(TestCase):
         self.start_pt = Point(-89.51, 28.95, srid=4326)
         self.end_pt = Point(-88.99, 29.43, srid=4326)
         self.serializer = GraphSerializer()
+        self.initializer = GraphInitializer(self.serializer)
         self.querystring = PathGrid.objects
         self.utils = GridUtilities()
         self.start_cell_id = 563371035
@@ -93,7 +96,8 @@ class GraphAlgorithmTestCases(TestCase):
         self.end_cell_id = 563384794
         self.start_route_point_id = 563378568
         self.end_route_point_id = 563379106
-        self.graph = graph.Graph()
+        file = pickle.load(open(graph_initializer.GraphInitializer.generate_graph(self.initializer)))
+        self.graph = graph.Graph(file)
         self.geod = pyproj.Geod(ellps="WGS84")
         self.a_star_path_finder = AStarPathFinder(self.serializer)
 
@@ -113,7 +117,7 @@ class GraphAlgorithmTestCases(TestCase):
 
     def test_astar_generator(self):
 
-        camefrom_cost_actual_tuple = AStarPathFinder.a_star_path_finder(self.a_star_path_finder,
+        camefrom_cost_actual_tuple = AStarPathFinder.find_path(self.a_star_path_finder,
                                                                         self.start_route_point_id,
                                                                         self.end_route_point_id,
                                                                         self.graph)
@@ -121,7 +125,7 @@ class GraphAlgorithmTestCases(TestCase):
         self.assertIsNotNone(camefrom_cost_actual_tuple[1])
 
     def test_route_reconstructor(self):
-        camefrom_cost_actual_tuple = AStarPathFinder.a_star_path_finder(self.a_star_path_finder,
+        camefrom_cost_actual_tuple = AStarPathFinder.find_path(self.a_star_path_finder,
                                                                         self.start_route_point_id,
                                                                         self.end_route_point_id,
                                                                         self.graph)
@@ -147,6 +151,7 @@ class HTTPRequestsTestCases(TestCase):
     def test_existing_routes(self):
         response = self.client.post('/planner/existing_routes')
         self.assertEqual(200, response.status_code)
+        self.assertTrue(isinstance(response, HttpResponse))
 
     def a_star_route_test(self):
         route = views.a_star_route(self.start_route_point_id, self.end_route_point_id)
@@ -156,21 +161,23 @@ class HTTPRequestsTestCases(TestCase):
     def test_display_route(self):
         response = self.client.post('/planner/display_route/1')
         self.assertEqual(200, response.status_code)
+        self.assertTrue(isinstance(response, HttpResponse))
 
     def test_display_map(self):
         response = self.client.post('/planner/index/0')
         self.assertEqual(200, response.status_code)
+        self.assertTrue(isinstance(response, HttpResponse))
 
 
-class GraphInitializerTestCase(TestCase):
-    def setUp(self):
-        pass
-
-    def test_graph_init(self):
-        pass
-
-    def test_weight_init(self):
-        pass
+# class GraphInitializerTestCase(TestCase):
+#     def setUp(self):
+#         pass
+#
+#     def test_graph_init(self):
+#         pass
+#
+#     def test_weight_init(self):
+#         pass
 
 
 class DataStructuresTestCases(TestCase):

@@ -46,7 +46,7 @@ class AStarPathFinder:
             if n[0] == b:
                 return n[1]
 
-    def a_star_path_finder(self, start, target, graph):
+    def find_path(self, start, target, graph):
         """
         A* path finding implementation between two points based on a spatial geometry grid where
         each cell is a node in the graph

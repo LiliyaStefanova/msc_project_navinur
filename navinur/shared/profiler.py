@@ -29,6 +29,10 @@ graph = graph.Graph()
 geod = pyproj.Geod(ellps="WGS84")
 initializer = GraphInitializer(serializer)
 
-with PyCallGraph(output=GraphvizOutput()):
-    views.a_star_route(start_cell_id, end_cell_id)
+graph_viz1 = GraphvizOutput(output_file='graph_initializer.png')
+with PyCallGraph(output=graph_viz1):
     GraphInitializer.generate_graph(initializer)
+
+graph_viz2 = GraphvizOutput(output_file='astar_routing.png')
+with PyCallGraph(output=graph_viz2):
+    views.a_star_route(start_cell_id, end_cell_id)
