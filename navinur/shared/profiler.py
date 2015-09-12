@@ -3,7 +3,7 @@ import os
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "navinur.settings")
 import pyproj
-from navinur.planner import views
+from navinur.planner.views import AStarFactory
 from django.contrib.gis.geos import Point
 from navinur.planner.graph_initializer import GraphInitializer, GraphSerializer
 from navinur.planner.grid_utils import GridUtilities
@@ -28,6 +28,7 @@ end_route_point_id = 563379106
 graph = graph.Graph()
 geod = pyproj.Geod(ellps="WGS84")
 initializer = GraphInitializer(serializer)
+astar_factory = AStarFactory()
 
 graph_viz1 = GraphvizOutput(output_file='graph_initializer.png')
 with PyCallGraph(output=graph_viz1):
@@ -35,4 +36,4 @@ with PyCallGraph(output=graph_viz1):
 
 graph_viz2 = GraphvizOutput(output_file='astar_routing.png')
 with PyCallGraph(output=graph_viz2):
-    views.a_star_route(start_cell_id, end_cell_id)
+    astar_factory.create_route(start_cell_id, end_cell_id)

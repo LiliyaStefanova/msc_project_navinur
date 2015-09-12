@@ -2,11 +2,11 @@ import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "navinur.settings")
 import unittest
 from navinur.shared.models import PathGrid
-from navinur.planner import graph, graph_initializer, grid_utils, queue, priority_queue, a_star_path_finder, views
+from navinur.planner import graph, graph_initializer, queue, priority_queue, views
 from a_star_path_finder import AStarPathFinder
 from graph_initializer import GraphInitializer, GraphSerializer
 from grid_utils import GridUtilities
-from django.contrib.gis.geos import Point, LineString
+from django.contrib.gis.geos import Point
 from django.test import TestCase
 from django.test import Client
 from django.http import HttpRequest, HttpResponse
@@ -143,6 +143,7 @@ class HTTPRequestsTestCases(TestCase):
         self.start_route_point_id = 563378568
         self.end_route_point_id = 563379106
         self.client = Client()
+        self.astar_factory = views.AStarFactory()
 
     def test_calc_route(self):
 
@@ -154,7 +155,9 @@ class HTTPRequestsTestCases(TestCase):
         self.assertTrue(isinstance(response, HttpResponse))
 
     def a_star_route_test(self):
-        route = views.a_star_route(self.start_route_point_id, self.end_route_point_id)
+        route = views.AStarFactory.create_route(self.astar_factory,
+                                                self.start_route_point_id,
+                                                self.end_route_point_id)
         self.assertTrue(isinstance(route, int))
         self.assertIsNotNone(PathGrid.objects.get(pk=route))
 
@@ -167,17 +170,6 @@ class HTTPRequestsTestCases(TestCase):
         response = self.client.post('/planner/index/0')
         self.assertEqual(200, response.status_code)
         self.assertTrue(isinstance(response, HttpResponse))
-
-
-# class GraphInitializerTestCase(TestCase):
-#     def setUp(self):
-#         pass
-#
-#     def test_graph_init(self):
-#         pass
-#
-#     def test_weight_init(self):
-#         pass
 
 
 class DataStructuresTestCases(TestCase):
