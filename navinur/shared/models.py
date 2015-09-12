@@ -5783,11 +5783,11 @@ class PathGrid(models.Model):
 class TestRoutes(models.Model):
     gid = models.AutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=100)
-    start = models.CharField(max_length=150)
-    end = models.CharField(max_length=150)
     distance = models.DecimalField(max_digits=1000, decimal_places=5, blank=True, null=True)
     geom = models.LineStringField(srid=32616, blank=True, null=True)
     geom_4326 = models.LineStringField(srid=4326, blank=True, null=True)
+    start_geom = models.PointField(srid=32616, blank=True, null=True)
+    end_geom = models.PointField(srid=32616, blank=True, null=True)
     objects = models.GeoManager()
 
     class Meta:

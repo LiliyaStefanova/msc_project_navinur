@@ -4,8 +4,6 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "navinur.settings")
 import django
 import pyproj
 from pyproj import Proj
-from osgeo import ogr, osr
-from django.contrib.gis.gdal import OGRGeometry
 django.setup()
 from django.contrib.gis.db.models import Extent
 from navinur.shared.models import PathGrid
@@ -24,8 +22,6 @@ class GridUtilities:
         :param end_pt: end coordinates
         :return: start and end cell gid
         """
-        # start_pt = Point(-89.51, 28.95, srid=4326)
-        # end_pt = Point(-88.99, 29.43, srid=4326)
         print("Start point is: {}".format(start_pt))
         print("End point is: {}".format(end_pt))
         # GeoDjango will convert the geometry of the point to the correct SRID of the table in the query expression
@@ -56,6 +52,13 @@ class GridUtilities:
         return lon, lat
 
     @staticmethod
+    def convert_to_proj(p):
+        utm16 = Proj(init='epsg:32616')
+        geo = Proj(init='epsg:4326')
+        lon, lat = pyproj.transform(geo, utm16, p[0], p[1])
+        return lon, lat
+
+    @staticmethod
     def find_cell_centre_coord(cell, query_string):
         polygon = query_string.get(pk=cell)
         centre_point = polygon.geom.centroid
@@ -66,40 +69,4 @@ class GridUtilities:
         cell = PathGrid.objects.get(geom__contains=pt)
         return cell.geom
 
-    @staticmethod
-    def get_line_segments_from_geometry(geom):
-        """
-        :type geom: OGRGeometry
-        """
-        pt_count = geom.point_count
-        line_segs = []
-        if pt_count > 0:
-            seg = []
-            for i in range(pt_count):
-                seg.append(geom)
-            line_segs.append(seg)
-        for i in range(pt_count):
-            sub_geom = geom
-            line_segs.extend(GridUtilities.get_line_segments_from_geometry(sub_geom))
-        return line_segs
 
-    @staticmethod
-    def calc_geom_length(geom):
-        segments = GridUtilities.get_line_segments_from_geometry(geom)
-
-        geod = pyproj.Geod(ellps='WGS84')
-
-        total_distance = 0.0
-        for segment in segments:
-            for i in range(len(segment)-1):
-                pt_1 = segment[i]
-                pt_2 = segment[i+1]
-
-                lon1, lat1 = pt_1
-                lon2, lat2 = pt_2
-
-                angle_to, angle_from, distance = geod.inv(lon1, lat1, lon2, lat2)
-
-                total_distance += distance
-
-        return total_distance

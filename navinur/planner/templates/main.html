@@ -3,6 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Route Planner</title>
+    <link href="{{STATIC_URL}}style.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/twitter-bootstrap/twitter-bootstrap-v2/docs/assets/css/bootstrap.css" >
@@ -59,7 +60,7 @@
     #pleaseWaitDialog{
         z-index:9999;
     }
-    </style>
+    <!--</style>-->
     <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://twitter-bootstrap-v2/docs/assets/js/jquery.js"></script>
@@ -122,8 +123,8 @@
                         window.location.reload()
                     }
                     var location = new OpenLayers.LonLat(coord.lon, coord.lat);
-                    var size = new OpenLayers.Size(15, 15);
-                    var offset = new OpenLayers.Pixel(0,0);
+                    var size = new OpenLayers.Size(15,15);
+                    var offset = new OpenLayers.Pixel(-(size.w / 2),-size.h);
                     var icon = new OpenLayers.Icon("http://maps.google.com/mapfiles/ms/icons/red-pushpin.png", size, offset);
                     markers.addMarker(new OpenLayers.Marker(location, icon.clone()));
                 },
@@ -174,7 +175,7 @@
             click.activate();
             select_feature.activate();
             map.zoomToMaxExtent();
-            map.setCenter([-75, 25], 3)
+            map.setCenter([-89, 28], 5)
             }
         var waitingBar;
         waitingBar = waitingBar || (function() {

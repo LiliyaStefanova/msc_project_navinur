@@ -1,26 +1,14 @@
 <!DOCTYPE Map>
 <Map srs="+proj=latlong +datum=WGS84" background-color="#FFFFFF" minimum-version="0.7.2">
-    <Style name="grid">
-        <Rule>
-            <LineSymbolizer stroke="#000000" stroke-width="0.1"/>
-        </Rule>
-    </Style>
-    <Style name="Route">
-        <Rule>
-            <MaxScaleDenominator>18000000</MaxScaleDenominator>
-            <LineSymbolizer stroke="#8C001A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-            <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[name]</TextSymbolizer>
-        </Rule>
-    </Style>
     <Style name="OceanBase">
         <Rule>
             <PolygonSymbolizer fill="#5F9EA0"/>
         </Rule>
     </Style>
     <!--<Style name="CoverageArea">-->
-        <!--<Rule>-->
-            <!--<LineSymbolizer stroke="#FFFFFF" stroke-width="0.3"/>-->
-        <!--</Rule>-->
+    <!--<Rule>-->
+    <!--<LineSymbolizer stroke="#FFFFFF" stroke-width="0.3"/>-->
+    <!--</Rule>-->
     <!--</Style>-->
     <Style name="BaseLayer">
         <Rule>
@@ -35,9 +23,9 @@
         </Rule>
     </Style>
     <Style name="tempLandPoly">
-    <Rule>
-    <PolygonSymbolizer fill="#FFFFFF"/>
-    </Rule>
+        <Rule>
+            <PolygonSymbolizer fill="#FFFFFF"/>
+        </Rule>
     </Style>
     <Style name="OverviewLandArea">
         <Rule>
@@ -113,11 +101,11 @@
         </Rule>
     </Style>
     <Style name="DryingHeight">
-        <Rule>
-            <Filter>[drval1] &lt;= 0</Filter>
-            <MaxScaleDenominator>18000000</MaxScaleDenominator>
-            <PolygonSymbolizer fill="#CFD784"/>
-        </Rule>
+    <Rule>
+    <Filter>[drval1] &lt;= 0</Filter>
+    <MaxScaleDenominator>18000000</MaxScaleDenominator>
+    <PolygonSymbolizer fill="#CFD784"/>
+    </Rule>
     </Style>
     <Style name="DepthAreaText">
         <Rule>
@@ -211,10 +199,28 @@
             <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[objnam]</TextSymbolizer>
         </Rule>
     </Style>
+    <Style name="grid">
+        <Rule>
+            <LineSymbolizer stroke="#000000" stroke-width="0.1"/>
+        </Rule>
+    </Style>
+    <Style name="Route">
+        <Rule>
+            <MaxScaleDenominator>18000000</MaxScaleDenominator>
+            <LineSymbolizer stroke="#A9A9A9" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <TextSymbolizer size="9"  fill="#8C001A" face-name="DejaVu Sans Book"
+                            halo-fill="#000000" placement="line">[distance]</TextSymbolizer>
+        </Rule>
+    </Style>
+    <Style name="RouteDirection">
+        <Rule>
+            <MarkersSymbolizer marker-type="arrow" placement="line" stroke="#8C001A"/>
+        </Rule>
+    </Style>
     <Style name="RouteIcons">
         <Rule>
             <MaxScaleDenominator>18000000</MaxScaleDenominator>
-            <PointSymbolizer allow-overlap="no" file="../img/route_icon.png"/>
+            <PointSymbolizer allow-overlap="yes" file="../img/circle-dark-icon.png"/>
         </Rule>
     </Style>
 </Map>

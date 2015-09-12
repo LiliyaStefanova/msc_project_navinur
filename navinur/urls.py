@@ -22,7 +22,6 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^tms/', include('navinur.tms.urls')),
     url(r'^planner/', include('navinur.planner.urls')),
-    url(r'^meteo/', include('navinur.meteo.urls'))
 ]
 
 # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

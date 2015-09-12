@@ -50,12 +50,8 @@ def calc_route(request):
         end_lon = float(request.GET['end_lon'])
         start_pt = Point(start_lon, start_lat, srid=4326)
         end_pt = Point(end_lon, end_lat, srid=4326)
-        start_end = grid_utils.GridUtilities.start_end_points_to_cells(start_pt, end_pt)
-        start_node = start_end[0]
-        end_node = start_end[1]
-
         _ROUTE_FACTORY = _ROUTE_FACTORY or AStarFactory()
-        route_id = _ROUTE_FACTORY.create_route(start_node, end_node)
+        route_id = _ROUTE_FACTORY.create_route(start_pt, end_pt)
 
         return HttpResponse("/planner/display_route/" + str(route_id))
     except:
@@ -76,13 +72,14 @@ class AStarFactory(object):
         self.g = pickle.load(open(self.serializer.outfile_location))
         self.gra = graph.Graph(self.g)
         self.path_finder = a_star_path_finder.AStarPathFinder(self.serializer)
+        self.qs = PathGrid.objects.all()
 
-    def create_route(self, start, target):
-        print ("Route start point: {}".format(start))
-        print ("Route end point: {}".format(target))
-        print("Graph dictionary generated...")
-        reverse_path = self.path_finder.find_path(start, target, self.gra.graph_dict)
-        path = self.path_finder.reconstruct_path(reverse_path[0], start, target)
+    def create_route(self, start_pt, target_pt):
+        start_end = grid_utils.GridUtilities.start_end_points_to_cells(start_pt, target_pt)
+        start_node = start_end[0]
+        end_node = start_end[1]
+        reverse_path = self.path_finder.find_path(start_node, end_node, self.gra.graph_dict)
+        path = self.path_finder.reconstruct_path(reverse_path[0], start_node, end_node)
         waypoints_proj = []
         waypoints_geo = []
         for item in path:
@@ -93,10 +90,14 @@ class AStarFactory(object):
             waypoints_geo.append(centre_point_geo)
         route_line_proj = LineString(waypoints_proj, srid=32616)
         route_line_geom = LineString(waypoints_geo, srid=4326)
-        ogr_geom = route_line_proj.ogr
-        route = TestRoutes(name='Route No {}'.format(random.randint(1, 100000)), start=start, end=target,
-                           distance=0, geom=route_line_proj,
-                           geom_4326=route_line_geom)
+        start_pt_record = GridUtilities.find_cell_centre_projected(start_node, self.qs)
+        end_pt_record = GridUtilities.find_cell_centre_projected(end_node, self.qs)
+        route = TestRoutes(name='Route No {}'.format(random.randint(1, 100000)),
+                           distance=round(route_line_proj.length/1000, 2),
+                           geom=route_line_proj,
+                           geom_4326=route_line_geom,
+                           start_geom=start_pt_record,
+                           end_geom=end_pt_record)
         route.save()
         return route.gid
 

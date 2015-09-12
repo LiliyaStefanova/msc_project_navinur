@@ -138,6 +138,10 @@ USE_TZ = True
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+'''
+source: http://agiliq.com/blog/2013/03/serving-static-files-in-django/
+'''
+
 MEDIA_URL = '/media/'
 
 STATIC_ROOT = ''

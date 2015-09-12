@@ -121,20 +121,27 @@ def tile(request, version, route_id, zoom, x, y):
         mapfile = "/home/lstefa/repos/project_navinur/navinur/tms/style/map_file.xml"
         initialize_map_layers(map)
         route_layer = mapnik.Layer("Route", "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
-        icons_layer = mapnik.Layer("Route", "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
+        start_icon_layer = mapnik.Layer("RouteIcons", "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
+        end_icon_layer = mapnik.Layer("RouteIcons", "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
 
         if route_id != "0":
-            query = "(select * from test_routes where gid=" + route_id + ") as route"
-            params = dict(dbname='navinur_db', user='postgres', password='password1', host='localhost',
-                          table=query, geometry_field='geom')
-            data_source = mapnik.PostGIS(**params)
-            route_layer.datasource = data_source
+            route_query = "(select * from test_routes where gid=" + route_id + ") as route"
+            route_params = dict(dbname='navinur_db', user='postgres', password='password1', host='localhost',
+                          table=route_query, geometry_field='geom')
+            route_data_source = mapnik.PostGIS(**route_params)
+            route_layer.datasource = route_data_source
+
+            start_icon_layer = _initialize_icon_layers(start_icon_layer, end_icon_layer, route_id)[0]
+            end_icon_layer = _initialize_icon_layers(start_icon_layer, end_icon_layer, route_id)[1]
 
             route_layer.styles.append("Route")
-            icons_layer.styles.append("Icons")
+            route_layer.styles.append("RouteDirection")
+            start_icon_layer.styles.append("RouteIcons")
+            end_icon_layer.styles.append("RouteIcons")
 
         map.layers.append(route_layer)
-
+        map.layers.append(start_icon_layer)
+        map.layers.append(end_icon_layer)
 
         mapnik.load_map(map, mapfile)
         box = mapnik.Box2d(min_long, min_lat, max_long, max_lat)
@@ -153,6 +160,20 @@ def tile(request, version, route_id, zoom, x, y):
 
 def _units_per_pixel(zoom_level):
     return 0.703125 / math.pow(2, zoom_level)
+
+
+def _initialize_icon_layers(start_icon_layer, end_icon_layer, route_id):
+
+    icon_query = "(select start_geom, end_geom from test_routes where gid=" + route_id + ") as points"
+    start_icon_params = dict(dbname='navinur_db', user='postgres', password='password1', host='localhost',
+                             table=icon_query,geometry_field='start_geom')
+    end_icon_params = dict(dbname='navinur_db', user='postgres', password='password1', host='localhost',
+                           table=icon_query, geometry_field='end_geom')
+    start_icon_data_source = mapnik.PostGIS(**start_icon_params)
+    end_icon_data_source = mapnik.PostGIS(**end_icon_params)
+    start_icon_layer.datasource = start_icon_data_source
+    end_icon_layer.datasource = end_icon_data_source
+    return start_icon_layer, end_icon_layer
 
 
 def create_point_geom(start_gid, end_gid):
@@ -190,22 +211,6 @@ def initialize_map_layers(map):
     overview_land_area_layer.styles.append("OverviewLandArea")
     map.layers.append(overview_land_area_layer)
 
-    overview_land_line_layer = mapnik.Layer("OverviewLandLine")
-    params = common_params
-    params['table'] = 'overview_land_area_line'
-    data_source = mapnik.PostGIS(**params)
-    overview_land_line_layer.datasource = data_source
-    overview_land_line_layer.styles.append("OverviewLandLine")
-    map.layers.append(overview_land_line_layer)
-
-    overview_coastline_layer = mapnik.Layer("OverviewCoastline")
-    params = common_params
-    params['table'] = 'overview_coastline_line'
-    data_source = mapnik.PostGIS(**params)
-    overview_coastline_layer.datasource = data_source
-    overview_coastline_layer.styles.append("OverviewCoastline")
-    map.layers.append(overview_coastline_layer)
-
     overview_depth_area = mapnik.Layer("OverviewDepthArea")
     params = common_params
     params['table'] = 'overview_depth_area'
@@ -215,6 +220,14 @@ def initialize_map_layers(map):
     overview_depth_area.styles.append("DryingHeight")
     map.layers.append(overview_depth_area)
 
+    overview_coastline_layer = mapnik.Layer("OverviewCoastline")
+    params = common_params
+    params['table'] = 'overview_coastline_line'
+    data_source = mapnik.PostGIS(**params)
+    overview_coastline_layer.datasource = data_source
+    overview_coastline_layer.styles.append("OverviewCoastline")
+    map.layers.append(overview_coastline_layer)
+
     overview_depthcontour_layer = mapnik.Layer("OverviewDepthContour")
     params = common_params
     params['table'] = 'overview_depth_contour_line'
@@ -223,14 +236,6 @@ def initialize_map_layers(map):
     overview_depthcontour_layer.styles.append("OverviewDepthContour")
     map.layers.append(overview_depthcontour_layer)
 
-    overview_river_line_layer = mapnik.Layer("OverviewRiverLine")
-    params = common_params
-    params['table'] = 'overview_river_line'
-    data_source = mapnik.PostGIS(**params)
-    overview_river_line_layer.datasource = data_source
-    overview_river_line_layer.styles.append("OverviewRiverLine")
-    map.layers.append(overview_river_line_layer)
-
     general_land_area_layer = mapnik.Layer("GeneralLandArea")
     params = common_params
     params['table'] = 'general_land_area'
@@ -238,22 +243,6 @@ def initialize_map_layers(map):
     general_land_area_layer.datasource = data_source
     general_land_area_layer.styles.append("GeneralLandArea")
     map.layers.append(general_land_area_layer)
-
-    general_land_line_layer = mapnik.Layer("GeneralLandLine")
-    params = common_params
-    params['table'] = 'general_land_area_line'
-    data_source = mapnik.PostGIS(**params)
-    general_land_line_layer.datasource = data_source
-    general_land_line_layer.styles.append("GeneralLandLine")
-    map.layers.append(general_land_line_layer)
-
-    general_coast_line_layer = mapnik.Layer("GeneralCoastLine")
-    params = common_params
-    params['table'] = 'general_coastline_line'
-    data_source = mapnik.PostGIS(**params)
-    general_coast_line_layer.datasource = data_source
-    general_coast_line_layer.styles.append("GeneralCoastline")
-    map.layers.append(general_coast_line_layer)
 
     general_depth_area_layer = mapnik.Layer("GeneralDepthArea")
     params = common_params
@@ -265,6 +254,14 @@ def initialize_map_layers(map):
     general_depth_area_layer.styles.append("DepthAreaText")
     map.layers.append(general_depth_area_layer)
 
+    general_coast_line_layer = mapnik.Layer("GeneralCoastLine")
+    params = common_params
+    params['table'] = 'general_coastline_line'
+    data_source = mapnik.PostGIS(**params)
+    general_coast_line_layer.datasource = data_source
+    general_coast_line_layer.styles.append("GeneralCoastline")
+    map.layers.append(general_coast_line_layer)
+
     general_depthcontour_layer = mapnik.Layer("GeneralDepthContour")
     params = common_params
     params['table'] = 'general_depth_contour_line'
@@ -273,6 +270,40 @@ def initialize_map_layers(map):
     general_depthcontour_layer.styles.append("GeneralDepthContour")
     map.layers.append(general_depthcontour_layer)
 
+    # coastal_land_line_layer = mapnik.Layer("CoastalLandLine")
+    # params = common_params
+    # params['table'] = 'coastal_land_area_line'
+    # data_source = mapnik.PostGIS(**params)
+    # coastal_land_line_layer.datasource = data_source
+    # coastal_land_line_layer.styles.append("CoastalLandLine")
+    # map.layers.append(coastal_land_line_layer)
+
+    coastal_depth_area_layer = mapnik.Layer("CoastalDepthArea")
+    params = common_params
+    params['table'] = 'coastal_depth_area'
+    data_source = mapnik.PostGIS(**params)
+    coastal_depth_area_layer.datasource = data_source
+    coastal_depth_area_layer.styles.append("CoastalDepthArea")
+    coastal_depth_area_layer.styles.append("DryingHeight")
+    coastal_depth_area_layer.styles.append("DepthAreaText")
+    map.layers.append(coastal_depth_area_layer)
+
+    coastal_depth_contour_layer = mapnik.Layer("CoastalDepthContour")
+    params = common_params
+    params['table'] = 'coastal_depth_contour_line'
+    data_source = mapnik.PostGIS(**params)
+    coastal_depth_contour_layer.datasource = data_source
+    coastal_depth_contour_layer.styles.append("CoastalDepthContour")
+    map.layers.append(coastal_depth_contour_layer)
+
+    overview_river_line_layer = mapnik.Layer("OverviewRiverLine")
+    params = common_params
+    params['table'] = 'overview_river_line'
+    data_source = mapnik.PostGIS(**params)
+    overview_river_line_layer.datasource = data_source
+    overview_river_line_layer.styles.append("OverviewRiverLine")
+    map.layers.append(overview_river_line_layer)
+
     general_river_line_layer = mapnik.Layer("GeneralRiverLine")
     params = common_params
     params['table'] = 'general_river_line'
@@ -280,6 +311,14 @@ def initialize_map_layers(map):
     general_river_line_layer.datasource = data_source
     general_river_line_layer.styles.append("GeneralRiverLine")
     map.layers.append(general_river_line_layer)
+
+    coastal_river_line_layer = mapnik.Layer("CoastalRiverLine")
+    params = common_params
+    params['table'] = 'coastal_river_line'
+    data_source = mapnik.PostGIS(**params)
+    coastal_river_line_layer.datasource = data_source
+    coastal_river_line_layer.styles.append("CoastalRiverLine")
+    map.layers.append(coastal_river_line_layer)
 
     general_wreck_point_layer = mapnik.Layer("GeneralWreckPoint")
     params = common_params
@@ -304,40 +343,6 @@ def initialize_map_layers(map):
     general_anchorage_layer.datasource = data_source
     general_anchorage_layer.styles.append("GeneralAnchorage")
     map.layers.append(general_anchorage_layer)
-
-    coastal_land_line_layer = mapnik.Layer("CoastalLandLine")
-    params = common_params
-    params['table'] = 'coastal_land_area_line'
-    data_source = mapnik.PostGIS(**params)
-    coastal_land_line_layer.datasource = data_source
-    coastal_land_line_layer.styles.append("CoastalLandLine")
-    map.layers.append(coastal_land_line_layer)
-
-    coastal_depth_area_layer = mapnik.Layer("CoastalDepthArea")
-    params = common_params
-    params['table'] = 'coastal_depth_area'
-    data_source = mapnik.PostGIS(**params)
-    coastal_depth_area_layer.datasource = data_source
-    coastal_depth_area_layer.styles.append("CoastalDepthArea")
-    coastal_depth_area_layer.styles.append("DryingHeight")
-    coastal_depth_area_layer.styles.append("DepthAreaText")
-    map.layers.append(coastal_depth_area_layer)
-
-    coastal_depth_contour_layer = mapnik.Layer("CoastalDepthContour")
-    params = common_params
-    params['table'] = 'coastal_depth_contour_line'
-    data_source = mapnik.PostGIS(**params)
-    coastal_depth_contour_layer.datasource = data_source
-    coastal_depth_contour_layer.styles.append("CoastalDepthContour")
-    map.layers.append(coastal_depth_contour_layer)
-
-    coastal_river_line_layer = mapnik.Layer("CoastalRiverLine")
-    params = common_params
-    params['table'] = 'coastal_river_line'
-    data_source = mapnik.PostGIS(**params)
-    coastal_river_line_layer.datasource = data_source
-    coastal_river_line_layer.styles.append("CoastalRiverLine")
-    map.layers.append(coastal_river_line_layer)
 
     coastal_wreck_point_layer = mapnik.Layer("CoastalWreckPoint")
     params = common_params
