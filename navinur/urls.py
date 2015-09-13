@@ -23,5 +23,3 @@ urlpatterns = [
     url(r'^tms/', include('navinur.tms.urls')),
     url(r'^planner/', include('navinur.planner.urls')),
 ]
-
-# + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

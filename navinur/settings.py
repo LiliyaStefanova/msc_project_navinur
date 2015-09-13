@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'y9)&fhx6gngn3k+(h_k=i@s=&4hulx_#2g-!j4wn=nc5(hrd_u'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -117,7 +117,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
+    # "django.core.context_processors.media",
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
@@ -136,26 +136,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-'''
-source: http://agiliq.com/blog/2013/03/serving-static-files-in-django/
-'''
+# '''
+# source: http://agiliq.com/blog/2013/03/serving-static-files-in-django/
+# '''
 
-MEDIA_URL = '/media/'
-
-STATIC_ROOT = ''
-
-STATIC_URL = '/static/'
-
-STATICFILES_DIRS = (
-)
-
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
-)
+# MEDIA_URL = '/media/'
 
 PROJECT_DIR = os.path.dirname(__file__)
 
@@ -164,3 +151,40 @@ NAVINUR_GRAPH_CACHE_DIR = '/var/tmp/navinur-cache'
 # TEMPLATE_DIRS = (
 #     os.path.join(PROJECT_DIR, '../templates')
 # )
+
+STATIC_ROOT = os.path.join(PROJECT_DIR, '..', 'static')
+STATIC_URL = '/statics/'
+STATICFILES_DIRS = [
+    # STATIC_ROOT,
+]
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    # 'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+   # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'app.log',
+            # 'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+    },
+}
+
+# LOGGING_CONFIG = None
