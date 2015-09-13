@@ -221,13 +221,14 @@
     <Style name="Route">
         <Rule>
             <MaxScaleDenominator>18000000</MaxScaleDenominator>
-            <LineSymbolizer stroke="#A9A9A9" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-            <TextSymbolizer size="9"  fill="#8C001A" face-name="DejaVu Sans Book"
-                            halo-fill="#000000" placement="line">[distance]</TextSymbolizer>
+            <LineSymbolizer stroke="#8C001A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <TextSymbolizer size="9"  fill="#FFFFFF" face-name="DejaVu Sans Book"
+                            halo-fill="#FFFFFF" placement="line">[distance]</TextSymbolizer>
         </Rule>
     </Style>
     <Style name="RouteDirection">
         <Rule>
+            <MaxScaleDenominator>25000000</MaxScaleDenominator>
             <MarkersSymbolizer allow-overlap="yes" marker-type="arrow" placement="line" fill="#8C001A"/>
         </Rule>
     </Style>

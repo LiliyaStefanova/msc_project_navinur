@@ -73,11 +73,12 @@
                 },
                 handleResponse: function(request) {
                     if(request.status != 200) {
-                        alert("Server returned a "+request.status+ " error");
+                        alert("Oops something went wrong! Server returned a "+request.status+ " error");
                         return;
                     };
                     if(request.responseText != " ") {
                         window.location.href = request.responseText;
+                        alert("Ready! Remove the Navigation highlight to view your route");
                     };
                 }
             }
