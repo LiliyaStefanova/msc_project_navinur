@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
 TILE_WIDTH = 256
 TILE_HEIGHT = 256
-# overview, general, coastal, approach
+# overview, general, coastal
 MAX_ZOOM_LEVEL = 11
 cache_dir = settings.NAVINUR_GRAPH_CACHE_DIR
 mapfile_location = os.path.join(cache_dir, 'map_file.xml')
@@ -119,20 +119,17 @@ def tile(request, version, route_id, zoom, x, y):
         map.background = mapnik.Color("#7391ad")
 
         mapfile = "/home/lstefa/repos/project_navinur/navinur/tms/style/map_file.xml"
-        initialize_map_layers(map)
+        initialize_static_layers(map)
         route_layer = mapnik.Layer("Route", "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
         start_icon_layer = mapnik.Layer("RouteIcons", "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
         end_icon_layer = mapnik.Layer("RouteIcons", "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
 
         if route_id != "0":
-            route_query = "(select * from test_routes where gid=" + route_id + ") as route"
-            route_params = dict(dbname='navinur_db', user='postgres', password='password1', host='localhost',
-                          table=route_query, geometry_field='geom')
-            route_data_source = mapnik.PostGIS(**route_params)
-            route_layer.datasource = route_data_source
 
-            start_icon_layer = _initialize_icon_layers(start_icon_layer, end_icon_layer, route_id)[0]
-            end_icon_layer = _initialize_icon_layers(start_icon_layer, end_icon_layer, route_id)[1]
+            layers = _initialize_dynamic_layers(route_layer, start_icon_layer, end_icon_layer, route_id)
+            route_layer = layers[0]
+            start_icon_layer = layers[1]
+            end_icon_layer = layers[2]
 
             route_layer.styles.append("Route")
             route_layer.styles.append("RouteDirection")
@@ -162,7 +159,21 @@ def _units_per_pixel(zoom_level):
     return 0.703125 / math.pow(2, zoom_level)
 
 
-def _initialize_icon_layers(start_icon_layer, end_icon_layer, route_id):
+def _initialize_dynamic_layers(route_layer, start_icon_layer, end_icon_layer, route_id):
+    """
+    Initializes dynamic map layers associated with a route display
+    :param route_layer:
+    :param start_icon_layer:
+    :param end_icon_layer:
+    :param route_id:
+    :return: a tuple containing the route and start and end icon layers initialized with data sources
+    """
+
+    route_query = "(select * from test_routes where gid=" + route_id + ") as route"
+    route_params = dict(dbname='navinur_db', user='postgres', password='password1', host='localhost',
+                        table=route_query, geometry_field='geom')
+    route_data_source = mapnik.PostGIS(**route_params)
+    route_layer.datasource = route_data_source
 
     icon_query = "(select start_geom, end_geom from test_routes where gid=" + route_id + ") as points"
     start_icon_params = dict(dbname='navinur_db', user='postgres', password='password1', host='localhost',
@@ -173,17 +184,15 @@ def _initialize_icon_layers(start_icon_layer, end_icon_layer, route_id):
     end_icon_data_source = mapnik.PostGIS(**end_icon_params)
     start_icon_layer.datasource = start_icon_data_source
     end_icon_layer.datasource = end_icon_data_source
-    return start_icon_layer, end_icon_layer
+    return route_layer, start_icon_layer, end_icon_layer
 
 
-def create_point_geom(start_gid, end_gid):
-    query = PathGrid.objects
-    start_pt = GridUtilities.find_cell_centre_coord(start_gid, query)
-    end_pt = GridUtilities.find_cell_centre_coord(end_gid, query)
-    return start_pt, end_pt
-
-
-def initialize_map_layers(map):
+def initialize_static_layers(map):
+    """
+    Initializes the static map layers which do not change
+    :param map:
+    :return: nothing; just loads layers and appends them to the maps already
+    """
     common_params = dict(dbname='navinur_db', user='postgres', password='password1', host='localhost')
 
     ocean_layer = mapnik.Layer("OceanBase")
@@ -270,13 +279,13 @@ def initialize_map_layers(map):
     general_depthcontour_layer.styles.append("GeneralDepthContour")
     map.layers.append(general_depthcontour_layer)
 
-    # coastal_land_line_layer = mapnik.Layer("CoastalLandLine")
-    # params = common_params
-    # params['table'] = 'coastal_land_area_line'
-    # data_source = mapnik.PostGIS(**params)
-    # coastal_land_line_layer.datasource = data_source
-    # coastal_land_line_layer.styles.append("CoastalLandLine")
-    # map.layers.append(coastal_land_line_layer)
+    coastal_land_line_layer = mapnik.Layer("CoastalLandLine")
+    params = common_params
+    params['table'] = 'coastal_land_area_line'
+    data_source = mapnik.PostGIS(**params)
+    coastal_land_line_layer.datasource = data_source
+    coastal_land_line_layer.styles.append("CoastalLandLine")
+    map.layers.append(coastal_land_line_layer)
 
     coastal_depth_area_layer = mapnik.Layer("CoastalDepthArea")
     params = common_params

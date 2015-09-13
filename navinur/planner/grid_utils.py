@@ -1,4 +1,3 @@
-__author__ = 'lstefa'
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "navinur.settings")
 import django
@@ -26,9 +25,7 @@ class GridUtilities:
         print("End point is: {}".format(end_pt))
         # GeoDjango will convert the geometry of the point to the correct SRID of the table in the query expression
         start_cell = PathGrid.objects.get(geom__contains=start_pt)
-        print(start_cell.gid)
         end_cell = PathGrid.objects.get(geom__contains=end_pt)
-        print(end_cell.gid)
         return start_cell.gid, end_cell.gid
 
     def grid_contains_cell(self, cell):

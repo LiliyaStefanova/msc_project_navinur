@@ -1,5 +1,3 @@
-__author__ = 'lstefa'
-
 import os
 if __name__ == '__main__':
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "navinur.settings")
@@ -8,7 +6,7 @@ import heapq
 from navinur.shared.models import PathGrid
 import grid_utils
 import pickle
-import priority_queue
+from navinur.planner.data_structures import priority_queue
 
 
 class AStarPathFinder:
@@ -20,7 +18,6 @@ class AStarPathFinder:
         self.qs = PathGrid.objects.all()
         self.serializer = serializer
         self.weights = pickle.load(open(serializer.weightfile_location))
-        print("Weights initialized...")
 
     def heuristic(self, current, target):
         """
@@ -98,6 +95,7 @@ class AStarPathFinderAlternative(object):
         """
         Alternative A* implementation which leads to zigzagging and looping
         paths
+        Not displayed via GUI but included for completeness
         """
 
         def __init__(self, serializer):
@@ -133,8 +131,6 @@ class AStarPathFinderAlternative(object):
             h = self.initialize_heuristic(self, graph)
 
             parents = self.initialize_parents(self, graph)
-            tlon, tlat = grid_utils.GridUtilities.find_cell_centre_coord(target, self.qs)
-            geod = pyproj.Geod(ellps="WGS84")
             # open and closed lists implemented as sets for better performance
             open_nodes = set()
             closed_nodes = set()

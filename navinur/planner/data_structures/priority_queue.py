@@ -4,6 +4,9 @@ import heapq
 
 
 class PriorityQueue:
+    """
+    Priority queue implementation based on heapq
+    """
 
     def __init__(self):
         self.elements = []

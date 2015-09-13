@@ -1,56 +1,53 @@
-__author__ = 'lstefa'
 from navinur.shared.models import PathGrid
-import queue
+from navinur.planner.data_structures import queue
 
-processed = {}
-discovered = {}
-parents = {}
-
-for cell in PathGrid.objects.all():
-    processed[cell.gid] = False
-    discovered[cell.gid] = False
-    parents[cell.gid] = -1
+"""
+Alternative routing implementation using Breadth First Search
+Included for completeness
+"""
 
 
-def bfs(graph, start):
-    q = queue.Queue()
+class BFSPathFinder(object):
 
-    q.enqueue(start)
-    discovered[start] = True
+    def __init__(self):
 
-    while not q.isempty():
-        v = q.dequeue()
-        # process_vertex_early(v)
-        processed[v] = True
-        y = graph[v]
-        for item in y:
-            if not processed[item]:
-                process_edge(v, item)
-            if not discovered[item]:
-                q.enqueue(item)
-                discovered[item] = True
-                parents[item] = v
-        process_vertex_late(v)
+        self.processed = {}
+        self.discovered = {}
+        self.parents = {}
+        for cell in PathGrid.objects.all():
+            self.processed[cell.gid] = False
+            self.discovered[cell.gid] = False
+            self.parents[cell.gid] = -1
+
+    def bfs(self, graph, start):
+        q = queue.Queue()
+
+        q.enqueue(start)
+        self.discovered[start] = True
+
+        while not q.isempty():
+            v = q.dequeue()
+            # process_vertex_early(v)
+            self.processed[v] = True
+            y = graph[v]
+            for item in y:
+                if not self.discovered[item]:
+                    q.enqueue(item)
+                    self.discovered[item] = True
+                    self.parents[item] = v
+
+    def find_path_bfs(self, start, end, ps, path=[]):
+        """
+        reconstructs the path following a traversal
+        """
+        path = [] if path is None else path
+        if start == end:
+            path = path + [start]
+            return path
+        else:
+            path = path + [end] + self.find_path_bfs(start, self.parents[end], self.parents)
+            return path
 
 
-def process_vertex_late(v):
-    return None
 
-
-def process_vertex_early(v):
-    return None
-
-
-def process_edge(x, y):
-    return None
-
-
-def find_path_bfs(start, end, ps, path=[]):
-    path = [] if path is None else path
-    if start == end:
-        path = path + [start]
-        return path
-    else:
-        path = path + [end] + find_path_bfs(start, parents[end], parents)
-        return path
 

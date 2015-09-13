@@ -2,7 +2,8 @@ import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "navinur.settings")
 import unittest
 from navinur.shared.models import PathGrid
-from navinur.planner import graph, graph_initializer, queue, priority_queue, views
+from navinur.planner import graph, graph_initializer, views
+from navinur.planner.data_structures import queue, priority_queue
 from a_star_path_finder import AStarPathFinder
 from graph_initializer import GraphInitializer, GraphSerializer
 from grid_utils import GridUtilities

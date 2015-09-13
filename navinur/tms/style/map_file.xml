@@ -196,7 +196,8 @@
     <Style name="GeneralLandRegionText">
         <Rule>
             <MaxScaleDenominator>25000000</MaxScaleDenominator>
-            <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[objnam]</TextSymbolizer>
+            <TextSymbolizer allow-overlap="no" size="8" face-name="DejaVu Sans Book" halo-fill="#000000">
+                [objnam]</TextSymbolizer>
         </Rule>
     </Style>
     <Style name="grid">
@@ -214,7 +215,7 @@
     </Style>
     <Style name="RouteDirection">
         <Rule>
-            <MarkersSymbolizer marker-type="arrow" placement="line" stroke="#8C001A"/>
+            <MarkersSymbolizer allow-overlap="yes" marker-type="arrow" placement="line" fill="#8C001A"/>
         </Rule>
     </Style>
     <Style name="RouteIcons">

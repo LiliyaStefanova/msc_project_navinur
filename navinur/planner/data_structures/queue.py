@@ -2,6 +2,9 @@ __author__ = 'lstefa'
 
 
 class Queue(object):
+    """
+    Regular queue implementation for data structures
+    """
     def __init__(self):
         self.items = []
 
