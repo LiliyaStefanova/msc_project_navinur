@@ -10,6 +10,9 @@ import math
 import mapnik
 import shapely
 import os
+
+from pkg_resources import resource_filename
+
 if __name__ == '__main__':
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "navinur.settings")
 
@@ -118,7 +121,7 @@ def tile(request, version, route_id, zoom, x, y):
         map = mapnik.Map(TILE_WIDTH, TILE_HEIGHT, "+proj=longlat +datum=WGS84")
         map.background = mapnik.Color("#7391ad")
 
-        mapfile = "/home/lstefa/repos/project_navinur/navinur/tms/style/map_file.xml"
+        mapfile = resource_filename(__name__, 'style/map_file.xml')
         initialize_static_layers(map)
         route_layer = mapnik.Layer("Route", "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
         start_icon_layer = mapnik.Layer("RouteIcons", "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
