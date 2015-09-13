@@ -289,13 +289,23 @@ def initialize_static_layers(map):
 
     coastal_depth_area_layer = mapnik.Layer("CoastalDepthArea")
     params = common_params
-    params['table'] = 'coastal_depth_area'
+    query = "(select * from coastal_depth_area where drval1 > 0.0) as depth_area"
+    params['table'] = query
     data_source = mapnik.PostGIS(**params)
     coastal_depth_area_layer.datasource = data_source
     coastal_depth_area_layer.styles.append("CoastalDepthArea")
-    coastal_depth_area_layer.styles.append("DryingHeight")
     coastal_depth_area_layer.styles.append("DepthAreaText")
     map.layers.append(coastal_depth_area_layer)
+
+    coastal_depth_area_drying_layer = mapnik.Layer("CoastalDepthArea")
+    params = common_params
+    dry_query = "(select * from coastal_depth_area where drval1 < 0.0 and dsnm!='US3GC03M.000') as depth_area_drying"
+    params['table'] = dry_query
+    data_source = mapnik.PostGIS(**params)
+    coastal_depth_area_drying_layer.datasource = data_source
+    coastal_depth_area_drying_layer.styles.append("DepthAreaText")
+    coastal_depth_area_drying_layer.styles.append("DryingHeight")
+    map.layers.append(coastal_depth_area_drying_layer)
 
     coastal_depth_contour_layer = mapnik.Layer("CoastalDepthContour")
     params = common_params
@@ -385,6 +395,15 @@ def initialize_static_layers(map):
     general_land_region_layer.styles.append("GeneralLandRegionText")
     map.layers.append(general_land_region_layer)
 
+    general_coverage_area_layer = mapnik.Layer("GeneralCoverageArea")
+    params = common_params
+    params['table'] = 'general_coverage_area'
+    data_source = mapnik.PostGIS(**params)
+    general_coverage_area_layer.datasource = data_source
+    general_coverage_area_layer.styles.append("GeneralCoverageArea")
+    # general_coverage_area_layer.styles.append("CoastalCoverageAreaTitle")
+    map.layers.append(general_coverage_area_layer)
+
     coastal_land_region_layer = mapnik.Layer("CoastalLandRegionText")
     params = common_params
     params['table'] = 'coastal_land_region_point'
@@ -392,6 +411,15 @@ def initialize_static_layers(map):
     coastal_land_region_layer.datasource = data_source
     coastal_land_region_layer.styles.append("CoastalLandRegionText")
     map.layers.append(coastal_land_region_layer)
+
+    coastal_coverage_area_layer = mapnik.Layer("CoastalCoverageArea")
+    params = common_params
+    params['table'] = 'coastal_coverage_area'
+    data_source = mapnik.PostGIS(**params)
+    coastal_coverage_area_layer.datasource = data_source
+    coastal_coverage_area_layer.styles.append("CoastalCoverageArea")
+    coastal_coverage_area_layer.styles.append("CoastalCoverageAreaTitle")
+    map.layers.append(coastal_coverage_area_layer)
 
     # path_grid_layer = mapnik.Layer("PathGrid", "+proj=utm +zone=16 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
     # params = common_params

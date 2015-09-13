@@ -5,11 +5,24 @@
             <PolygonSymbolizer fill="#5F9EA0"/>
         </Rule>
     </Style>
-    <!--<Style name="CoverageArea">-->
-    <!--<Rule>-->
-    <!--<LineSymbolizer stroke="#FFFFFF" stroke-width="0.3"/>-->
-    <!--</Rule>-->
-    <!--</Style>-->
+    <Style name="CoastalCoverageArea">
+    <Rule>
+    <LineSymbolizer stroke="#00FF00" stroke-width="0.5"/>
+    </Rule>
+    </Style>
+    <Style name="CoastalCoverageAreaTitle">
+        <Rule>
+            <MaxScaleDenominator>18000000</MaxScaleDenominator>
+            <TextSymbolizer allow-overlap="no" size="8" face-name="DejaVu Sans Book" halo-fill="#8C001A">
+                [title]
+            </TextSymbolizer>
+        </Rule>
+    </Style>
+    <Style name="GeneralCoverageArea">
+        <Rule>
+            <LineSymbolizer stroke="#E8A317" stroke-width="1"/>
+        </Rule>
+    </Style>
     <Style name="BaseLayer">
         <Rule>
             <PolygonSymbolizer fill="#F0E68C"/>
@@ -19,7 +32,7 @@
     <Style name="BaseLayerText">
         <Rule>
             <MaxScaleDenominator>25000000</MaxScaleDenominator>
-            <TextSymbolizer size="8" face-name="DejaVu Sans Book" halo-fill="#000000">[name]</TextSymbolizer>
+            <TextSymbolizer size="12" wrap-width="15" face-name="DejaVu Sans Book" halo-fill="#000000">[name]</TextSymbolizer>
         </Rule>
     </Style>
     <Style name="tempLandPoly">
