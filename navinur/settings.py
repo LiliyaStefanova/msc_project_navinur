@@ -41,7 +41,6 @@ INSTALLED_APPS = (
     'navinur.shared',
     'navinur.tms',
     'navinur.planner',
-    'django_nose',
 )
 
 MIDDLEWARE_CLASSES = (
