@@ -222,8 +222,8 @@
         <Rule>
             <MaxScaleDenominator>18000000</MaxScaleDenominator>
             <LineSymbolizer stroke="#8C001A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-            <TextSymbolizer size="9"  fill="#FFFFFF" face-name="DejaVu Sans Book"
-                            halo-fill="#FFFFFF" placement="line">[distance]</TextSymbolizer>
+            <TextSymbolizer size="9"  fill="#000000" face-name="DejaVu Sans Book" allow-overlap="no"
+                            halo-fill="#000000" placement="line">[distance]</TextSymbolizer>
         </Rule>
     </Style>
     <Style name="RouteDirection">

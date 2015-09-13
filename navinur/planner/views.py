@@ -107,7 +107,7 @@ class AStarFactory(object):
         start_pt_record = GridUtilities.find_cell_centre_projected(start_node, self.qs)
         end_pt_record = GridUtilities.find_cell_centre_projected(end_node, self.qs)
         route = TestRoutes(name='Route No {}'.format(random.randint(1, 100000)),
-                           distance=round(route_geoms[0].length/1000, 2),
+                           distance=round(route_geoms[0].length/1852, 2),
                            geom=route_geoms[0],
                            geom_4326=route_geoms[1],
                            start_geom=start_pt_record,
