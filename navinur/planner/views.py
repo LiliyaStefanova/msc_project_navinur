@@ -102,7 +102,7 @@ class AStarFactory(object):
         start_node = start_end[0]
         end_node = start_end[1]
         reverse_path = self.path_finder.find_path(start_node, end_node, self.gra.graph_dict)
-        path = self.path_finder.reconstruct_path(reverse_path[0], start_node, end_node)
+        path = self.path_finder.rebuild_path(reverse_path[0], start_node, end_node)
         route_geoms = _generate_route_geom(path)
         start_pt_record = GridUtilities.find_cell_centre_projected(start_node, self.qs)
         end_pt_record = GridUtilities.find_cell_centre_projected(end_node, self.qs)

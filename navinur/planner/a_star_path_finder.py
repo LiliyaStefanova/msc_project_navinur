@@ -58,37 +58,37 @@ class AStarPathFinder:
         :param graph: the graph traversed to find the path
         :return: a list of nodes part of the path in reverse order
         """
-        frontier = priority_queue.PriorityQueue()
-        frontier.put(start, 0)
-        came_from = {}
-        cost_so_far = {}
-        came_from[start] = None
-        cost_so_far[start] = 0
-        while not frontier.empty():
-            current = frontier.pop()
+        graph_frontier = priority_queue.PriorityQueue()
+        graph_frontier.put(start, 0)
+        parents = {}
+        cost_until_now = {}
+        parents[start] = None
+        cost_until_now[start] = 0
+        while not graph_frontier.empty():
+            current = graph_frontier.pop()
             if current == target:
                 break
 
             for n in graph[current]:
-                new_cost = cost_so_far[current] + self.cost(current, n)
-                if n not in cost_so_far or new_cost < cost_so_far[n]:
-                    cost_so_far[n] = new_cost
+                new_cost = cost_until_now[current] + self.cost(current, n)
+                if n not in cost_until_now or new_cost < cost_until_now[n]:
+                    cost_until_now[n] = new_cost
                     priority = new_cost + self.heuristic(target, n)
-                    frontier.put(n, priority)
-                    came_from[n] = current
+                    graph_frontier.put(n, priority)
+                    parents[n] = current
 
-        return came_from, cost_so_far
+        return parents, cost_until_now
 
     @staticmethod
-    def reconstruct_path(came_from, start, goal):
+    def rebuild_path(came_from, start, target):
         """
         Takes a list of nodes which track the parents of each node on the path between two nodes
         :param came_from: list of all parent nodes in reverse order
         :param start: start point of path
-        :param goal: end point of path
+        :param target: end point of path
         :return: path which can be used in correct order
         """
-        current = goal
+        current = target
         path = [current]
         while current != start:
             current = came_from[current]
