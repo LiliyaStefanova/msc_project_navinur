@@ -16,6 +16,12 @@ from pkg_resources import resource_filename
 if __name__ == '__main__':
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "navinur.settings")
 
+"""
+Example code was referenced from the following source:
+Title: Python Geospatial Development, 2nd edition
+Author: Erik Westra
+"""
+
 TILE_WIDTH = 256
 TILE_HEIGHT = 256
 # overview, general, coastal

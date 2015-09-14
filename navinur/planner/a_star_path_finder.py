@@ -8,6 +8,12 @@ import grid_utils
 import pickle
 from navinur.planner.data_structures import priority_queue
 
+"""
+A* Implementation examples were referenced from the following source:
+Title: Amit's A* Pages
+Author: Amit Patel
+"""
+
 
 class AStarPathFinder:
 
